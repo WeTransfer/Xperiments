@@ -1,6 +1,8 @@
 defmodule Xperiments.Experiment do
   use Xperiments.Web, :model
-  alias Xperiments.{Application, User}
+  alias Xperiments.{Application, User, Variant, Rule}
+
+  @primary_key {:id, :binary_id, autogenerate: true}
 
   schema "expirements" do
     field :name, :string
@@ -13,10 +15,13 @@ defmodule Xperiments.Experiment do
     belongs_to :application, Application
     belongs_to :user, User
 
+    many_to_many :exclusions, __MODULE__, join_through: "expirements_exclusions", join_keys: [experiment_a_id: :id, experiment_b_id: :id]
+
+    embeds_many :variants, Variant
+    embeds_many :rules, Rule
+
     timestamps()
   end
-
-  @primary_key {:id, :binary_id, autogenerate: true}
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
