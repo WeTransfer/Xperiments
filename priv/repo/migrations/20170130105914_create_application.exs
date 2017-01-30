@@ -2,8 +2,7 @@ defmodule Xperiments.Repo.Migrations.CreateApplication do
   use Ecto.Migration
 
   def change do
-    create table(:applications, primary_key: false) do
-      add :id, :binary_id, primary_key: true
+    create table(:applications) do
       add :name, :string
 
       timestamps()

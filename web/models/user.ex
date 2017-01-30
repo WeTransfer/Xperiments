@@ -1,10 +1,13 @@
 defmodule Xperiments.User do
   use Xperiments.Web, :model
+  alias Xperiments.Experiment
 
   schema "users" do
     field :email, :string
     field :name, :string
     field :role, :string
+
+    has_many :expirements, Experiment
 
     timestamps()
   end
