@@ -1,8 +1,10 @@
 defmodule Xperiments.Application do
   use Xperiments.Web, :model
+  alias Xperiments.Experiment
 
   schema "applications" do
     field :name, :string
+    has_many :expirements, Experiment
 
     timestamps()
   end
