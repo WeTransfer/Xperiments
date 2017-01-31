@@ -14,6 +14,6 @@ defmodule Xperiments.Router do
   end
 
   scope "/", Xperiments do
-    get "/", HomeController, :index
+    forward "/", HomeController, :index
   end
 end
