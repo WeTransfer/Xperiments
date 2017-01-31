@@ -4,9 +4,9 @@ import {Step, Stepper, StepLabel, StepContent} from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 
-import CreateExperimentFormStepOne from 'component/forms/createexperiment/stepone';
-import CreateExperimentFormStepTwo from 'component/forms/createexperiment/steptwo';
-import CreateExperimentFormStepThree from 'component/forms/createexperiment/stepthree';
+import CreateExperimentFormStepOne from 'component/forms/createexperiment/stepone.es6';
+import CreateExperimentFormStepTwo from 'component/forms/createexperiment/steptwo.es6';
+import CreateExperimentFormStepThree from 'component/forms/createexperiment/stepthree.es6';
 
 export default class CreateExperimentPage extends React.Component {
   state = {

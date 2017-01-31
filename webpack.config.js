@@ -14,12 +14,12 @@ module.exports = {
 
   module: {
     loaders: [{
-      test: /\.(es6|jsx)$/,
+      test: /\.(es6|jsx|js)$/,
       exclude: /node_modules/,
       loader: 'babel-loader',
       include: __dirname,
       query: {
-        presets: ["es2015", "react", "react-optimize"]
+        presets: ["es2015", "react", "react-optimize", "stage-0"]
       }
     }, {
       test: /\.css$/,
