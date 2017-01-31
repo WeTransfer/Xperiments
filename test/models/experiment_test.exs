@@ -15,4 +15,10 @@ defmodule Xperiments.ExperimentTest do
     changeset = Experiment.changeset(%Experiment{}, @invalid_attrs)
     refute changeset.valid?
   end
+
+  test "references with parent models" do
+    changeset = Experiment.changeset(%Experiment{}, Map.drop(@valid_attrs, [:sampling_rate, :max_users]))
+    refute changeset.valid?
+    assert changeset.errors == [sampling_rate: {"required at least one field", []}]
+  end
 end
