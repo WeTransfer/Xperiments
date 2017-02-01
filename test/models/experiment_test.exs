@@ -11,7 +11,7 @@ defmodule Xperiments.ExperimentTest do
     |> Timex.format!("{ISO:Extended:Z}")
   end
 
-  setup context do
+  setup_all do
     [
       valid_attrs: %{description: "some content",
                      end_date: build_date(3),
