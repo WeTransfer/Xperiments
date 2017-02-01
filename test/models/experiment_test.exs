@@ -1,9 +1,11 @@
 defmodule Xperiments.ExperimentTest do
   use Xperiments.ModelCase
+  use Timex
 
+  import Xperiments.Factory
   alias Xperiments.{Experiment, User, Application}
 
-  @valid_attrs %{description: "some content", end_date: %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}, max_users: 42, name: "some content", start_date: %{day: 17, hour: 14, min: 0, month: 4, sec: 0, year: 2010}}
+  @valid_attrs %{description: "some content", end_date: Timex.shift(Timex.now(), days: 3) |> Timex.format!("{ISO:Extended:Z}"), max_users: 42, name: "some content", start_date: Timex.now()}
   @invalid_attrs %{}
   @experiment %Experiment{user: %User{}, application: %Application{}}
 
@@ -47,5 +49,19 @@ defmodule Xperiments.ExperimentTest do
 
     changeset = Experiment.changeset_with_embeds(@experiment, @valid_attrs)
     refute changeset.valid?
+  end
+
+  test "states changes" do
+    experiment = insert(:experiment)
+    assert experiment.state == "draft"
+    assert Experiment.can_run?(experiment) == true
+    assert Experiment.can_terminate?(experiment) == false
+
+    updated_exp = Experiment.run(experiment)
+    |> Xperiments.Repo.update!
+    assert updated_exp.state == "running"
+
+    invalid_changeset = Experiment.run(updated_exp)
+    refute invalid_changeset.valid?
   end
 end

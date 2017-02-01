@@ -36,8 +36,8 @@ defmodule Xperiments.Experiment do
   schema "expirements" do
     field :name, :string
     field :description, :string
-    field :start_date, Ecto.DateTime
-    field :end_date, Ecto.DateTime
+    field :start_date, :utc_datetime
+    field :end_date, :utc_datetime
     field :sampling_rate, :decimal
     field :max_users, :integer
     field :state, :string, default: "draft"
