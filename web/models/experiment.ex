@@ -54,14 +54,27 @@ defmodule Xperiments.Experiment do
     timestamps()
   end
 
+  @allowed_params ~w(name description start_date end_date sampling_rate max_users)
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:name, :description, :start_date, :end_date, :sampling_rate, :max_users])
+    |> cast(params, @allowed_params)
+    |> cast_assoc(:user, required: true)
+    |> cast_assoc(:application, required: true)
     |> validate_required([:name, :description, :start_date, :end_date])
     |> validate_required_at_least_one([:sampling_rate, :max_users])
+    |> maybe_validate_number(:sampling_rate, greater_than: 0)
+    |> maybe_validate_number(:max_users, greater_than: 0)
+  end
+
+  def changeset_with_embeds(struct, params \\ %{}) do
+    struct
+    |> changeset(params)
+    |> cast_embed(:variants, required: true)
+    |> cast_embed(:rules)
   end
 
   defp validate_required_at_least_one(changeset, [field | tail]) do
@@ -71,7 +84,12 @@ defmodule Xperiments.Experiment do
     end
   end
   defp validate_required_at_least_one(changeset, []) do
-    add_error(changeset, :sampling_rate, "required at least one field")
+    add_error(changeset, :__shared__, "required at least one field")
+  end
+
+  defp maybe_validate_number(changeset, nil, _opts), do: changeset
+  defp maybe_validate_number(changeset, field, opts) do
+    validate_number(changeset, field, opts)
   end
 
 end
