@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Paper from 'material-ui/Paper';
 import {Step, Stepper, StepLabel, StepContent} from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -7,6 +8,12 @@ import FlatButton from 'material-ui/FlatButton';
 import CreateExperimentFormStepOne from 'component/forms/createexperiment/stepone.es6';
 import CreateExperimentFormStepTwo from 'component/forms/createexperiment/steptwo.es6';
 import CreateExperimentFormStepThree from 'component/forms/createexperiment/stepthree.es6';
+
+const styling = {
+  paper: {
+    padding: 20
+  }
+};
 
 export default class CreateExperimentPage extends React.Component {
   state = {
@@ -44,23 +51,23 @@ export default class CreateExperimentPage extends React.Component {
 
   render() {
     const {finished, stepIndex} = this.state;
-    const contentStyle = {margin: '0 16px'};
 
     return <div className="page__create-experiment">
       <Stepper activeStep={stepIndex}>
         <Step>
-          <StepLabel>Create Experiment</StepLabel>
+          <StepLabel>Experiment Details</StepLabel>
         </Step>
         <Step>
-          <StepLabel>Add variants</StepLabel>
+          <StepLabel>Segmentation & Variants</StepLabel>
         </Step>
         <Step>
-          <StepLabel>Ready</StepLabel>
+          <StepLabel>Exclude Experiments</StepLabel>
         </Step>
       </Stepper>
-      <div style={contentStyle}>
-        {this.getStepContent(stepIndex)}
-        <div style={{marginTop: 12}}>
+      <div>
+        <Paper style={styling.paper} zDepth={1} rounded={false}>{this.getStepContent(stepIndex)}</Paper>
+        <div className="spacing spacing--is-30"></div>
+        <div>
           <FlatButton
             label="Back"
             disabled={stepIndex === 0}
