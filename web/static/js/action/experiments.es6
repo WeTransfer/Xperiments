@@ -1,5 +1,5 @@
-import Store from 'store';
-import ActionHelper from 'redux-actions';
+import Store from 'store/index.es6';
+import ActionHelper from 'modules/redux-actions/index.es6';
 
 export const actions = ActionHelper.types([
   'REFRESH_EXPERIMENTS'

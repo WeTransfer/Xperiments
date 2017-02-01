@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Store from 'store/index.es6';
+
 import Paper from 'material-ui/Paper';
 import {Step, Stepper, StepLabel, StepContent} from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';

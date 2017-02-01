@@ -1,6 +1,6 @@
 import * as Redux from 'redux';
 import Thunk from 'redux-thunk';
-import Reducer from 'reducer';
+import Reducer from 'reducer/index.es6';
 
 // Create our initial state
 const initialState = {

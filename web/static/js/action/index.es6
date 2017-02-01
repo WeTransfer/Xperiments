@@ -1,4 +1,4 @@
-import Experiments from './experiments';
+import Experiments from './experiments.es6';
 
 export default {
   Experiments

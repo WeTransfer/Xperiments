@@ -1,4 +1,4 @@
-import {actions} from 'action/experiments';
+import {actions} from 'action/experiments.es6';
 
 export default function(state = {}, action) {
   const {type} = action;
