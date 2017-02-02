@@ -9,11 +9,17 @@ defmodule Xperiments.Router do
     plug :accepts, ["html"]
   end
 
-  scope "/api", Xperiments do
+  scope "/api/v1", Xperiments do
     pipe_through :api
+
+    resources "/applications", ApplicationController, only: [:index], param: :name do
+      resources "/experiments", ExperimentController, except: [:delete, :new]
+    end
   end
 
-  scope "/", Xperiments do
-    forward "/", HomeController, :index
-  end
+  # scope "/", Xperiments do
+  #   # pipe_through :browser
+
+  #   forward "/", HomeController, :index
+  # end
 end

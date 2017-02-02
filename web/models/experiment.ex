@@ -107,4 +107,13 @@ defmodule Xperiments.Experiment do
     validate_number(changeset, field, opts)
   end
 
+  ## Serializer
+  defimpl Poison.Encoder, for: __MODULE__ do
+    def encode(model, opts) do
+      model
+      |> Map.from_struct
+      |> Map.drop([:__meta__, :__struct__])
+      |> Poison.encode!
+    end
+  end
 end
