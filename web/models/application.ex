@@ -4,7 +4,7 @@ defmodule Xperiments.Application do
 
   schema "applications" do
     field :name, :string
-    has_many :expirements, Experiment
+    has_many :experiments, Experiment
 
     timestamps()
   end
@@ -16,5 +16,16 @@ defmodule Xperiments.Application do
     struct
     |> cast(params, [:name])
     |> validate_required([:name])
+  end
+
+  ## Serializer
+
+  defimpl Poison.Encoder, for: __MODULE__ do
+    def encode(model, opts) do
+      model
+      |> Map.from_struct
+      |> Map.take([:name, :id])
+      |> Poison.encode!
+    end
   end
 end

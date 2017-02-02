@@ -48,7 +48,6 @@ defmodule Xperiments.Web do
       import Phoenix.Controller, only: [get_csrf_token: 0, get_flash: 2, view_module: 1]
 
       # import Xperiments.Router.Helpers
-      import Xperiments.ErrorHelpers
       # import Xperiments.Gettext
     end
   end
