@@ -6,14 +6,15 @@
     "watch": "webpack --watch-stdin --progress --color"
   },
   "dependencies": {
-    "phoenix": "file:deps/phoenix",
     "ContentEdit": "^1.2.1",
     "bootstrap": "^3.3.7",
     "fast-async": "6.0.31",
     "material-ui": "^0.16.7",
+    "phoenix": "file:deps/phoenix",
     "react": "^15.4.2",
     "react-addons-transition-group": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-redux": "^5.0.2",
     "react-router": "^3.0.2",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
@@ -44,7 +45,12 @@
   },
   "babel": {
     "presets": [
-      ["es2015", {"loose": true}],
+      [
+        "es2015",
+        {
+          "loose": true
+        }
+      ],
       "react",
       "react-optimize",
       "stage-0"
@@ -68,15 +74,15 @@
         }
       ]
     ],
-     "env": {
-       "development": {
-         "sourceMaps": "inline"
-       },
-       "test": {
-         "plugins": [
-           "babel-plugin-rewire"
-         ]
-       }
-     }
+    "env": {
+      "development": {
+        "sourceMaps": "inline"
+      },
+      "test": {
+        "plugins": [
+          "babel-plugin-rewire"
+        ]
+      }
+    }
   }
 }

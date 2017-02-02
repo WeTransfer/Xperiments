@@ -4,12 +4,17 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 
 export default class ExperimentsTable extends React.Component {
   static propTypes = {
-    experiments: React.PropTypes.array
+    experiments: React.PropTypes.arrayOf(React.PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      variants: PropTypes.array.isRequired,
+      isActive: PropTypes.bool.isRequired
+    }).isRequired).isRequired
   };
   
   render() {
     let renderedExperiments = [];
-    this.props.experiments.forEach((experiment) => {
+    this.props.experiments.list.forEach((experiment) => {
       renderedExperiments.push(React.createElement(TableRow, {key: `experiment__table-row-${experiment.id}`}, [
         React.createElement(TableRowColumn, null, experiment.id),
         React.createElement(TableRowColumn, null, experiment.name),

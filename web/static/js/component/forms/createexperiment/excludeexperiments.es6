@@ -29,7 +29,6 @@ export default class ExlcudeExperiments extends React.Component {
   }
 
   filterExperiments = (searchText, key) => {
-    console.log(searchText, key); 
     // searchText !== '' && key.indexOf(searchText) !== -1
   }
 
