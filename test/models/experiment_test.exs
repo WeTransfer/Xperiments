@@ -15,6 +15,7 @@ defmodule Xperiments.ExperimentTest do
     [
       valid_attrs: %{description: "some content",
                      end_date: build_date(3),
+                     sampling_rate: 100,
                      max_users: 42,
                      name: "some content",
                      start_date: build_date(1)},
@@ -30,17 +31,6 @@ defmodule Xperiments.ExperimentTest do
   test "changeset with invalid attributes", context do
     changeset = Experiment.changeset(context[:experiment], %{})
     refute changeset.valid?
-  end
-
-  test "changeset without an association", context do
-    changeset = Experiment.changeset(Map.delete(context[:experiment], :user), context[:valid_attrs])
-    refute changeset.valid?
-  end
-
-  test "validation when at least one required field is not set", context do
-    changeset = Experiment.changeset(context[:experiment], Map.drop(context[:valid_attrs], [:sampling_rate, :max_users]))
-    refute changeset.valid?
-    assert changeset.errors == [__shared__: {"required at least one field", []}]
   end
 
   test "number validation when a field can be set or not", context do

@@ -62,14 +62,11 @@ defmodule Xperiments.Experiment do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @allowed_params)
-    |> cast_assoc(:user, required: true)
-    |> cast_assoc(:application, required: true)
-    |> validate_required([:name, :description, :start_date, :end_date])
+    |> validate_required([:name, :description, :start_date, :end_date, :sampling_rate])
     |> validate_end_date_greater_start_date([:start_date, :end_date])
     |> validate_current_or_future_date(:start_date)
     |> validate_current_or_future_date(:end_date)
-    |> validate_required_at_least_one([:sampling_rate, :max_users])
-    |> maybe_validate_number(:sampling_rate, greater_than: 0)
+    |> validate_number(:sampling_rate, greater_than: 0, less_than_or_equal_to: 100)
     |> maybe_validate_number(:max_users, greater_than: 0)
   end
 
@@ -81,7 +78,7 @@ defmodule Xperiments.Experiment do
   end
 
   # TODO: Make a refactor for dates validation
-  defp validate_end_date_greater_start_date(changeset, [start_date_field, end_date_field]) do
+  def validate_end_date_greater_start_date(changeset, [start_date_field, end_date_field]) do
     # TODO: use `with` here
     start_date = get_field(changeset, start_date_field)
     end_date = get_field(changeset, end_date_field)
@@ -103,18 +100,11 @@ defmodule Xperiments.Experiment do
     end
   end
 
-  defp validate_required_at_least_one(changeset, [field | tail]) do
-    case get_field(changeset, field) do
-      nil -> validate_required_at_least_one(changeset, tail)
-      _ -> validate_required(changeset, field)
-    end
-  end
-  defp validate_required_at_least_one(changeset, []) do
-    add_error(changeset, :__shared__, "required at least one field")
-  end
-
-  defp maybe_validate_number(changeset, nil, _opts), do: changeset
-  defp maybe_validate_number(changeset, field, opts) do
+  @doc """
+  Validate a number if it set only, otherwise do nothing
+  """
+  def maybe_validate_number(changeset, nil, _opts), do: changeset
+  def maybe_validate_number(changeset, field, opts) do
     validate_number(changeset, field, opts)
   end
 
