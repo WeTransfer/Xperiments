@@ -7,8 +7,6 @@ defmodule Xperiments.User do
     field :name, :string
     field :role, :string
 
-    has_many :expirements, Experiment
-
     timestamps()
   end
 
