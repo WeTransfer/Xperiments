@@ -18,7 +18,7 @@ defmodule Xperiments.Variant do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @allowed_params)
-    |> validate_required(List.delete(@allowed_params, :control_group))
+    |> validate_required(List.delete(@allowed_params, :control_group) |> List.delete(:description))
     |> validate_number(:allocation, greater_than: 0, less_than_or_equal_to: 100)
   end
 

@@ -5,4 +5,7 @@ defmodule Xperiments.ExperimentView do
     %{experiment: exp}
   end
 
+  def render("index.json", %{experiments: experiments}) do
+    %{experiments: render_many(experiments, __MODULE__, "show.json")}
+  end
 end
