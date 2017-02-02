@@ -7,8 +7,6 @@ defmodule Xperiments.User do
     field :name, :string
     field :role, :string
 
-    has_many :expirements, Experiment
-
     timestamps()
   end
 
@@ -19,5 +17,15 @@ defmodule Xperiments.User do
     struct
     |> cast(params, [:email, :name, :role])
     |> validate_required([:email, :name, :role])
+  end
+
+  ## Serializer
+  defimpl Poison.Encoder, for: __MODULE__ do
+    def encode(model, opts) do
+      model
+      |> Map.from_struct
+      |> Map.drop([:__meta__, :__struct__])
+      |> Poison.encode!
+    end
   end
 end

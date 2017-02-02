@@ -1,0 +1,13 @@
+language: elixir
+matrix:
+  include:
+    - otp_release: 19.0
+      elixir: 1.4.0
+services:
+  - postgresql
+sudo: false
+before_script:
+  - mix deps.get --only test
+  - psql -c 'create database xperiments_test;' -U postgres
+script:
+  - mix test

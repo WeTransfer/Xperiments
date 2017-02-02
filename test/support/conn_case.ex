@@ -25,7 +25,8 @@ defmodule Xperiments.ConnCase do
       import Ecto.Changeset
       import Ecto.Query
 
-      import Xperiments.Router.Helpers
+      # import Xperiments.Router.Helpers
+      import Xperiments.Factory
 
       # The default endpoint for testing
       @endpoint Xperiments.Endpoint
