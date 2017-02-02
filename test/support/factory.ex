@@ -4,8 +4,8 @@ defmodule Xperiments.Factory do
 
   def user_factory do
     %Xperiments.User{
-      name: "Lev",
-      email: "lev.tolstoy@wetransfer.com"
+      name: sequence("Lev"),
+      email: sequence(:email, &"lev.tolstoy#{&1}@wetransfer.com")
     }
   end
 
@@ -17,13 +17,12 @@ defmodule Xperiments.Factory do
 
   def experiment_factory do
     %Xperiments.Experiment{
-      name: "Experiment 1",
+      name: sequence("Experiment"),
       description: "Change some text",
       start_date: Timex.now(),
       end_date: Timex.shift(Timex.now(), days: 3),
       max_users: 100,
       application: build(:application),
-      user: build(:user)
     }
   end
 
