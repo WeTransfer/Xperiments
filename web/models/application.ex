@@ -17,4 +17,15 @@ defmodule Xperiments.Application do
     |> cast(params, [:name])
     |> validate_required([:name])
   end
+
+  ## Serializer
+
+  defimpl Poison.Encoder, for: __MODULE__ do
+    def encode(model, opts) do
+      model
+      |> Map.from_struct
+      |> Map.take([:name, :id])
+      |> Poison.encode!
+    end
+  end
 end
