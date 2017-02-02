@@ -4,7 +4,7 @@ defmodule Xperiments.Application do
 
   schema "applications" do
     field :name, :string
-    has_many :expirements, Experiment
+    has_many :experiments, Experiment
 
     timestamps()
   end

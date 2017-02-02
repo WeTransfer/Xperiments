@@ -33,19 +33,18 @@ defmodule Xperiments.Experiment do
     ]
 
   @primary_key {:id, :binary_id, autogenerate: true}
-  schema "expirements" do
+  schema "experiments" do
     field :name, :string
     field :description, :string
     field :start_date, :utc_datetime
     field :end_date, :utc_datetime
-    field :sampling_rate, :decimal
+    field :sampling_rate, :decimal, default: 100
     field :max_users, :integer
     field :state, :string, default: "draft"
 
     belongs_to :application, Application
-    belongs_to :user, User
 
-    many_to_many :exclusions, __MODULE__, join_through: "expirements_exclusions",
+    many_to_many :exclusions, __MODULE__, join_through: "experiments_exclusions",
       join_keys: [experiment_a_id: :id, experiment_b_id: :id]
 
     embeds_many :variants, Variant
