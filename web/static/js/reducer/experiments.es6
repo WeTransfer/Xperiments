@@ -8,6 +8,13 @@ export default function(state = {}, action) {
       return {
         ...state
       };
+
+    case actions.EXPERIMENTS_SUCCESS:
+      return {
+        ...state,
+        list: action.list,
+        isLoaded: true
+      };
   }
 
   return state;

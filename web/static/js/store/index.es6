@@ -2,9 +2,14 @@ import * as Redux from 'redux';
 import Thunk from 'redux-thunk';
 import Reducer from 'reducer/index.es6';
 
+import experiment from './helper/experiment.es6';
+import experiments from './helper/experiments.es6';
+
 // Create our initial state
 const initialState = {
   // This contains everything that is pending in our app is stored here
+  experiment,
+  experiments
 };
 
 // We'll create a Store that has our Reducers and an initial state,

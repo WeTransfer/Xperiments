@@ -1,8 +1,11 @@
 import React from 'react';
+import Store from 'store/index.es6';
+import Actions from 'action/index.es6';
 import {Link} from 'react-router';
 
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
+
+import ExperimentsTable from 'component/experimentstable.es6';
 
 const styles = {
   button: {
@@ -11,45 +14,17 @@ const styles = {
 };
 
 export default class ExperimentsDashboardPage extends React.Component {
+  componentDidMount() {
+    Store.subscribe(this.render);
+    Store.dispatch(Actions.Experiments.list());
+  }
+
   render() {
+    const {experiments} = Store.getState();
+
     return <div className="page__expriments-dashboard">
       <Link to="/experiments/create"><RaisedButton label="create experiment" primary={true} style={styles.button} /></Link>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHeaderColumn>ID</TableHeaderColumn>
-            <TableHeaderColumn>Name</TableHeaderColumn>
-            <TableHeaderColumn>Variants</TableHeaderColumn>
-            <TableHeaderColumn>Status</TableHeaderColumn>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableRowColumn>1</TableRowColumn>
-            <TableRowColumn>Experiment 1</TableRowColumn>
-            <TableRowColumn>2</TableRowColumn>
-            <TableRowColumn>Active</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableRowColumn>2</TableRowColumn>
-            <TableRowColumn>Experiment 2</TableRowColumn>
-            <TableRowColumn>3</TableRowColumn>
-            <TableRowColumn>Inactive</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableRowColumn>3</TableRowColumn>
-            <TableRowColumn>Experiment 3</TableRowColumn>
-            <TableRowColumn>3</TableRowColumn>
-            <TableRowColumn>Draft</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableRowColumn>4</TableRowColumn>
-            <TableRowColumn>Experiment 4</TableRowColumn>
-            <TableRowColumn>2</TableRowColumn>
-            <TableRowColumn>Finished</TableRowColumn>
-          </TableRow>
-        </TableBody>
-      </Table>
+      {experiments.list.length ? <ExperimentsTable experiments={experiments.list} /> : null}
     </div>
   }
 }

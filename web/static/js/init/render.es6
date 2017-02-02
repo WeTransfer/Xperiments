@@ -1,5 +1,5 @@
-import ReactDOM from 'react-dom';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 
 import Layout from 'component/layout.es6';
@@ -26,5 +26,4 @@ try {
     <App />,
     document.querySelector('.root-node')
   );
-} catch (e) {
-}
+} catch (e) {}

@@ -1,4 +1,5 @@
 import React from 'react';
+import Store from 'store/index.es6';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Link} from 'react-router';
 
