@@ -69,7 +69,8 @@ defmodule Xperiments.Experiment do
     |> maybe_validate_number(:max_users, greater_than: 0)
   end
 
-  def changeset_with_embeds(struct, params \\ %{}) do
+  # TODO: check that at least one variant is a control group
+  def changeset_update(struct, params \\ %{}) do
     struct
     |> changeset(params)
     |> cast_embed(:variants, required: true)
@@ -112,7 +113,7 @@ defmodule Xperiments.Experiment do
     def encode(model, opts) do
       model
       |> Map.from_struct
-      |> Map.drop([:__meta__, :__struct__])
+      |> Map.drop([:__meta__, :__struct__, :application])
       |> Poison.encode!
     end
   end
