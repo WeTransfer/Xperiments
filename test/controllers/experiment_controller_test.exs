@@ -72,12 +72,14 @@ defmodule Xperiments.ExperimentControllerTest do
       put(context[:conn], @api_path <> "/experiments/" <> exp_id, %{experiment: updates})
       |> json_response(422)
 
-    IO.inspect Poison.encode!(body)
-    assert body == ""
+    assert body == %{"errors" => %{"rules" => [%{"type" => ["is invalid"]}],
+                                   "sampling_rate" => ["must be less than or equal to 100"],
+                                   "variants" => [%{"allocation" => ["must be greater than 0"]}]}}
   end
 
-  test "/index returns list of experiments", context do
+  test "/index returns a list of experiments, except those which are in a deleted state", context do
     insert_list(3, :experiment, application: context.app)
+    insert(:experiment, application: context.app, state: "deleted")
     body =
       get(context[:conn], @api_path <> "/experiments")
       |> json_response(200)

@@ -5,7 +5,9 @@ defmodule Xperiments.ExperimentController do
   plug :scrub_params, "experiment" when action in [:create, :update]
 
   def index(conn, %{"application_name" => app}) do
-    app = Repo.get_by!(Application, name: app) |> Repo.preload(:experiments)
+    app =
+      Repo.get_by!(Application, name: app)
+      |> Repo.preload(experiments: from(e in Experiment, where: e.state != "deleted"))
     render(conn, "index.json", experiments: app.experiments |> Repo.preload(:exclusions))
   end
 
@@ -60,6 +62,5 @@ defmodule Xperiments.ExperimentController do
       |> put_status(:bad_request)
       |> json(%{errors: %{details: "unsupported event"}})
     end
-
   end
 end
