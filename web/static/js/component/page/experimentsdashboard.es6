@@ -5,7 +5,6 @@ import {Link} from 'react-router';
 
 import RaisedButton from 'material-ui/RaisedButton';
 
-// import ExperimentsTable from 'component/experimentstable.es6';
 import VisibleExperimentsList from 'containers/visibleexperimentslist.es6';
 
 const styles = {

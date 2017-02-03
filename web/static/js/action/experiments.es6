@@ -2,15 +2,17 @@ import Store from 'store/index.es6';
 import ActionHelper from 'modules/redux-actions/index.es6';
 
 export const actions = ActionHelper.types([
-  'REFRESH_EXPERIMENTS',
-  'EXPERIMENTS_SUCCESS'
+  'FETCH_EXPERIMENTS',
+  'FETCHED_EXPERIMENTS'
 ]);
 
 export default ActionHelper.generate({
   list() {
     return async (dispatch, getState) => {
+      dispatch({type: actions.FETCH_EXPERIMENTS});
+
       dispatch({
-        type: actions.EXPERIMENTS_SUCCESS,
+        type: actions.FETCHED_EXPERIMENTS,
         list: [
           {id: 1, name: 'experiment 1', variants: [], isActive: true, startDate: '', endDate: ''},
           {id: 2, name: 'experiment 2', variants: [], isActive: true, startDate: '', endDate: ''},

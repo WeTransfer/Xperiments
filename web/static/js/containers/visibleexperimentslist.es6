@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import ExperimentsTable from 'component/experimentstable.es6';
 
-const getVisibleTodos = (experiments, filter = 'SHOW_ALL') => {
+const getVisibleExperiments = (experiments, filter = 'SHOW_ALL') => {
   switch (filter) {
     case 'SHOW_ALL':
       return experiments;
@@ -12,7 +12,7 @@ const getVisibleTodos = (experiments, filter = 'SHOW_ALL') => {
 
 const mapStateToProps = (state) => {
   return {
-    experiments: getVisibleTodos(state.experiments, state.visibilityFilter)
+    experiments: getVisibleExperiments(state.experiments, state.visibilityFilter)
   }
 }
 
