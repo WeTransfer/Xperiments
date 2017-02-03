@@ -7,6 +7,10 @@ services:
   - postgresql
 addons:
   postgresql: "9.5"
+cache:
+  directories:
+    - _build
+    - deps
 sudo: required
 before_script:
   - mix deps.get --only test
