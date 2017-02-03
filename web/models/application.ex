@@ -15,6 +15,8 @@ defmodule Xperiments.Application do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:name])
+    |> update_change(:name, &String.downcase/1)
+    |> unique_constraint(:name)
     |> validate_required([:name])
   end
 
