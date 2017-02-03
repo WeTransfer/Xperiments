@@ -15,17 +15,19 @@ export default ActionHelper.generate({
     return async (dispatch, getState) => {
       API.post(config.api.resources.experiments.POST, {experiment: data})
         .then(response => {
-          dispatch({
-            type: actions.CREATE_EXPERIMENT,
-            data: response.json()
+          response.json(json => {
+            dispatch({
+              type: actions.CREATE_EXPERIMENT,
+              data: json.experiment
+            });
+
+            dispatch({
+              type: ExperimentActions.PUSH_TO_EXPERIMENTS,
+              data: json.experiment
+            });
           });
 
           dispatch({type: actions.RESET_EXPERIMENT});
-
-          dispatch({
-            type: ExperimentActions.PUSH_TO_EXPERIMENTS,
-            data: response.json()
-          });
         });
     };
   },

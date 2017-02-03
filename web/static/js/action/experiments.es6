@@ -4,13 +4,6 @@ import API from 'modules/api/index.es6';
 
 import config from 'config.es6';
 
-const _processExperiments = (experiments) => {
-  return experiments.map(expriment => {
-    console.log(expriment);
-    return expriment;
-  })
-};
-
 export const actions = ActionHelper.types([
   'FETCH_EXPERIMENTS',
   'FETCHED_EXPERIMENTS',
@@ -27,7 +20,7 @@ export default ActionHelper.generate({
           response.json().then(json => {
             dispatch({
               type: actions.FETCHED_EXPERIMENTS,
-              list: _processExperiments(json.experiments)
+              list: json.experiments
             });
           });
         });

@@ -56,7 +56,7 @@ export default class CreateExperimentFormStepOne extends React.Component {
         <div className="row">
           <div className="col-md-4">
             <DatePicker
-              value={this.props.experiment.startDate}
+              value={this.props.experiment.start_date}
               floatingLabelText="Start Date"
               mode="landscape"
               onChange={(e, value) => {this.props.setStartDate(value);}}
@@ -64,7 +64,7 @@ export default class CreateExperimentFormStepOne extends React.Component {
           </div>
           <div className="col-md-8">
             <TimePicker
-              value={this.props.experiment.startTime}
+              value={this.props.experiment.start_date}
               floatingLabelText="Start Time"
               onChange={(e, value) => {this.props.setStartTime(value);}}
             />
@@ -73,7 +73,7 @@ export default class CreateExperimentFormStepOne extends React.Component {
         <div className="row">
           <div className="col-md-4">
             <DatePicker
-              value={this.props.experiment.endDate}
+              value={this.props.experiment.end_date}
               floatingLabelText="End Date"
               mode="landscape"
               onChange={(e, value) => {this.props.setEndDate(value);}}
@@ -81,7 +81,7 @@ export default class CreateExperimentFormStepOne extends React.Component {
           </div>
           <div className="col-md-8">
             <TimePicker
-              value={this.props.experiment.endTime}
+              value={this.props.experiment.end_date}
               floatingLabelText="End Time"
               onChange={(e, value) => {this.props.setEndTime(value);}}
             />

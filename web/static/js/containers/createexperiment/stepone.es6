@@ -17,10 +17,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     setName: value => {dispatch(setValue('name', value))},
-    setStartDate: value => {dispatch(setValue('startDate', value))},
-    setStartTime: value => {dispatch(setValue('startTime', value))},
-    setEndDate: value => {dispatch(setValue('endDate', value))},
-    setEndTime: value => {dispatch(setValue('endTime', value))},
+    setStartDate: value => {dispatch(setValue('start_date', value))},
+    setStartTime: value => {dispatch(setValue('start_date', value))},
+    setEndDate: value => {dispatch(setValue('end_date', value))},
+    setEndTime: value => {dispatch(setValue('end_date', value))},
     setDescription: value => {dispatch(setValue('description', value))},
     save: (data) => {
       dispatch(Actions.Experiment.create(data));
