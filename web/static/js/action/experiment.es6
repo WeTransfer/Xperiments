@@ -1,24 +1,39 @@
 import Store from 'store/index.es6';
 import ActionHelper from 'modules/redux-actions/index.es6';
+import {actions as ExperimentActions} from 'action/experiments.es6';
+import API from 'modules/api/index.es6';
+import config from 'config.es6';
 
 export const actions = ActionHelper.types([
   'CREATE_EXPERIMENT',
-  'SET_VALUES'
+  'SET_EXPERIMENT_VALUES',
+  'RESET_EXPERIMENT'
 ]);
 
 export default ActionHelper.generate({
-  create() {
+  create(data) {
     return async (dispatch, getState) => {
-      dispatch({
-        type: actions.CREATE_EXPERIMENT
-      });
+      API.post(config.api.resources.experiments.POST, {experiment: data})
+        .then(response => {
+          dispatch({
+            type: actions.CREATE_EXPERIMENT,
+            data: response.json()
+          });
+
+          dispatch({type: actions.RESET_EXPERIMENT});
+
+          dispatch({
+            type: ExperimentActions.PUSH_TO_EXPERIMENTS,
+            data: response.json()
+          });
+        });
     };
   },
 
   setValues(data) {
     return (dispatch, getState) => {
       dispatch({
-        type: actions.SET_VALUES,
+        type: actions.SET_EXPERIMENT_VALUES,
         data
       });
     };

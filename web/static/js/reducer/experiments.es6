@@ -16,6 +16,14 @@ export default function(state = {}, action) {
         list: action.list,
         isFetching: false
       };
+
+    case actions.PUSH_TO_EXPERIMENTS:
+      let newList = state.list;
+      newList.push(action.data);
+      return {
+        ...state,
+        list: newList
+      };
   }
 
   return state;

@@ -14,7 +14,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     setName: value => {dispatch(setValue('name', value))},
     setStartDate: value => {dispatch(setValue('startDate', value))},
@@ -22,14 +22,17 @@ const mapDispatchToProps = (dispatch) => {
     setEndDate: value => {dispatch(setValue('endDate', value))},
     setEndTime: value => {dispatch(setValue('endTime', value))},
     setDescription: value => {dispatch(setValue('description', value))},
-    validate: () => {},
-    save: () => {}
+    save: (data) => {
+      dispatch(Actions.Experiment.create(data));
+      ownProps.onSave();
+    },
+    cancel: ownProps.onClose
   }
 }
 
 const CreateExperimentStepOne = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateExperimentStepOneForm)
+)(CreateExperimentStepOneForm);
 
 export default CreateExperimentStepOne;

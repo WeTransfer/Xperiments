@@ -7,7 +7,6 @@ import {Step, Stepper, StepLabel, StepContent} from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 
-import CreateExperimentFormStepOne from 'containers/createexperiment/stepone.es6';
 import CreateExperimentFormStepTwo from 'component/forms/createexperiment/steptwo.es6';
 import CreateExperimentFormStepThree from 'component/forms/createexperiment/stepthree.es6';
 
@@ -27,7 +26,7 @@ export default class CreateExperimentPage extends React.Component {
     const {stepIndex} = this.state;
     this.setState({
       stepIndex: stepIndex + 1,
-      finished: stepIndex >= 2,
+      finished: stepIndex >= 1,
     });
   };
 
@@ -41,10 +40,8 @@ export default class CreateExperimentPage extends React.Component {
   getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
-        return <CreateExperimentFormStepOne />;
-      case 1:
         return <CreateExperimentFormStepTwo />;
-      case 2:
+      case 1:
         return <CreateExperimentFormStepThree />;
       default:
         return 'You\'re a long way from home sonny jim!';
@@ -56,9 +53,6 @@ export default class CreateExperimentPage extends React.Component {
 
     return <div className="page__create-experiment">
       <Stepper activeStep={stepIndex}>
-        <Step>
-          <StepLabel>Experiment Details</StepLabel>
-        </Step>
         <Step>
           <StepLabel>Segmentation & Variants</StepLabel>
         </Step>
