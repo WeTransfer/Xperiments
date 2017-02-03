@@ -1,6 +1,5 @@
 defmodule Xperiments.User do
   use Xperiments.Web, :model
-  alias Xperiments.Experiment
 
   schema "users" do
     field :email, :string
@@ -21,7 +20,7 @@ defmodule Xperiments.User do
 
   ## Serializer
   defimpl Poison.Encoder, for: __MODULE__ do
-    def encode(model, opts) do
+    def encode(model, _opts) do
       model
       |> Map.from_struct
       |> Map.drop([:__meta__, :__struct__])
