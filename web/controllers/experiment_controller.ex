@@ -24,7 +24,7 @@ defmodule Xperiments.ExperimentController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render("error.json", changeset: changeset)
+        |> render(Xperiments.ErrorView, "error.json", changeset: changeset)
     end
   end
 
@@ -39,32 +39,27 @@ defmodule Xperiments.ExperimentController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(RestApi.ChangesetView, "error.json", changeset: changeset)
+        |> render(Xperiments.ErrorView, "error.json", changeset: changeset)
     end
   end
 
   def change_state(conn, %{"experiment_id" => id, "event" => event}) do
     experiment = Repo.get!(Experiment, id)
-    changeset = case event do
-                  "run" ->
-                    Experiment.run(experiment)
-                  "stop" ->
-                    Experiment.stop(experiment)
-                  "terminate" ->
-                    Experiment.terminate(experiment)
-                  "delete" ->
-                    Experiment.delete(experiment)
-                  _ ->
-                    "Unsupported state"
-                    halt(conn)
-                end
-    case Repo.update(changeset) do
-      {:ok, exp} ->
-        render(conn, "state.json", state: exp.state)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(RestApi.ChangesetView, "error.json", changeset: changeset)
+    if String.to_atom(event) in Experiment.events do
+      changeset = Experiment.change_state(experiment, event)
+      case Repo.update(changeset) do
+        {:ok, exp} ->
+          render(conn, "state.json", state: exp.state)
+        {:error, changeset} ->
+          conn
+          |> put_status(:unprocessable_entity)
+          |> render(Xperiments.ErrorView, "error.json", changeset: changeset)
+      end
+    else
+      conn
+      |> put_status(:bad_request)
+      |> json(%{errors: %{details: "unsupported event"}})
     end
+
   end
 end

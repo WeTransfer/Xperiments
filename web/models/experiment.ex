@@ -108,6 +108,22 @@ defmodule Xperiments.Experiment do
     validate_number(changeset, field, opts)
   end
 
+  @doc """
+  Tries to change a state for a given experiment and returns a changeset
+  """
+  def change_state(experiment, event) do
+    case event do
+      "run" ->
+        __MODULE__.run(experiment)
+      "stop" ->
+        __MODULE__.stop(experiment)
+      "terminate" ->
+        __MODULE__.terminate(experiment)
+      "delete" ->
+        __MODULE__.delete(experiment)
+    end
+  end
+
   ## Serializer
   defimpl Poison.Encoder, for: __MODULE__ do
     def encode(model, _opts) do

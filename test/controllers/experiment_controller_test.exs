@@ -32,7 +32,7 @@ defmodule Xperiments.ExperimentControllerTest do
   end
 
   test "/update any experiment with embded data", context do
-    exp_id = insert(:experiment).id
+    exp_id = insert(:experiment, application: context.app).id
     variant = %{
       name: "Var A",
       allocation: 40,
@@ -53,6 +53,29 @@ defmodule Xperiments.ExperimentControllerTest do
     assert body["experiment"]["id"] == exp_id
   end
 
+  test "/update returns errors when bad data is given", context do
+    exp_id = insert(:experiment, application: context.app).id
+    variant = %{
+      name: "Var A",
+      allocation: 0,
+      control_group: true,
+      payload: "{}"
+    }
+    rule = %{
+      parameter: "language",
+      type: "bad_type",
+      operator: "==",
+      value: "en"
+    }
+    updates = %{variants: [variant], rules: [rule], sampling_rate: 200}
+    body =
+      put(context[:conn], @api_path <> "/experiments/" <> exp_id, %{experiment: updates})
+      |> json_response(422)
+
+    IO.inspect Poison.encode!(body)
+    assert body == ""
+  end
+
   test "/index returns list of experiments", context do
     insert_list(3, :experiment, application: context.app)
     body =
@@ -61,13 +84,29 @@ defmodule Xperiments.ExperimentControllerTest do
     assert length(body["experiments"]) == 3
   end
 
-  test "/state change state for a given experiemnt", context do
-    exp = insert(:experiment)
+  test "/state changes state for a given experiemnt", context do
+    exp = insert(:experiment, application: context.app)
     assert exp.state == "draft"
     body =
       put(context[:conn], @api_path <> "/experiments/" <> exp.id <> "/state", %{event: "run"})
       |> json_response(200)
     assert body["state"] == "running"
     assert Repo.get!(Experiment, exp.id).state == "running"
+  end
+
+  test "/state returns an error if given an unsupported state", context do
+    exp = insert(:experiment, application: context[:app])
+    body =
+      put(context[:conn], @api_path <> "/experiments/" <> exp.id <> "/state", %{event: "bad_event"})
+      |> json_response(400)
+    assert body["errors"] == %{"details" => "unsupported event"}
+  end
+
+  test "/state returns an error if we try to make an unsupported transittion", context do
+    exp = insert(:experiment, application: context[:app])
+    body =
+      put(context[:conn], @api_path <> "/experiments/" <> exp.id <> "/state", %{event: "stop"})
+      |> json_response(422)
+    assert body["errors"] == %{"state" => ["You can't move state from :draft to :stopped"]}
   end
 end

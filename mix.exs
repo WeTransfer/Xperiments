@@ -36,7 +36,7 @@ defmodule Xperiments.Mixfile do
      {:postgrex, ">= 0.0.0"},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
-     {:ecto_state_machine, "~> 0.2.1"},
+     {:ecto_state_machine, git: "git@github.com:asiniy/ecto_state_machine.git"},
      {:timex, "~> 3.0"},
      {:ex_machina, "~> 1.0", only: :test}]
   end
