@@ -4,7 +4,7 @@ matrix:
     - otp_release: 19.0
       elixir: 1.4.0
 services:
-  - postgresql
+  - postgresql: "9.5"
 sudo: false
 before_script:
   - mix deps.get --only test
