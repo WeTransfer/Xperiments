@@ -5,7 +5,9 @@ defmodule Xperiments.ExperimentController do
   plug :scrub_params, "experiment" when action in [:create, :update]
 
   def index(conn, %{"application_name" => app}) do
-    app = Repo.get_by!(Application, name: app) |> Repo.preload(:experiments)
+    app =
+      Repo.get_by!(Application, name: app)
+      |> Repo.preload(experiments: from(e in Experiment, where: e.state != "deleted"))
     render(conn, "index.json", experiments: app.experiments |> Repo.preload(:exclusions))
   end
 
@@ -24,7 +26,7 @@ defmodule Xperiments.ExperimentController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render("error.json", changeset: changeset)
+        |> render(Xperiments.ErrorView, "error.json", changeset: changeset)
     end
   end
 
@@ -39,7 +41,26 @@ defmodule Xperiments.ExperimentController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(RestApi.ChangesetView, "error.json", changeset: changeset)
+        |> render(Xperiments.ErrorView, "error.json", changeset: changeset)
+    end
+  end
+
+  def change_state(conn, %{"experiment_id" => id, "event" => event}) do
+    experiment = Repo.get!(Experiment, id)
+    if String.to_atom(event) in Experiment.events do
+      changeset = Experiment.change_state(experiment, event)
+      case Repo.update(changeset) do
+        {:ok, exp} ->
+          render(conn, "state.json", state: exp.state)
+        {:error, changeset} ->
+          conn
+          |> put_status(:unprocessable_entity)
+          |> render(Xperiments.ErrorView, "error.json", changeset: changeset)
+      end
+    else
+      conn
+      |> put_status(:bad_request)
+      |> json(%{errors: %{details: "unsupported event"}})
     end
   end
 end
