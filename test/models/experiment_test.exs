@@ -3,7 +3,7 @@ defmodule Xperiments.ExperimentTest do
   use Timex
 
   import Xperiments.Factory
-  alias Xperiments.{Experiment, User, Application}
+  alias Xperiments.{Experiment, Application}
 
   def build_date(shift_days) do
     Timex.now()
@@ -19,7 +19,7 @@ defmodule Xperiments.ExperimentTest do
                      max_users: 42,
                      name: "some content",
                      start_date: build_date(1)},
-      experiment:  %Experiment{user: %User{}, application: %Application{}}
+      experiment:  %Experiment{application: %Application{}}
     ]
   end
 
@@ -46,11 +46,11 @@ defmodule Xperiments.ExperimentTest do
     rules = [
       %{parameter: "lang", type: "string", operator: "==", value: "ru"}
     ]
-    changeset = Experiment.changeset_with_embeds(context[:experiment],
+    changeset = Experiment.changeset_update(context[:experiment],
       Map.merge(context[:valid_attrs], %{variants: variants, rules: rules}))
     assert changeset.valid?
 
-    changeset = Experiment.changeset_with_embeds(context[:experiment], context[:valid_attrs])
+    changeset = Experiment.changeset_update(context[:experiment], context[:valid_attrs])
     refute changeset.valid?
   end
 
