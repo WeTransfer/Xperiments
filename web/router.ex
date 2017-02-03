@@ -13,7 +13,9 @@ defmodule Xperiments.Router do
     pipe_through :api
 
     resources "/applications", ApplicationController, only: [:index], param: :name do
-      resources "/experiments", ExperimentController, except: [:delete, :new]
+      resources "/experiments", ExperimentController, except: [:delete, :new] do
+        put "/state", ExperimentController, :change_state, as: :state
+      end
     end
   end
 

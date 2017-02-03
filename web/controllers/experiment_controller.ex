@@ -42,4 +42,29 @@ defmodule Xperiments.ExperimentController do
         |> render(RestApi.ChangesetView, "error.json", changeset: changeset)
     end
   end
+
+  def change_state(conn, %{"experiment_id" => id, "event" => event}) do
+    experiment = Repo.get!(Experiment, id)
+    changeset = case event do
+                  "run" ->
+                    Experiment.run(experiment)
+                  "stop" ->
+                    Experiment.stop(experiment)
+                  "terminate" ->
+                    Experiment.terminate(experiment)
+                  "delete" ->
+                    Experiment.delete(experiment)
+                  _ ->
+                    "Unsupported state"
+                    halt(conn)
+                end
+    case Repo.update(changeset) do
+      {:ok, exp} ->
+        render(conn, "state.json", state: exp.state)
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(RestApi.ChangesetView, "error.json", changeset: changeset)
+    end
+  end
 end

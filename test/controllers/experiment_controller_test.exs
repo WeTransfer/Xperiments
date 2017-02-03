@@ -23,8 +23,9 @@ defmodule Xperiments.ExperimentControllerTest do
       start_date: Timex.now |> Timex.shift(hours: 1) |> Timex.format!("{ISO:Extended:Z}"),
       end_date: Timex.now |> Timex.shift(days: 3) |> Timex.format!("{ISO:Extended:Z}")
     }
-    response = post(context[:conn], "#{@api_path}/experiments", %{experiment: draft_experiment})
-    body = json_response(response, 201)
+    body =
+      post(context[:conn], "#{@api_path}/experiments", %{experiment: draft_experiment})
+      |> json_response(201)
     experiment = Repo.get_by!(Experiment, name: draft_experiment.name)
 
     assert body["experiment"]["id"] == experiment.id
@@ -58,5 +59,15 @@ defmodule Xperiments.ExperimentControllerTest do
       get(context[:conn], @api_path <> "/experiments")
       |> json_response(200)
     assert length(body["experiments"]) == 3
+  end
+
+  test "/state change state for a given experiemnt", context do
+    exp = insert(:experiment)
+    assert exp.state == "draft"
+    body =
+      put(context[:conn], @api_path <> "/experiments/" <> exp.id <> "/state", %{event: "run"})
+      |> json_response(200)
+    assert body["state"] == "running"
+    assert Repo.get!(Experiment, exp.id).state == "running"
   end
 end
