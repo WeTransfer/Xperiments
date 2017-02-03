@@ -4,8 +4,14 @@ matrix:
     - otp_release: 19.0
       elixir: 1.4.0
 services:
-  - postgresql: "9.5"
-sudo: false
+  - postgresql
+addons:
+  postgresql: "9.5"
+cache:
+  directories:
+    - _build
+    - deps
+sudo: required
 before_script:
   - mix deps.get --only test
   - psql -c 'create database xperiments_test;' -U postgres
