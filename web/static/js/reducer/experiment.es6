@@ -9,9 +9,10 @@ export default function(state = {}, action) {
         ...state
       };
 
-    case actions.RESET_SUCCESS:
+    case actions.SET_VALUES:
       return {
-        ...state
+        ...state,
+        ...action.data
       };
   }
 

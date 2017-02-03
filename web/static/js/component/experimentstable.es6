@@ -22,7 +22,7 @@ export default class ExperimentsTable extends React.Component {
         React.createElement(TableRowColumn, {key: `experiment__table-row-column-id-${experiment.id}`}, experiment.id),
         React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
         React.createElement(TableRowColumn, {key: `experiment__table-row-column-variants-${experiment.id}`}, experiment.variants.length),
-        React.createElement(TableRowColumn, {key: `experiment__table-row-column-active-${experiment.id}`}, experiment.isActive ? 'Yes' : 'No')
+        React.createElement(TableRowColumn, {key: `experiment__table-row-column-active-${experiment.id}`}, experiment.isActive ? 'Active' : 'Inactive')
       ]));
     });
 
