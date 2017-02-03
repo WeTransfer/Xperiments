@@ -1,9 +1,11 @@
 import React from 'react';
+import Store from 'store/index.es6';
+import Actions from 'action/index.es6';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Link} from 'react-router';
 
-import MenuItem from 'material-ui/MenuItem';
-import DropDownMenu from 'material-ui/DropDownMenu';
+import VisibleApplicationsMenu from 'containers/visibleapplicationsmenu.es6';
+
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 
 export default class Layout extends React.Component {
@@ -13,6 +15,10 @@ export default class Layout extends React.Component {
       selectedApp: 1,
       selectedTab: 'experiments'
     };
+  }
+
+  componentDidMount() {
+    Store.dispatch(Actions.Applications.list());
   }
 
   selectApp = (event, index, selectedApp) => this.setState({selectedApp});
@@ -28,12 +34,7 @@ export default class Layout extends React.Component {
       <MuiThemeProvider>
         <Toolbar>
           <ToolbarGroup firstChild={true}>
-            <DropDownMenu value={this.state.selectedApp} onChange={this.selectApp}>
-              <MenuItem value={1} primaryText="Web" />
-              <MenuItem value={2} primaryText="OSx App" />
-              <MenuItem value={3} primaryText="iOS App" />
-              <MenuItem value={4} primaryText="Android App" />
-            </DropDownMenu>
+            <VisibleApplicationsMenu />
           </ToolbarGroup>
         </Toolbar>
       </MuiThemeProvider>

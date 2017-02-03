@@ -13,13 +13,13 @@ export default class CreateExperimentFormStepTwo extends React.Component {
       <h5>What users do you want to target?</h5>
       <AddSegments />
       <div className="row">
-        <div className="col-md-6">
+        <div className="col-md-3">
           <TextField
             defaultValue=""
             floatingLabelText="Maximum Participants (optional)"
           />
         </div>
-        <div className="col-md-6">
+        <div className="col-md-9">
           <TextField
             defaultValue="100"
             disabled={true}

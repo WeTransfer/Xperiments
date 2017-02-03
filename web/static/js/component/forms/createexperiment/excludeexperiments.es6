@@ -28,6 +28,10 @@ export default class ExlcudeExperiments extends React.Component {
     this.setState({experiments}); 
   }
 
+  filterExperiments = (searchText, key) => {
+    // searchText !== '' && key.indexOf(searchText) !== -1
+  }
+
   render() {
     let renderedExperiments = [];
 
