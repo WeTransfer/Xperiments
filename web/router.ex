@@ -17,9 +17,9 @@ defmodule Xperiments.Router do
     end
   end
 
-  # scope "/", Xperiments do
-  #   # pipe_through :browser
+  scope "/", Xperiments do
+    pipe_through :browser
 
-  #   forward "/", HomeController, :index
-  # end
+    forward "/", HomeController, :index
+  end
 end
