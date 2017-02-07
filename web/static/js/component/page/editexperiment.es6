@@ -17,13 +17,17 @@ const styling = {
 };
 
 export default class EditExperimentPage extends React.Component {
+  static propTypes = {
+    experiment: React.PropTypes.object
+  };
+
   state = {
     finished: false,
-    stepIndex: 0,
+    stepIndex: 0
   }
 
-  componentDidMount() {
-    Store.dispatch(Actions.Experiments.get(this.props.params.experimentId));
+  componentWillMount() {
+    Store.dispatch(Actions.Experiment.get(this.props.params.experimentId));
   }
 
   handleNext = () => {
@@ -44,7 +48,7 @@ export default class EditExperimentPage extends React.Component {
   getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
-        return <CreateExperimentFormStepTwo />;
+        return <CreateExperimentFormStepTwo samplingRate={this.props.experiment.data.sampling_rate} maxUsers={this.props.experiment.data.max_users} variants={this.props.experiment.data.variants} rules={this.props.experiment.data.rules} onRulesAdd={() => {}} onVariantAdd={() => {}} />;
       case 1:
         return <CreateExperimentFormStepThree />;
       default:
@@ -53,6 +57,9 @@ export default class EditExperimentPage extends React.Component {
   }
 
   render() {
+    if (this.props.experiment.isFetching === undefined || this.props.experiment.isFetching === true)
+      return null;
+
     const {finished, stepIndex} = this.state;
 
     return <div className="page__create-experiment">

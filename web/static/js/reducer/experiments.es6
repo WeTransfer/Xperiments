@@ -12,10 +12,16 @@ export default function(state = {}, action) {
       };
 
     case actions.FETCHED_EXPERIMENTS:
-    case actions.FETCHED_EXPERIMENT:
       return {
         ...state,
         list: action.list,
+        isFetching: false
+      };
+
+    case actions.FETCHED_EXPERIMENT:
+      return {
+        ...state,
+        list: [action.list],
         isFetching: false
       };
 

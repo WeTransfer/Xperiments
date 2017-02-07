@@ -6,7 +6,7 @@ import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 
 import Layout from 'component/layout.es6';
 import NoMatch from 'component/page/nomatch.es6';
-import EditExperimentPage from 'component/page/editexperiment.es6';
+import EditExperimentPageContainer from 'containers/editexperimentpage.es6';
 import ExperimentsDashboardPage from 'component/page/experimentsdashboard.es6';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -19,7 +19,7 @@ ReactDOM.render(
       <Route path="/" component={Layout}>
         <IndexRoute component={ExperimentsDashboardPage} />
         <Route path="experiments" component={ExperimentsDashboardPage} />
-        <Route path="experiments/:experimentId/edit" component={EditExperimentPage} />
+        <Route path="experiments/:experimentId/edit" component={EditExperimentPageContainer} />
       </Route>
     </Router>
   </Provider>,

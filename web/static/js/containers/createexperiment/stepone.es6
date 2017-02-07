@@ -6,12 +6,12 @@ import CreateExperimentStepOneForm from 'component/forms/createexperiment/stepon
 const setValue = (key, value) => {
   let data = {};
   data[key] = value;
-  return Actions.Experiment.setValues(data);
+  return Actions.NewExperiment.setValues(data);
 }
 
 const mapStateToProps = (state) => {
   return {
-    experiment: state.experiment
+    experiment: state.newexperiment
   }
 }
 
@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setEndTime: value => {dispatch(setValue('end_date', value))},
     setDescription: value => {dispatch(setValue('description', value))},
     save: (data) => {
-      dispatch(Actions.Experiment.create(data));
+      dispatch(Actions.NewExperiment.create(data));
       ownProps.onSave();
     },
     cancel: ownProps.onClose

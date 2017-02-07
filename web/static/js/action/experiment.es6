@@ -1,43 +1,55 @@
 import Store from 'store/index.es6';
 import ActionHelper from 'modules/redux-actions/index.es6';
-import {actions as AppActions} from 'action/app.es6';
-import {actions as ExperimentsActions} from 'action/experiments.es6';
 import API from 'modules/api/index.es6';
+
 import config from 'config.es6';
 
 export const actions = ActionHelper.types([
-  'SET_EXPERIMENT_VALUES',
-  'RESET_EXPERIMENT'
+  'FETCH_EXPERIMENT',
+  'FETCHED_EXPERIMENT',
+  'UPDATED_EXPERIMENT',
+  'SET_EXPERIMENT_VALUES'
 ]);
 
 export default ActionHelper.generate({
-  create(data) {
-    return async (dispatch, getState) => {
-      API.post(config.api.resources.experiments.POST, {experiment: data})
+  get(id) {
+    return async (dispatch) => {
+      dispatch({type: actions.FETCH_EXPERIMENT});
+
+      API.get(`${config.api.resources.experiments.GET}/${id}`)
         .then(response => {
           response.json().then(json => {
             dispatch({
-              type: ExperimentsActions.PUSH_TO_EXPERIMENTS,
+              type: actions.FETCHED_EXPERIMENT,
               data: json.experiment
             });
-
-            dispatch({
-              type: AppActions.SET_APP_REDIRECT,
-              path: `/experiments/${json.experiment.id}/edit`
-            });
           });
-
-          dispatch({type: actions.RESET_EXPERIMENT});
         });
-    };
+    }
   },
 
   setValues(data) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
       dispatch({
         type: actions.SET_EXPERIMENT_VALUES,
         data
       });
     };
+  },
+
+  update() {
+    return async (dispatch) => {
+      dispatch({type: actions.UPDATE_EXPERIMENT});
+
+      API.put(`${config.api.resources.experiments.GET}/${id}`)
+        .then(response => {
+          response.json().then(json => {
+            dispatch({
+              type: actions.UPDATED_EXPERIMENT,
+              data: json.experiment
+            });
+          });
+        });
+    }
   }
 });

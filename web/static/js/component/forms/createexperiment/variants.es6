@@ -8,7 +8,12 @@ import AddVariant from './addvariant.es6';
 
 export default class Variants extends React.Component {
   static propTypes = {
-    title: React.propTypes.string  
+    title: React.propTypes.string,
+    list: React.propTypes.array
+  }
+
+  defaultProps = {
+    list: []
   }
 
   state = {
@@ -28,12 +33,23 @@ export default class Variants extends React.Component {
   }
 
   render() {
+    let renderedList = [];
+
+    this.props.list.forEach(variant => {
+      renderedList.push(<TableRow>
+        <TableRowColumn>{variant.name}</TableRowColumn>
+        <TableRowColumn>{variant.allocation}</TableRowColumn>
+        <TableRowColumn>{variant.is_control_group ? 'Yes' : 'No'}</TableRowColumn>
+        <TableRowColumn>-</TableRowColumn>
+      </TableRow>);
+    });
+
     return <div className="variants__manager">
       <div className="row">
         <div className="col-md-6"><h5>{this.props.title}</h5></div>
         <div className="col-md-6">
           <RaisedButton label="add variant" secondary={true} onTouchTap={this.showCreateVariant} className="pull-right"   />
-          <AddVariant open={this.state.isCreateVariantVisible} onCancel={this.hideCreateVariant} onAdd={() => {}} />
+          <AddVariant open={this.state.isCreateVariantVisible} onCancel={this.hideCreateVariant} onAdd={() => {}} allowControlGroupSelection={true} />
         </div>
       </div>
       <div className="row">
@@ -47,26 +63,7 @@ export default class Variants extends React.Component {
                 <TableHeaderColumn>Actions</TableHeaderColumn>
               </TableRow>
             </TableHeader>
-            <TableBody displayRowCheckbox={false}>
-              <TableRow>
-                <TableRowColumn>Original Variant</TableRowColumn>
-                <TableRowColumn>50%</TableRowColumn>
-                <TableRowColumn>Yes</TableRowColumn>
-                <TableRowColumn></TableRowColumn>
-              </TableRow>
-              <TableRow>
-                <TableRowColumn>VariantA</TableRowColumn>
-                <TableRowColumn>25%</TableRowColumn>
-                <TableRowColumn>No</TableRowColumn>
-                <TableRowColumn></TableRowColumn>
-              </TableRow>
-              <TableRow>
-                <TableRowColumn>VariantB</TableRowColumn>
-                <TableRowColumn>25%</TableRowColumn>
-                <TableRowColumn>No</TableRowColumn>
-                <TableRowColumn></TableRowColumn>
-              </TableRow>
-            </TableBody>
+            <TableBody displayRowCheckbox={false}>{renderedList}</TableBody>
           </Table>
         </div>
       </div>

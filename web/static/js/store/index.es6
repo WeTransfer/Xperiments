@@ -5,6 +5,7 @@ import Reducer from 'reducer/index.es6';
 import app from './helper/app.es6';
 import user from './helper/user.es6';
 import applications from './helper/applications.es6';
+import newexperiment from './helper/newexperiment.es6';
 import experiment from './helper/experiment.es6';
 import experiments from './helper/experiments.es6';
 
@@ -14,6 +15,7 @@ const initialState = {
   app,
   user,
   applications,
+  newexperiment,
   experiment,
   experiments
 };

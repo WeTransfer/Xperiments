@@ -15,6 +15,7 @@ export default class AddVariant extends React.Component {
   static propTypes = {
     onCancel: React.PropTypes.func,
     onAdd: React.PropTypes.func,
+    allowControlGroupSelection: React.PropTypes.props
   }
 
   handleCancel = () => {
@@ -54,7 +55,7 @@ export default class AddVariant extends React.Component {
             <TextField defaultValue="" floatingLabelText="Allocation (%)" />
           </div>
           <div className="col-md-7">
-            <Checkbox label="Control Group" style={styling.checkbox} />
+            <Checkbox label="Control Group" style={styling.checkbox} disabled={!this.props.allowControlGroupSelection} />
           </div>
         </div>
         <div className="row">

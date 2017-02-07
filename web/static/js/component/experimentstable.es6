@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {Link} from 'react-router';
+
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import LinearProgress from 'material-ui/LinearProgress';
 
@@ -22,7 +24,8 @@ export default class ExperimentsTable extends React.Component {
         React.createElement(TableRowColumn, {key: `experiment__table-row-column-id-${experiment.id}`}, experiment.id),
         React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
         React.createElement(TableRowColumn, {key: `experiment__table-row-column-variants-${experiment.id}`}, experiment.variants.length),
-        React.createElement(TableRowColumn, {key: `experiment__table-row-column-active-${experiment.id}`}, experiment.isActive ? 'Active' : 'Inactive')
+        React.createElement(TableRowColumn, {key: `experiment__table-row-column-active-${experiment.id}`}, experiment.isActive ? 'Active' : 'Inactive'),
+        React.createElement(TableRowColumn, {key: `experiment__table-row-column-actions-${experiment.id}`}, !experiment.isActive ? <Link to={`/experiments/${experiment.id}/edit`}>Edit</Link> : null)
       ]));
     });
 
@@ -33,6 +36,7 @@ export default class ExperimentsTable extends React.Component {
           <TableHeaderColumn>Name</TableHeaderColumn>
           <TableHeaderColumn>Variants</TableHeaderColumn>
           <TableHeaderColumn>Status</TableHeaderColumn>
+          <TableHeaderColumn></TableHeaderColumn>
         </TableRow>
       </TableHeader>
       <TableBody>{renderedExperiments}</TableBody>
