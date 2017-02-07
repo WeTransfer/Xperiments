@@ -5,12 +5,14 @@ export default function(state = {}, action) {
 
   switch (type) {
     case actions.FETCH_EXPERIMENTS:
+    case actions.FETCH_EXPERIMENT:
       return {
         ...state,
         isFetching: true
       };
 
     case actions.FETCHED_EXPERIMENTS:
+    case actions.FETCHED_EXPERIMENT:
       return {
         ...state,
         list: action.list,

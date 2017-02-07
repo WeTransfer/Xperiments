@@ -7,6 +7,8 @@ import config from 'config.es6';
 export const actions = ActionHelper.types([
   'FETCH_EXPERIMENTS',
   'FETCHED_EXPERIMENTS',
+  'FETCH_EXPERIMENT',
+  'FETCHED_EXPERIMENT',
   'PUSH_TO_EXPERIMENTS'
 ]);
 
@@ -24,14 +26,22 @@ export default ActionHelper.generate({
             });
           });
         });
-    };
+    }
+  },
+
+  get(id) {
+    return async (dispatch, getState) => {
+      dispatch({type: actions.FETCH_EXPERIMENT});
+
+      API.get(`${config.api.resources.experiments.GET}/${id}`)
+        .then(response => {
+          response.json().then(json => {
+            dispatch({
+              type: actions.FETCHED_EXPERIMENT,
+              list: json.experiment
+            });
+          });
+        });
+    }
   }
 });
-
-
-// {id: 1, name: 'experiment 1', description: '', variants: [], isActive: true, startDate: '', startTime: '', endDate: '', endTime: ''},
-// {id: 2, name: 'experiment 2', description: '', variants: [], isActive: true, startDate: '', startTime: '', endDate: '', endTime: ''},
-// {id: 3, name: 'experiment 3', description: '', variants: [], isActive: true, startDate: '', startTime: '', endDate: '', endTime: ''},
-// {id: 4, name: 'experiment 4', description: '', variants: [], isActive: true, startDate: '', startTime: '', endDate: '', endTime: ''},
-// {id: 5, name: 'experiment 5', description: '', variants: [], isActive: true, startDate: '', startTime: '', endDate: '', endTime: ''},
-// {id: 6, name: 'experiment 6', description: '', variants: [], isActive: true, startDate: '', startTime: '', endDate: '', endTime: ''}

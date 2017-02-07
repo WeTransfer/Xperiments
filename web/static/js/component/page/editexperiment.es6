@@ -1,6 +1,6 @@
 import React from 'react';
-
 import Store from 'store/index.es6';
+import Actions from 'action/index.es6';
 
 import Paper from 'material-ui/Paper';
 import {Step, Stepper, StepLabel, StepContent} from 'material-ui/Stepper';
@@ -16,10 +16,14 @@ const styling = {
   }
 };
 
-export default class CreateExperimentPage extends React.Component {
+export default class EditExperimentPage extends React.Component {
   state = {
     finished: false,
     stepIndex: 0,
+  }
+
+  componentDidMount() {
+    Store.dispatch(Actions.Experiments.get(this.props.params.experimentId));
   }
 
   handleNext = () => {
