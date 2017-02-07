@@ -11,6 +11,13 @@ defmodule Xperiments.ExperimentController do
     render(conn, "index.json", experiments: app.experiments |> Repo.preload(:exclusions))
   end
 
+  def show(conn, %{"id" => id}) do
+    experiment =
+      Repo.get!(Experiment, id)
+      |> Repo.preload(:exclusions)
+    render(conn, "show.json", experiment: experiment)
+  end
+
   def create(conn, %{"application_name" => app, "experiment" => experiment_data}) do
     app = Repo.get_by!(Application, name: app)
     changeset =
