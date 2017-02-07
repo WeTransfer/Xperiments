@@ -33,7 +33,7 @@ export default class ExperimentsDashboardPage extends React.Component {
   hideCreateExperiment = () => {
     this.setState({
       isCreateExperimentVisible: false
-    }); 
+    });
   }
 
   render() {

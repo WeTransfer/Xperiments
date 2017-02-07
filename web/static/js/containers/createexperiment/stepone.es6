@@ -1,3 +1,4 @@
+import Store from 'store/index.es6';
 import { connect } from 'react-redux';
 import Actions from 'action/index.es6';
 import CreateExperimentStepOneForm from 'component/forms/createexperiment/stepone.es6';
