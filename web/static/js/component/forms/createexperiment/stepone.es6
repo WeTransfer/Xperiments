@@ -22,7 +22,6 @@ export default class CreateExperimentFormStepOne extends React.Component {
   };
 
   save = () => {
-    console.log(this.props);
     this.props.save(this.props.experiment);
   }
 

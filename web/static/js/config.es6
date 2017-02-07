@@ -1,6 +1,5 @@
-// import Store from './store/index.es6';
+// import Store from 'store/index.es6';
 
-// console.log(Store);
 // const {user, applications} = Store.getState();
 
 // let currentAppName = applications.find((app) => {
