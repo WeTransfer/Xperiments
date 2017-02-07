@@ -8,12 +8,9 @@ defmodule Xperiments do
 
     # Define workers and child supervisors to be supervised
     children = [
-      # Start the Ecto repository
       supervisor(Xperiments.Repo, []),
-      # Start the endpoint when the application starts
       supervisor(Xperiments.Endpoint, []),
-      # Start your own worker by calling: Xperiments.Worker.start_link(arg1, arg2, arg3)
-      # worker(Xperiments.Worker, [arg1, arg2, arg3]),
+      supervisor(Xperiments.Assigner.Supervisor, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
