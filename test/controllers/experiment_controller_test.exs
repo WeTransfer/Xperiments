@@ -31,6 +31,16 @@ defmodule Xperiments.ExperimentControllerTest do
     assert body["experiment"]["id"] == experiment.id
   end
 
+  test "/show an experiment", context do
+    exp = insert(:experiment, application: context.app)
+    body =
+      get(context.conn, @api_path <> "/experiments/" <> exp.id)
+      |> json_response(200)
+
+    assert body["experiment"]["id"] == exp.id
+    assert body["experiment"]["name"] == exp.name
+  end
+
   test "/update any experiment with embded data", context do
     exp_id = insert(:experiment, application: context.app).id
     variant = %{
