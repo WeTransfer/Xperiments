@@ -9,11 +9,13 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.start_link(__MODULE__, experiment, name: via_tuple(id))
   end
 
-  def init(experiment) do
+  def init(%{state: state} = experiment) when state in ["running", "stopped"] do
     state = Map.take(experiment, [:id, :name, :rules, :variants, :start_date, :end_date,
-                                  :created_at, :exclusions])
+                                  :created_at, :state, :exclusions])
     {:ok, state}
   end
+  def init(experiment),
+    do: {:stop, {:bad_experiment, experiment}}
 
   def via_tuple(id) do
     {:via, Registry, {:registry_experiments, id}}
@@ -37,12 +39,11 @@ defmodule Xperiments.Assigner.Experiment do
   @doc """
   Get a specific variant of the experiment
   """
-  def get_variant(pid, var_name) do
-
+  def get_variant(id, var_name) do
   end
 
-  def get_exclusion_list(pid) do
-    GenServer.call(pid, {:get_exclusion_list})
+  def get_exclusions_list(id) do
+    GenServer.call(via_tuple(id), {:get_exclusion_list})
   end
 
 
@@ -70,8 +71,8 @@ defmodule Xperiments.Assigner.Experiment do
   Returns an exclussions list only if state is `running`
   Otherwise returns an empty list
   """
-  def handle_call({:get_exclusion_list}, _caller, state = %{state: "running", exclussions: exclussions}) do
-    {:reply, exclussions, state}
+  def handle_call({:get_exclusion_list}, _caller, %{state: "running", exclusions: exclusions} = state) do
+    {:reply, exclusions, state}
   end
   def handle_call({:get_exclusion_list}, _caller, state) do
     {:reply, [], state}

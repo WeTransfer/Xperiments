@@ -11,7 +11,7 @@ defmodule Xperiments.Factory do
 
   def application_factory do
     %Xperiments.Application{
-      name: "frontend"
+      name: sequence("frontend")
     }
   end
 

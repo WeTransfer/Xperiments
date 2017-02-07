@@ -28,6 +28,7 @@ defmodule Xperiments.Assigner.Manager do
   end
 
   @doc "Returns a list of pid of all runninng experiments"
+  @spec experiments_list() :: List
   def experiments_list do
     Supervisor.which_children(__MODULE__)
     |> Enum.map(fn {_, pid, _, _} -> pid end)
