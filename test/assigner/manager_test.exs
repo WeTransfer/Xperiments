@@ -1,13 +1,11 @@
 defmodule Xperiments.Assigner.ManagerTest do
   use Xperiments.AssignCase, async: false
+  import ExUnit.CaptureLog
   alias Xperiments.Assigner.{Manager}
 
   setup do
-    on_exit fn ->
-      # terminate all experiments
-      for e_pid <- Manager.experiments_list() do
-        Supervisor.terminate_child(Xperiments.Assigner.Supervisor, e_pid)
-      end
+    for e_pid <- Manager.experiments_list() do
+      Supervisor.terminate_child(Manager, e_pid)
     end
     [
       exp: insert(:experiment, state: "running") |> Repo.preload(:exclusions)
@@ -16,8 +14,9 @@ defmodule Xperiments.Assigner.ManagerTest do
 
   test "return an error when we try to start an experiment with a wrong state" do
     exp = insert(:experiment, state: "draft") |> Repo.preload(:exclusions)
-    {:error, reason} = Manager.start_experiment(exp)
-    assert {:bad_experiment, exp} == reason
+    assert capture_log(fn ->
+      :error = Manager.start_experiment(exp)
+      end) =~ "Given experiment"
   end
 
   test "start a new experiment", context do

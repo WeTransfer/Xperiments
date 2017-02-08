@@ -1,10 +1,9 @@
 defmodule Xperiments.Assigner.Manager do
   use Supervisor
-
-  @name Xperiments.Assigner.Manager
+  require Logger
 
   def start_link do
-    Supervisor.start_link(__MODULE__, :ok, name: @name)
+    Supervisor.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
   def init(:ok) do
@@ -18,13 +17,21 @@ defmodule Xperiments.Assigner.Manager do
 
   @doc "Start an experiment using data from the DB"
   def start_experiment(experiment_info) do
-    Supervisor.start_child(@name, [experiment_info])
+    case Supervisor.start_child(__MODULE__, [experiment_info]) do
+      {:ok, pid} -> {:ok, pid}
+      {:error, {:bad_experiment, experiment}} ->
+        Logger.error "Given experiment is not started: #{inspect experiment}"
+        :error
+      err ->
+        Logger.error "Something else really wrong: #{inspect err}"
+        :error
+    end
   end
 
   @doc "Remove an experiment from the supervision tree"
   def terminate_experiment(id) do
     [{pid, _}] = Registry.lookup(:registry_experiments, id)
-    Supervisor.terminate_child(@name, pid)
+    Supervisor.terminate_child(__MODULE__, pid)
   end
 
   @doc "Returns a list of pid of all runninng experiments"

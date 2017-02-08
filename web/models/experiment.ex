@@ -124,7 +124,19 @@ defmodule Xperiments.Experiment do
     end
   end
 
+  ## Queries
+
+  def ready_to_run(query) do
+    query |> where([e], e.state in ["running", "stopped"])
+  end
+
+  def with_exclusions(query) do
+    exclusions_query = from ex in __MODULE__, where: not(ex.state == "terminated")
+    query |> preload([exclusions: ^exclusions_query])
+  end
+
   ## Serializer
+
   defimpl Poison.Encoder, for: __MODULE__ do
     def encode(model, _opts) do
       model

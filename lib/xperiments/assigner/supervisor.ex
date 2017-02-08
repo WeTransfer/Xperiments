@@ -11,11 +11,11 @@ defmodule Xperiments.Assigner.Supervisor do
     children = [
       supervisor(Registry, [:unique, @registry_name]),
       supervisor(Xperiments.Assigner.Manager, []),
-      worker(Xperiments.Assigner.Loader, []),
+      worker(Task, [&Xperiments.Assigner.Loader.load_experiments_from_db/0], restart: :temporary),
       worker(Xperiments.Assigner.Dispatcher, [])
     ]
 
-    opts = [strategy: :one_for_one, name: Epxeriments.Supervisor]
+    opts = [strategy: :one_for_one, name: Assigner.Supervisor]
     supervise(children, opts)
   end
 end

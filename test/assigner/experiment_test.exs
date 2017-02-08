@@ -1,8 +1,9 @@
 defmodule Xperiments.Assigner.ExperimentTest do
-  use Xperiments.AssignCase, async: false
+  use Xperiments.AssignCase
   alias Xperiments.Assigner.{Manager, Experiment}
 
   setup do
+    # :ok = Ecto.Adapters.SQL.Sandbox.checkout(Xperiments.Repo)
     exp =
       insert(:experiment, state: "running", exclusions: [build(:experiment)])
       |> Repo.preload(:exclusions)

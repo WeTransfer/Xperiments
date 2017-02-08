@@ -19,20 +19,20 @@ defmodule Xperiments.Assigner.Dispatcher do
   ## Server
 
   def handle_call({:assign_to_experiments, rules, assigned_experiments}, _caller, state) do
-    exclussions_list = Map.keys(assigned_experiments) |> get_exclusion_list()
-    candidates = find_experiments(exclussions_list)
+    # exclussions_list = Map.keys(assigned_experiments) |> get_exclusions_list()
+    # candidates = find_experiments(exclussions_list)
   end
 
   defp find_experiments(exclussions_list \\ []) do
     []
   end
 
-  defp get_exclusion_list(experiments) do
-    experiments
-    |> Enum.map fn(id) ->
-      Registry.lookup(:registry_experiments, id)
-      |> Experiment.get_exclusion_list
-    end
-    |> List.flatten
+  defp get_exclusions_list(experiments) do
+    # experiments
+    # |> Enum.map fn(id) ->
+    #   Registry.lookup(:registry_experiments, id)
+    #   |> Experiment.get_exclusion_list
+    # end
+    # |> List.flatten
   end
 end

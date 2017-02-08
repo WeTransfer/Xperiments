@@ -18,7 +18,7 @@ defmodule Xperiments.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Xperiments, []},
-     applications: [:phoenix, :phoenix_pubsub, :cowboy, :logger, :gettext,
+     applications: [:phoenix, :phoenix_pubsub, :cowboy, :logger,
                     :phoenix_ecto, :postgrex, :timex]]
   end
 
