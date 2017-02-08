@@ -5,14 +5,18 @@ import {Link} from 'react-router';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
+import Paper from 'material-ui/Paper';
 
 import CreateExperimentStepOne from 'containers/createexperiment.es6';
 import VisibleExperimentsList from 'containers/visibleexperimentslist.es6';
 
 const styling = {
+  paper: {
+    padding: 20,
+    marginTop: 20
+  },
   button: {
-    marginTop: 20,
-    marginBottom: 20
+    marginTop: 20
   }
 }
 
@@ -47,7 +51,7 @@ export default class ExperimentsDashboardPage extends React.Component {
           </div>
         </div>
         <div className="col-md-12">
-          <VisibleExperimentsList />
+          <Paper style={styling.paper} zDepth={1} rounded={false}><VisibleExperimentsList /></Paper>
         </div>
       </div>
     </div>
