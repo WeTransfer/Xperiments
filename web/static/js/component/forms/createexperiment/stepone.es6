@@ -7,6 +7,12 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 
+const styling = {
+  flatButton: {
+    marginRight: 10
+  }
+};
+
 export default class CreateExperimentFormStepOne extends React.Component {
   static propTypes = {
     experiment: React.PropTypes.object,
@@ -31,11 +37,12 @@ export default class CreateExperimentFormStepOne extends React.Component {
     const actions = [
       <FlatButton
         label="Cancel"
-        primary={true}
+        primary={false}
         disabled={this.props.experiment.isSaving}
         onTouchTap={this.props.cancel}
+        style={styling.flatButton}
       />,
-      <FlatButton
+      <RaisedButton
         label="Submit"
         primary={true}
         disabled={this.props.experiment.isSaving}

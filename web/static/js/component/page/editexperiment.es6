@@ -10,7 +10,7 @@ import TextField from 'material-ui/TextField';
 
 import Rules from 'component/forms/createexperiment/rules.es6';
 import Variants from 'component/forms/createexperiment/variants.es6';
-import ExcludeExperiments from 'component/forms/createexperiment/excludeexperiments.es6';
+import Exclusions from 'component/forms/createexperiment/exclusions.es6';
 
 const styling = {
   paper: {
@@ -44,17 +44,17 @@ export default class EditExperimentPage extends React.Component {
 
     return <div className="page__edit-experiment">
       <Paper style={styling.paper} zDepth={1} rounded={false}>
-        <h5>What users do you want to target?</h5>
-        <Rules list={this.props.experiment.data.rules} />
+        <Rules title="What users do you want to target?" list={this.props.experiment.data.rules} />
         <div className="spacing spacing--is-30"></div>
         <Variants title="What do you want to show to your users?" list={this.props.experiment.data.variants} />
         <div className="spacing spacing--is-30"></div>
-        <h5>What experiments do you want to exclude?</h5>
-        <ExcludeExperiments />
+        <Exclusions title="What experiments do you want to exclude?" list={this.props.experiment.data.exclusions} />
       </Paper>
-      <br />
-      <Link to="/experiments"><FlatButton label="cancel" style={styling.button.flat} /></Link>
-      <RaisedButton label="save" primary={true} onTouchTap={this.handleClickOnSave} />
+      <div className="spacing"></div>
+      <div className="pull-right">
+        <Link to="/experiments"><FlatButton label="cancel" style={styling.button.flat} /></Link>
+        <RaisedButton label="save" primary={true} onTouchTap={this.handleClickOnSave} />
+      </div>
     </div>;
   }
 }

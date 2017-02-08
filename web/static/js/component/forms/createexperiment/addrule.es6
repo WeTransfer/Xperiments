@@ -1,5 +1,6 @@
 import React from 'react';
 
+import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
@@ -14,6 +15,9 @@ const styling = {
   },
   dialog: {
     width: '100%'
+  },
+  flatButton: {
+    marginRight: 10
   }
 };
 
@@ -41,8 +45,9 @@ export default class AddRule extends React.Component {
         label="Cancel"
         primary={true}
         onTouchTap={this.props.onCancel}
+        style={styling.flatButton}
       />,
-      <FlatButton
+      <RaisedButton
         label="Add"
         primary={true}
         disabled={false}

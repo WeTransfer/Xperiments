@@ -9,11 +9,12 @@ import Dialog from 'material-ui/Dialog';
 import CreateExperimentStepOne from 'containers/createexperiment.es6';
 import VisibleExperimentsList from 'containers/visibleexperimentslist.es6';
 
-const styles = {
+const styling = {
   button: {
-    margin: 12,
+    marginTop: 20,
+    marginBottom: 20
   }
-};
+}
 
 export default class ExperimentsDashboardPage extends React.Component {
   state = {
@@ -38,9 +39,17 @@ export default class ExperimentsDashboardPage extends React.Component {
 
   render() {
     return <div className="page__expriments-dashboard">
-      <RaisedButton label="create experiment" primary={true} style={styles.button} onTouchTap={this.showCreateExperiment} />
-      <CreateExperimentStepOne isVisible={this.state.isCreateExperimentVisible} onClose={this.hideCreateExperiment} onSave={this.hideCreateExperiment} />
-      <VisibleExperimentsList />
+      <div className="row">
+        <div className="col-md-12">
+          <div className="pull-right">
+            <RaisedButton style={styling.button} label="create experiment" primary={true} onTouchTap={this.showCreateExperiment} />
+            <CreateExperimentStepOne isVisible={this.state.isCreateExperimentVisible} onClose={this.hideCreateExperiment} onSave={this.hideCreateExperiment} />
+          </div>
+        </div>
+        <div className="col-md-12">
+          <VisibleExperimentsList />
+        </div>
+      </div>
     </div>
   }
 }

@@ -11,7 +11,8 @@ export const actions = ActionHelper.types([
   'UPDATED_EXPERIMENT',
   'SET_EXPERIMENT_VALUES',
   'SET_EXPERIMENT_VARIANT',
-  'SET_EXPERIMENT_RULE'
+  'SET_EXPERIMENT_RULE',
+  'SET_EXPERIMENT_EXCLUSION'
 ]);
 
 export default ActionHelper.generate({
@@ -54,6 +55,15 @@ export default ActionHelper.generate({
       dispatch({
         type: actions.SET_EXPERIMENT_RULE,
         data
+      });
+    }
+  },
+
+  pushExclusion(experimentId) {
+    return dispatch => {
+      dispatch({
+        type: actions.SET_EXPERIMENT_EXCLUSION,
+        experimentId
       });
     }
   },

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
@@ -8,6 +9,9 @@ import Checkbox from 'material-ui/Checkbox';
 const styling = {
   checkbox: {
     marginTop: 30
+  },
+  flatButton: {
+    marginRight: 10
   }
 };
 
@@ -42,8 +46,9 @@ export default class AddVariant extends React.Component {
         label="Cancel"
         primary={true}
         onTouchTap={this.props.onCancel}
+        style={styling.flatButton}
       />,
-      <FlatButton
+      <RaisedButton
         label="Add"
         primary={true}
         disabled={false}

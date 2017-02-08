@@ -52,6 +52,14 @@ export default function(state = {}, action) {
         ...state,
         data: newData
       };
+
+    case actions.SET_EXPERIMENT_EXCLUSION:
+      newData = Object.assign({}, state.data);
+      newData.exclusions.push(action.experimentId);
+      return {
+        ...state,
+        data: newData
+      };
   }
 
   return state;

@@ -8,6 +8,7 @@ export default {
   max_users: null,
   rules: [],
   variants: [],
+  exclusions: [],
   isSaving: false
 };
 
@@ -19,6 +20,7 @@ export default {
 //   startDate: +new Date(), // now
 //   endDate: null,
 //   allocatedPercentage: 100,
+//   exclusions: [],
 //   rules: [
 //     {parameter: "language", type: "string", operator: "==", value: "en"},
 //     {parameter: "country"m type: "string", operator: "==", value: "us"}
