@@ -1,93 +1,60 @@
 import React from 'react';
 import Store from 'store/index.es6';
 import Actions from 'action/index.es6';
+import {Link} from 'react-router';
 
 import Paper from 'material-ui/Paper';
-import {Step, Stepper, StepLabel, StepContent} from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
 
-import CreateExperimentFormStepTwo from 'component/forms/createexperiment/steptwo.es6';
-import CreateExperimentFormStepThree from 'component/forms/createexperiment/stepthree.es6';
+import Rules from 'component/forms/createexperiment/rules.es6';
+import Variants from 'component/forms/createexperiment/variants.es6';
+import ExcludeExperiments from 'component/forms/createexperiment/excludeexperiments.es6';
 
 const styling = {
   paper: {
-    padding: 20
+    padding: 20,
+    marginTop: 30
+  },
+  button: {
+    flat: {
+      marginRight: 10
+    }
   }
 };
 
 export default class EditExperimentPage extends React.Component {
   static propTypes = {
-    experiment: React.PropTypes.object
+    experiment: React.PropTypes.object,
+    save: React.PropTypes.func
   };
-
-  state = {
-    finished: false,
-    stepIndex: 0
-  }
 
   componentWillMount() {
     Store.dispatch(Actions.Experiment.get(this.props.params.experimentId));
   }
 
-  handleNext = () => {
-    const {stepIndex} = this.state;
-    this.setState({
-      stepIndex: stepIndex + 1,
-      finished: stepIndex >= 1,
-    });
-  };
-
-  handlePrev = () => {
-    const {stepIndex} = this.state;
-    if (stepIndex > 0) {
-      this.setState({stepIndex: stepIndex - 1});
-    }
-  };
-
-  getStepContent(stepIndex) {
-    switch (stepIndex) {
-      case 0:
-        return <CreateExperimentFormStepTwo samplingRate={this.props.experiment.data.sampling_rate} maxUsers={this.props.experiment.data.max_users} variants={this.props.experiment.data.variants} rules={this.props.experiment.data.rules} onRulesAdd={() => {}} onVariantAdd={() => {}} />;
-      case 1:
-        return <CreateExperimentFormStepThree />;
-      default:
-        return 'You\'re a long way from home sonny jim!';
-    }
+  handleClickOnSave = () => {
+    this.props.save(this.props.experiment.data);
   }
 
   render() {
     if (this.props.experiment.isFetching === undefined || this.props.experiment.isFetching === true)
       return null;
 
-    const {finished, stepIndex} = this.state;
-
-    return <div className="page__create-experiment">
-      <Stepper activeStep={stepIndex}>
-        <Step>
-          <StepLabel>Segmentation & Variants</StepLabel>
-        </Step>
-        <Step>
-          <StepLabel>Exclude Experiments</StepLabel>
-        </Step>
-      </Stepper>
-      <div>
-        <Paper style={styling.paper} zDepth={1} rounded={false}>{this.getStepContent(stepIndex)}</Paper>
+    return <div className="page__edit-experiment">
+      <Paper style={styling.paper} zDepth={1} rounded={false}>
+        <h5>What users do you want to target?</h5>
+        <Rules list={this.props.experiment.data.rules} />
         <div className="spacing spacing--is-30"></div>
-        <div>
-          <FlatButton
-            label="Back"
-            disabled={stepIndex === 0}
-            onTouchTap={this.handlePrev}
-            style={{marginRight: 12}}
-          />
-          <RaisedButton
-            label={stepIndex === 2 ? 'Finish' : 'Next'}
-            primary={true}
-            onTouchTap={this.handleNext}
-          />
-        </div>
-      </div>
+        <Variants title="What do you want to show to your users?" list={this.props.experiment.data.variants} />
+        <div className="spacing spacing--is-30"></div>
+        <h5>What experiments do you want to exclude?</h5>
+        <ExcludeExperiments />
+      </Paper>
+      <br />
+      <Link to="/experiments"><FlatButton label="cancel" style={styling.button.flat} /></Link>
+      <RaisedButton label="save" primary={true} onTouchTap={this.handleClickOnSave} />
     </div>;
   }
 }

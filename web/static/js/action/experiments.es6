@@ -20,7 +20,7 @@ export default ActionHelper.generate({
           response.json().then(json => {
             dispatch({
               type: actions.FETCHED_EXPERIMENTS,
-              list: json.experiments
+              list: json.experiments.reverse()
             });
           });
         });

@@ -2,6 +2,7 @@ import {actions} from 'action/experiment.es6';
 
 export default function(state = {}, action) {
   const {type} = action;
+  let newData = {};
 
   switch (type) {
     case actions.FETCH_EXPERIMENT:
@@ -33,7 +34,23 @@ export default function(state = {}, action) {
     case actions.SET_EXPERIMENT_VALUES:
       return {
         ...state,
-        ...action.data
+        data: Object.assign({}, state.data, action.data)
+      };
+
+    case actions.SET_EXPERIMENT_VARIANT:
+      newData = Object.assign({}, state.data);
+      newData.variants = newData.variants.concat(action.data);
+      return {
+        ...state,
+        data: newData
+      };
+
+    case actions.SET_EXPERIMENT_RULE:
+      newData = Object.assign({}, state.data);
+      newData.rules = newData.rules.concat(action.data);
+      return {
+        ...state,
+        data: newData
       };
   }
 

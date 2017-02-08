@@ -5,6 +5,7 @@ import applications from './applications.es6';
 import newexperiment from './newexperiment.es6';
 import experiment from './experiment.es6';
 import experiments from './experiments.es6';
+import newrule from './newrule.es6';
 
 export default Redux.combineReducers({
   app,
@@ -12,5 +13,6 @@ export default Redux.combineReducers({
   applications,
   newexperiment,
   experiment,
-  experiments
+  experiments,
+  newrule
 });

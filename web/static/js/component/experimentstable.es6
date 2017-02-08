@@ -3,7 +3,6 @@ import React from 'react';
 import {Link} from 'react-router';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import LinearProgress from 'material-ui/LinearProgress';
 
 export default class ExperimentsTable extends React.Component {
   static propTypes = {
@@ -16,18 +15,18 @@ export default class ExperimentsTable extends React.Component {
   };
   
   render() {
-    if (this.props.experiments.isFetching) return  <LinearProgress mode="indeterminate" />;
-    
     let renderedExperiments = [];
-    this.props.experiments.list.forEach((experiment) => {
-      renderedExperiments.push(React.createElement(TableRow, {key: `experiment__table-row-${experiment.id}`}, [
-        React.createElement(TableRowColumn, {key: `experiment__table-row-column-id-${experiment.id}`}, experiment.id),
-        React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
-        React.createElement(TableRowColumn, {key: `experiment__table-row-column-variants-${experiment.id}`}, experiment.variants.length),
-        React.createElement(TableRowColumn, {key: `experiment__table-row-column-active-${experiment.id}`}, experiment.isActive ? 'Active' : 'Inactive'),
-        React.createElement(TableRowColumn, {key: `experiment__table-row-column-actions-${experiment.id}`}, !experiment.isActive ? <Link to={`/experiments/${experiment.id}/edit`}>Edit</Link> : null)
-      ]));
-    });
+    if (!this.props.experiments.isFetching) {
+      this.props.experiments.list.forEach((experiment) => {
+        renderedExperiments.push(React.createElement(TableRow, {key: `experiment__table-row-${experiment.id}`}, [
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-id-${experiment.id}`}, experiment.id),
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-variants-${experiment.id}`}, experiment.variants.length),
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-active-${experiment.id}`}, experiment.isActive ? 'Active' : 'Inactive'),
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-actions-${experiment.id}`}, !experiment.isActive ? <Link to={`/experiments/${experiment.id}/edit`}>Edit</Link> : null)
+        ]));
+      });
+    }
 
     return <Table>
       <TableHeader>

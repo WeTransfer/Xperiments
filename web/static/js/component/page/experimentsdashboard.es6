@@ -6,7 +6,7 @@ import {Link} from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 
-import CreateExperimentStepOne from 'containers/createexperiment/stepone.es6';
+import CreateExperimentStepOne from 'containers/createexperiment.es6';
 import VisibleExperimentsList from 'containers/visibleexperimentslist.es6';
 
 const styles = {
@@ -37,8 +37,6 @@ export default class ExperimentsDashboardPage extends React.Component {
   }
 
   render() {
-    const {experiments} = Store.getState();
-    console.log(experiments);
     return <div className="page__expriments-dashboard">
       <RaisedButton label="create experiment" primary={true} style={styles.button} onTouchTap={this.showCreateExperiment} />
       <CreateExperimentStepOne isVisible={this.state.isCreateExperimentVisible} onClose={this.hideCreateExperiment} onSave={this.hideCreateExperiment} />

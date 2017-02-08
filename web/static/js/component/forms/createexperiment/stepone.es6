@@ -16,6 +16,8 @@ export default class CreateExperimentFormStepOne extends React.Component {
     setEndDate: React.PropTypes.func,
     setEndTime: React.PropTypes.func,
     setDescription: React.PropTypes.func,
+    setMaxUsers: React.PropTypes.func,
+    setSamplingRate: React.PropTypes.func,
     save: React.PropTypes.func,
     cancel: React.PropTypes.func,
     isVisible: React.PropTypes.bool
@@ -41,7 +43,7 @@ export default class CreateExperimentFormStepOne extends React.Component {
       />
     ];
 
-    return <Dialog modal={true} actions={actions} open={this.props.isVisible}>
+    return <Dialog modal={true} actions={actions} open={this.props.isVisible} title="Create Experiment">
       <div className="form__create-experiment form__create-experiment--is-step-one">
         <div className="row">
           <div className="col-md-3">
@@ -53,7 +55,7 @@ export default class CreateExperimentFormStepOne extends React.Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-4">
+          <div className="col-md-5">
             <DatePicker
               value={this.props.experiment.start_date}
               floatingLabelText="Start Date"
@@ -61,7 +63,7 @@ export default class CreateExperimentFormStepOne extends React.Component {
               onChange={(e, value) => {this.props.setStartDate(value);}}
             />
           </div>
-          <div className="col-md-8">
+          <div className="col-md-7">
             <TimePicker
               value={this.props.experiment.start_date}
               floatingLabelText="Start Time"
@@ -70,7 +72,7 @@ export default class CreateExperimentFormStepOne extends React.Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-4">
+          <div className="col-md-5">
             <DatePicker
               value={this.props.experiment.end_date}
               floatingLabelText="End Date"
@@ -78,11 +80,28 @@ export default class CreateExperimentFormStepOne extends React.Component {
               onChange={(e, value) => {this.props.setEndDate(value);}}
             />
           </div>
-          <div className="col-md-8">
+          <div className="col-md-7">
             <TimePicker
               value={this.props.experiment.end_date}
               floatingLabelText="End Time"
               onChange={(e, value) => {this.props.setEndTime(value);}}
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-5">
+            <TextField
+              defaultValue={this.props.experiment.max_users !== null ? this.props.experiment.max_users : ''}
+              floatingLabelText="Maximum Participants (optional)"
+              onChange={(e, value) => {this.props.setMaxUsers(value);}}
+            />
+          </div>
+          <div className="col-md-5">
+            <TextField
+              defaultValue={this.props.experiment.sampling_rate}
+              disabled={true}
+              floatingLabelText="Sampling Rate (%)"
+              onChange={(e, value) => {this.props.setSamplingRate(value);}}
             />
           </div>
         </div>

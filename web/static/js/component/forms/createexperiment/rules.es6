@@ -2,9 +2,8 @@ import React from 'react';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
-import Dialog from 'material-ui/Dialog';
 
-import AddVariantForm from 'containers/addvariantform.es6';
+import AddRuleForm from 'containers/addruleform.es6';
 
 const styling = {
   emptyTD: {
@@ -12,40 +11,37 @@ const styling = {
   }
 };
 
-export default class Variants extends React.Component {
+export default class AddSegments extends React.Component {
   static propTypes = {
     title: React.PropTypes.string,
     list: React.PropTypes.array
-  }
-
-  defaultProps = {
-    list: []
-  }
+  };
 
   state = {
-    isCreateVariantVisible: false
+    isAddRuleVisible: false
   }
 
-  showCreateVariant = () => {
+  showAddRule = () => {
     this.setState({
-      isCreateVariantVisible: true
+      isAddRuleVisible: true
     });
   }
 
-  hideCreateVariant = () => {
+  hideAddRule = () => {
     this.setState({
-      isCreateVariantVisible: false
+      isAddRuleVisible: false
     });
   }
 
   render() {
     let renderedList = [];
 
-    this.props.list.forEach(variant => {
+    this.props.list.forEach(rule => {
       renderedList.push(<TableRow>
-        <TableRowColumn>{variant.name}</TableRowColumn>
-        <TableRowColumn>{variant.allocation}</TableRowColumn>
-        <TableRowColumn>{variant.control_group ? 'Yes' : 'No'}</TableRowColumn>
+        <TableRowColumn>{rule.parameter}</TableRowColumn>
+        <TableRowColumn>{rule.type}</TableRowColumn>
+        <TableRowColumn>{rule.operator}</TableRowColumn>
+        <TableRowColumn>{rule.value}</TableRowColumn>
         <TableRowColumn>-</TableRowColumn>
       </TableRow>);
     });
@@ -56,12 +52,12 @@ export default class Variants extends React.Component {
       </TableRow>);
     }
 
-    return <div className="variants__manager">
+    return <div className="form__add-segments">
       <div className="row">
         <div className="col-md-6"><h5>{this.props.title}</h5></div>
         <div className="col-md-6">
-          <RaisedButton label="add variant" secondary={true} onTouchTap={this.showCreateVariant} className="pull-right" />
-          <AddVariantForm open={this.state.isCreateVariantVisible} onCancel={this.hideCreateVariant} onAdd={this.hideCreateVariant} />
+          <RaisedButton label="add rule" secondary={true} onTouchTap={this.showAddRule} className="pull-right" />
+          <AddRuleForm open={this.state.isAddRuleVisible} onCancel={this.hideAddRule} onAdd={this.hideAddRule} />
         </div>
       </div>
       <div className="row">
@@ -69,9 +65,10 @@ export default class Variants extends React.Component {
           <Table>
             <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
               <TableRow>
-                <TableHeaderColumn>Name</TableHeaderColumn>
-                <TableHeaderColumn>Allocation</TableHeaderColumn>
-                <TableHeaderColumn>Control Group</TableHeaderColumn>
+                <TableHeaderColumn>Parameter</TableHeaderColumn>
+                <TableHeaderColumn>Type</TableHeaderColumn>
+                <TableHeaderColumn>Operator</TableHeaderColumn>
+                <TableHeaderColumn>Value</TableHeaderColumn>
                 <TableHeaderColumn>Actions</TableHeaderColumn>
               </TableRow>
             </TableHeader>

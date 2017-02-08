@@ -23,6 +23,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setEndDate: value => {dispatch(setValue('end_date', value))},
     setEndTime: value => {dispatch(setValue('end_date', value))},
     setDescription: value => {dispatch(setValue('description', value))},
+    setSamplingRate: value => {dispatch(setValue('sampling_rate', value))},
+    setMaxUsers: value => {dispatch(setValue('max_users', value))},
     save: (data) => {
       dispatch(Actions.NewExperiment.create(data));
       ownProps.onSave();
