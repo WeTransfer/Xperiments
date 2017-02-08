@@ -17,6 +17,7 @@ export default class ExperimentsTable extends React.Component {
   static propTypes = {
     experiments: React.PropTypes.arrayOf(React.PropTypes.shape({
       id: PropTypes.number.isRequired,
+      state: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       variants: PropTypes.array.isRequired,
       isActive: PropTypes.bool.isRequired
@@ -53,7 +54,7 @@ export default class ExperimentsTable extends React.Component {
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-id-${experiment.id}`}, experiment.id),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-variants-${experiment.id}`}, experiment.variants.length),
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-active-${experiment.id}`}, experiment.isActive ? 'Active' : 'Inactive'),
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-state-${experiment.id}`}, experiment.state),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-actions-${experiment.id}`}, actions)
         ]));
       });
