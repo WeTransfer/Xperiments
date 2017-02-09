@@ -19,11 +19,11 @@ defmodule Xperiments.Assigner.Dispatcher do
   ## Server
 
   def handle_call({:assign_to_experiments, rules, assigned_experiments}, _caller, state) do
-    # exclussions_list = Map.keys(assigned_experiments) |> get_exclusions_list()
-    # candidates = find_experiments(exclussions_list)
+    # exclusions_list = Map.keys(assigned_experiments) |> get_exclusions_list()
+    # candidates = find_experiments(exclusions_list)
   end
 
-  defp find_experiments(exclussions_list \\ []) do
+  defp find_experiments(exclusions_list \\ []) do
     []
   end
 

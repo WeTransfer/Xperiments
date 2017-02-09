@@ -68,7 +68,7 @@ defmodule Xperiments.Assigner.Experiment do
   end
 
   @doc """
-  Returns an exclussions list only if state is `running`
+  Returns an exclusions list only if state is `running`
   Otherwise returns an empty list
   """
   def handle_call({:get_exclusion_list}, _caller, %{state: "running", exclusions: exclusions} = state) do
