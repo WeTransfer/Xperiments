@@ -127,12 +127,17 @@ defmodule Xperiments.Experiment do
   ## Queries
 
   def ready_to_run(query) do
-    query |> where([e], e.state in ["running", "stopped"])
+    from e in query,
+      where: e.state in ["running", "stopped"]
   end
 
   def with_exclusions(query) do
-    exclusions_query = from ex in __MODULE__, where: not(ex.state == "terminated")
-    query |> preload([exclusions: ^exclusions_query])
+    exclusions_query =
+      from(ex in query,
+        where: not(ex.state == "terminated"),
+        select: map(ex, [:id, :name]))
+    from e in query,
+      preload: [exclusions: ^exclusions_query]
   end
 
   ## Serializer

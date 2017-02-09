@@ -12,4 +12,8 @@ defmodule Xperiments.ExperimentView do
   def render("state.json", %{state: state}) do
     %{state: state}
   end
+
+  def render("exclusions.json", %{exclusions: exclusions, id: id}) do
+    %{"#{id}" => exclusions}
+  end
 end

@@ -70,4 +70,12 @@ defmodule Xperiments.ExperimentController do
       |> json(%{errors: %{details: "unsupported event"}})
     end
   end
+
+  def exclusions(conn, %{"experiment_id" => id}) do
+    experiment =
+      Experiment
+      |> Experiment.with_exclusions
+      |> Repo.get(id)
+    render conn, "exclusions.json", exclusions: experiment.exclusions, id: experiment.id
+  end
 end
