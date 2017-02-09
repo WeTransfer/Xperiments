@@ -1,43 +1,92 @@
 import Store from 'store/index.es6';
+import {actions as AppActions} from 'action/app.es6';
 import ActionHelper from 'modules/redux-actions/index.es6';
-import {actions as ExperimentActions} from 'action/experiments.es6';
 import API from 'modules/api/index.es6';
+
 import config from 'config.es6';
 
 export const actions = ActionHelper.types([
-  'CREATE_EXPERIMENT',
+  'FETCH_EXPERIMENT',
+  'FETCHED_EXPERIMENT',
+  'UPDATE_EXPERIMENT',
+  'UPDATED_EXPERIMENT',
   'SET_EXPERIMENT_VALUES',
-  'RESET_EXPERIMENT'
+  'SET_EXPERIMENT_VARIANT',
+  'SET_EXPERIMENT_RULE',
+  'SET_EXPERIMENT_EXCLUSION'
 ]);
 
 export default ActionHelper.generate({
-  create(data) {
-    return async (dispatch, getState) => {
-      API.post(config.api.resources.experiments.POST, {experiment: data})
-        .then(response => {
-          response.json(json => {
-            dispatch({
-              type: actions.CREATE_EXPERIMENT,
-              data: json.experiment
-            });
+  get(id) {
+    return async (dispatch) => {
+      dispatch({type: actions.FETCH_EXPERIMENT});
 
+      API.get(`${config.api.resources.experiments.GET}/${id}`)
+        .then(response => {
+          response.json().then(json => {
             dispatch({
-              type: ExperimentActions.PUSH_TO_EXPERIMENTS,
+              type: actions.FETCHED_EXPERIMENT,
               data: json.experiment
             });
           });
-
-          dispatch({type: actions.RESET_EXPERIMENT});
         });
-    };
+    }
   },
 
   setValues(data) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
       dispatch({
         type: actions.SET_EXPERIMENT_VALUES,
         data
       });
     };
+  },
+
+  pushVariant(data) {
+    return dispatch => {
+      dispatch({
+        type: actions.SET_EXPERIMENT_VARIANT,
+        data
+      });
+    }
+  },
+
+  pushRule(data) {
+    return dispatch => {
+      dispatch({
+        type: actions.SET_EXPERIMENT_RULE,
+        data
+      });
+    }
+  },
+
+  pushExclusion(experimentId) {
+    return dispatch => {
+      dispatch({
+        type: actions.SET_EXPERIMENT_EXCLUSION,
+        experimentId
+      });
+    }
+  },
+
+  update(data) {
+    return async (dispatch) => {
+      dispatch({type: actions.UPDATE_EXPERIMENT});
+
+      API.put(`${config.api.resources.experiments.GET}/${data.id}`, {experiment: data})
+        .then(response => {
+          response.json().then(json => {
+            dispatch({
+              type: actions.UPDATED_EXPERIMENT,
+              data: json.experiment
+            });
+
+            dispatch({
+              type: AppActions.SET_APP_REDIRECT,
+              path: '/experiments/'
+            });
+          });
+        });
+    }
   }
 });

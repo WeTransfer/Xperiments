@@ -11,5 +11,15 @@ export default {
       }),
       body: JSON.stringify(data)
     }));
+  },
+
+  put: (url, data) => {
+    return window.fetch(new Request(url, {
+      method: 'PUT', 
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify(data)
+    }));
   }
 };

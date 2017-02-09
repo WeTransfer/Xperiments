@@ -1,3 +1,4 @@
+import Store from 'store/index.es6';
 import { connect } from 'react-redux';
 import Actions from 'action/index.es6';
 import CreateExperimentStepOneForm from 'component/forms/createexperiment/stepone.es6';
@@ -5,12 +6,12 @@ import CreateExperimentStepOneForm from 'component/forms/createexperiment/stepon
 const setValue = (key, value) => {
   let data = {};
   data[key] = value;
-  return Actions.Experiment.setValues(data);
+  return Actions.NewExperiment.setValues(data);
 }
 
 const mapStateToProps = (state) => {
   return {
-    experiment: state.experiment
+    experiment: state.newexperiment
   }
 }
 
@@ -22,8 +23,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setEndDate: value => {dispatch(setValue('end_date', value))},
     setEndTime: value => {dispatch(setValue('end_date', value))},
     setDescription: value => {dispatch(setValue('description', value))},
+    setSamplingRate: value => {dispatch(setValue('sampling_rate', value))},
+    setMaxUsers: value => {dispatch(setValue('max_users', value))},
     save: (data) => {
-      dispatch(Actions.Experiment.create(data));
+      dispatch(Actions.NewExperiment.create(data));
       ownProps.onSave();
     },
     cancel: ownProps.onClose

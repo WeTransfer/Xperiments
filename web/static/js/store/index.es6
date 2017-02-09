@@ -2,18 +2,24 @@ import * as Redux from 'redux';
 import Thunk from 'redux-thunk';
 import Reducer from 'reducer/index.es6';
 
+import app from './helper/app.es6';
 import user from './helper/user.es6';
 import applications from './helper/applications.es6';
+import newexperiment from './helper/newexperiment.es6';
 import experiment from './helper/experiment.es6';
 import experiments from './helper/experiments.es6';
+import newrule from './helper/newrule.es6';
 
 // Create our initial state
 const initialState = {
   // This contains everything that is pending in our app is stored here
+  app,
   user,
   applications,
+  newexperiment,
   experiment,
-  experiments
+  experiments,
+  newrule
 };
 
 // We'll create a Store that has our Reducers and an initial state,

@@ -5,6 +5,7 @@ export default function(state = {}, action) {
 
   switch (type) {
     case actions.FETCH_EXPERIMENTS:
+    case actions.FETCH_EXPERIMENT:
       return {
         ...state,
         isFetching: true
@@ -14,6 +15,13 @@ export default function(state = {}, action) {
       return {
         ...state,
         list: action.list,
+        isFetching: false
+      };
+
+    case actions.FETCHED_EXPERIMENT:
+      return {
+        ...state,
+        list: [action.list],
         isFetching: false
       };
 

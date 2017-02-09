@@ -20,18 +20,10 @@ export default ActionHelper.generate({
           response.json().then(json => {
             dispatch({
               type: actions.FETCHED_EXPERIMENTS,
-              list: json.experiments
+              list: json.experiments.reverse()
             });
           });
         });
-    };
+    }
   }
 });
-
-
-// {id: 1, name: 'experiment 1', description: '', variants: [], isActive: true, startDate: '', startTime: '', endDate: '', endTime: ''},
-// {id: 2, name: 'experiment 2', description: '', variants: [], isActive: true, startDate: '', startTime: '', endDate: '', endTime: ''},
-// {id: 3, name: 'experiment 3', description: '', variants: [], isActive: true, startDate: '', startTime: '', endDate: '', endTime: ''},
-// {id: 4, name: 'experiment 4', description: '', variants: [], isActive: true, startDate: '', startTime: '', endDate: '', endTime: ''},
-// {id: 5, name: 'experiment 5', description: '', variants: [], isActive: true, startDate: '', startTime: '', endDate: '', endTime: ''},
-// {id: 6, name: 'experiment 6', description: '', variants: [], isActive: true, startDate: '', startTime: '', endDate: '', endTime: ''}

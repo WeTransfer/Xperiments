@@ -5,15 +5,20 @@ import {Link} from 'react-router';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
+import Paper from 'material-ui/Paper';
 
-import CreateExperimentStepOne from 'containers/createexperiment/stepone.es6';
+import CreateExperimentStepOne from 'containers/createexperiment.es6';
 import VisibleExperimentsList from 'containers/visibleexperimentslist.es6';
 
-const styles = {
+const styling = {
+  paper: {
+    padding: 20,
+    marginTop: 20
+  },
   button: {
-    margin: 12,
+    marginTop: 20
   }
-};
+}
 
 export default class ExperimentsDashboardPage extends React.Component {
   state = {
@@ -33,14 +38,22 @@ export default class ExperimentsDashboardPage extends React.Component {
   hideCreateExperiment = () => {
     this.setState({
       isCreateExperimentVisible: false
-    }); 
+    });
   }
 
   render() {
     return <div className="page__expriments-dashboard">
-      <RaisedButton label="create experiment" primary={true} style={styles.button} onTouchTap={this.showCreateExperiment} />
-      <CreateExperimentStepOne isVisible={this.state.isCreateExperimentVisible} onClose={this.hideCreateExperiment} onSave={this.hideCreateExperiment} />
-      <VisibleExperimentsList />
+      <div className="row">
+        <div className="col-md-12">
+          <div className="pull-right">
+            <RaisedButton style={styling.button} label="create experiment" primary={true} onTouchTap={this.showCreateExperiment} />
+            <CreateExperimentStepOne isVisible={this.state.isCreateExperimentVisible} onClose={this.hideCreateExperiment} onSave={this.hideCreateExperiment} />
+          </div>
+        </div>
+        <div className="col-md-12">
+          <Paper style={styling.paper} zDepth={1} rounded={false}><VisibleExperimentsList /></Paper>
+        </div>
+      </div>
     </div>
   }
 }
