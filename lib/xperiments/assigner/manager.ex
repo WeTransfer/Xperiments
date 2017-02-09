@@ -23,7 +23,7 @@ defmodule Xperiments.Assigner.Manager do
         Logger.error "Given experiment is not started: #{inspect experiment}"
         :error
       err ->
-        Logger.error "Something else really wrong: #{inspect err}"
+        Logger.error "Can't start an experiment with the reason: #{inspect err}"
         :error
     end
   end

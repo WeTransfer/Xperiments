@@ -3,7 +3,6 @@ defmodule Xperiments.Assigner.ExperimentTest do
   alias Xperiments.Assigner.{Manager, Experiment}
 
   setup do
-    # :ok = Ecto.Adapters.SQL.Sandbox.checkout(Xperiments.Repo)
     exp =
       insert(:experiment, state: "running", exclusions: [build(:experiment)])
       |> Repo.preload(:exclusions)
@@ -18,4 +17,5 @@ defmodule Xperiments.Assigner.ExperimentTest do
     assert length(exc_list) == 1
     assert exc_list == exclusions
   end
+
 end
