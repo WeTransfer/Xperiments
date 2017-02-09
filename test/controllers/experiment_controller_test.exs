@@ -121,13 +121,4 @@ defmodule Xperiments.ExperimentControllerTest do
       |> json_response(422)
     assert body["errors"] == %{"state" => ["You can't move state from :draft to :stopped"]}
   end
-
-  test "/exclusions returns a list of mutual exclusions for the given experiment", context do
-    exp = insert(:experiment, application: context[:app], exclusions: [build(:experiment)])
-    body =
-      get(context.conn, @api_path <> "/experiments/" <> exp.id <> "/exclusions")
-      |> json_response(200)
-    assert Map.keys(body) == [exp.id]
-    assert length(Map.values(body)) == 1
-  end
 end

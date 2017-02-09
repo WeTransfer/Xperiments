@@ -136,8 +136,8 @@ defmodule Xperiments.Experiment do
       from(ex in query,
         where: not(ex.state == "terminated"),
         select: map(ex, [:id, :name]))
-    from e in query,
-      preload: [exclusions: ^exclusions_query]
+    from(e in query,
+      preload: [exclusions: ^exclusions_query])
   end
 
   ## Serializer
