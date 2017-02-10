@@ -150,33 +150,5 @@ export default ActionHelper.generate({
         throw 'APIPutFailed';
       }
     }
-  },
-
-  updateState(to) {
-    return async (dispatch) => {
-      dispatch({type: actions.UPDATE_EXPERIMENT_STATE});
-
-      try {
-        const response = await API.put(`${config.api.resources.experiments.GET}/${data.id}/state/${to}`, {experiment: data});
-        if (response.status === 200) {
-          response.json().then(json => {
-            dispatch({
-              type: actions.UPDATED_EXPERIMENT_STATE,
-              data: json.experiment
-            });
-          });
-        } else {
-          dispatch({
-            type: AppActions.SET_APP_NOTIFICATION,
-            notificationData: {
-              type: 'error',
-              message: 'There was an error updating the experiment state, please try again'
-            }
-          });
-        }
-      } catch(e) {
-        throw 'APIPutFailed';
-      }
-    }
   }
 });

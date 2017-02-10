@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import Actions from 'action/index.es6';
 import ExperimentsTable from 'component/experimentstable.es6';
 
 const getVisibleExperiments = (experiments, filter = 'SHOW_ALL') => {
@@ -17,7 +18,11 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {}
+  return {
+    start: experimentId => dispatch(Actions.Experiments.startExperiment(experimentId)),
+    stop: experimentId => dispatch(Actions.Experiments.stopExperiment(experimentId)),
+    terminate: experimentId => dispatch(Actions.Experiments.terminateExperiment(experimentId))
+  }
 }
 
 const VisibleExperimentsList = connect(
