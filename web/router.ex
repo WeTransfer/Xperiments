@@ -19,9 +19,17 @@ defmodule Xperiments.Router do
     end
   end
 
+  scope "/assigner", Xperiments do
+    pipe_through :api
+
+    get "/application/:app_name/experiments", AssignerController, :experiments
+  end
+
+  # should be last, because scope is too wide
   scope "/", Xperiments do
     pipe_through :browser
 
     forward "/", HomeController, :index
   end
+
 end

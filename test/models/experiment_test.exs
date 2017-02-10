@@ -41,7 +41,7 @@ defmodule Xperiments.ExperimentTest do
 
   test "validate embedded fields: variants and rules", context do
     variants = [
-      %{name: "var a", allocation: 1, description: "nothing", payload: "test"}
+      %{name: "var a", allocation: 100, description: "nothing", payload: "test"}
     ]
     rules = [
       %{parameter: "lang", type: "string", operator: "==", value: "ru"}
@@ -78,5 +78,20 @@ defmodule Xperiments.ExperimentTest do
 
     invalid_changeset = Experiment.run(updated_exp)
     refute invalid_changeset.valid?
+  end
+
+  test "can't run experiment without variants" do
+    experiment = insert(:experiment, variants: [])
+    assert experiment.state == "draft"
+
+    falsy_changeset = Experiment.run(experiment)
+    refute falsy_changeset.valid?
+  end
+
+  test "that we can strore big chunks of data in one row with an experiment" do
+    variant = Xperiments.Factory.variant()
+    exp = insert(:experiment, variants: [variant])
+    db_var_payload = (exp.variants |> List.first).payload
+    assert db_var_payload == variant.payload
   end
 end

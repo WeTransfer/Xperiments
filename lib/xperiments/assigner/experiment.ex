@@ -10,8 +10,10 @@ defmodule Xperiments.Assigner.Experiment do
   end
 
   def init(%{state: state} = experiment) when state in ["running", "stopped"] do
-    state = Map.take(experiment, [:id, :name, :rules, :variants, :start_date, :end_date,
-                                  :created_at, :state, :exclusions])
+    :random.seed(:erlang.now)
+    temp_state = Map.take(experiment, [:id, :name, :rules, :start_date, :end_date,
+                                       :created_at, :state, :exclusions])
+    state = Map.merge(temp_state, %{variants: do_build_segmented_variants(experiment.variants)})
     {:ok, state}
   end
   def init(experiment),
@@ -40,15 +42,21 @@ defmodule Xperiments.Assigner.Experiment do
   Get a specific variant of the experiment
   """
   def get_variant(id, var_name) do
+
+  end
+
+  @doc """
+  Assign a variant based on their allocations
+  """
+  def get_random_variant(pid) when is_pid(pid) do
+    GenServer.call(pid, {:get_random_variant})
+  end
+  def get_random_variant(id) do
+    GenServer.call(via_tuple(id), {:get_random_variant})
   end
 
   def get_exclusions_list(id) do
     GenServer.call(via_tuple(id), {:get_exclusion_list})
-  end
-
-
-  def assign_client_to_variant(client_id) do
-
   end
 
   def accept_rules?(pid, rules) do
@@ -78,9 +86,40 @@ defmodule Xperiments.Assigner.Experiment do
     {:reply, [], state}
   end
 
+  # TODO: WIP
   def handle_call({:check_rules, rules}, _caller, state) do
-    # compare_rules(rules, state[:rules])
     {:reply, true, state}
+  end
+
+  def handle_call({:get_random_variant}, _caller, state) do
+    response = Map.merge(
+      Map.take(state, [:id, :name, :start_date, :end_date]),
+      %{variant: do_get_random_variant(state.variants)}
+    )
+    {:reply, response, state}
+  end
+
+  # Create segment ranges for each variant based on their allocations
+  @doc false
+  defp do_build_segmented_variants(variants) do
+    {segmented_variants, _} =
+      variants
+      |> Enum.sort(& &1.allocation >= &2.allocation)
+      |> Enum.map_reduce(0, fn var, cursor ->
+        new_cursor = cursor + var.allocation
+        {
+          Map.merge(var, %{segment_range: Range.new(cursor + 1, new_cursor)}),
+          new_cursor
+        }
+      end)
+    segmented_variants
+  end
+
+  defp do_get_random_variant(variants) do
+    rand_num = :rand.uniform(100)
+    Enum.filter(variants, fn var -> rand_num in var.segment_range end)
+    |> List.first
+    |> Map.drop([:segment_range])
   end
 
 end
