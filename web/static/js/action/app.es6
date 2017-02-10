@@ -11,21 +11,21 @@ export default ActionHelper.generate({
   setRedirectPath(path) {
     return (dispatch, getState) => {
       dispatch({
-        type: 'SET_APP_REDIRECT',
+        type: actions.SET_APP_REDIRECT,
         path
       });
     };
   },
 
   resetRedirectPath() {
-    return (dispatch, getState) => {
-      dispatch({type: 'RESET_APP_REDIRECT'});
+    return dispatch => {
+      dispatch({type: actions.RESET_APP_REDIRECT});
     };
   },
 
   resetNotification() {
     return (dispatch, getState) => {
-      dispatch({type: 'RESET_APP_NOTIFICATION'});
+      dispatch({type: actions.RESET_APP_NOTIFICATION});
     };
   }
 });

@@ -24,7 +24,6 @@ export default class AddExclusion extends React.Component {
   }
 
   handleAdd = () => {
-    console.log(this.props.currentlyExcluded, this.refs.tableBody);
     let exclusions = [];
     this.refs.tableBody.state.selectedRows.forEach(rowNumber => {
       exclusions.push(this.props.list[rowNumber].id);
