@@ -51,7 +51,7 @@ export default class ExperimentsDashboardPage extends React.Component {
         </div>
         <div className="col-md-12">
           <Paper style={styling.paper} zDepth={1} rounded={false}>
-            <VisibleExperimentsList />
+            <VisibleExperimentsList title="Experiments" />
           </Paper>
         </div>
       </div>

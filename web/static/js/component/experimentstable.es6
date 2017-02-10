@@ -31,7 +31,8 @@ export default class ExperimentsTable extends React.Component {
     currentFilter: React.PropTypes.string.isRequired,
     start: React.PropTypes.func.isRequired,
     stop: React.PropTypes.func.isRequired,
-    terminate: React.PropTypes.func.isRequired
+    terminate: React.PropTypes.func.isRequired,
+    title: React.PropTypes.string
   };
 
   state = {
@@ -105,7 +106,7 @@ export default class ExperimentsTable extends React.Component {
 
     let dialog = null;
     if (this.state.showingExperimentId !== null) {
-      let visibleExperiment = this.props.experiments.list.filter((experiment) => {
+      let visibleExperiment = this.props.list.filter((experiment) => {
         return experiment.id === this.state.showingExperimentId;
       });
       
@@ -130,7 +131,8 @@ export default class ExperimentsTable extends React.Component {
 
     return <div className="experiments__table">
       <div className="row">
-        <div className="col-xs-12">
+        <div className="col-xs-6"><h4>{this.props.title}</h4></div>
+        <div className="col-xs-6">
           <div className="pull-right">
             <SelectField
               floatingLabelText="Filter by"
