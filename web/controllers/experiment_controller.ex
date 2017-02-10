@@ -4,17 +4,19 @@ defmodule Xperiments.ExperimentController do
 
   plug :scrub_params, "experiment" when action in [:create, :update]
 
-  def index(conn, %{"application_name" => app}) do
-    app =
-      Repo.get_by!(Application, name: app)
-      |> Repo.preload(experiments: from(e in Experiment, where: e.state != "deleted"))
-    render(conn, "index.json", experiments: app.experiments |> Repo.preload(:exclusions))
+  def index(conn, %{"application_name" => app_name}) do
+    app_id = Repo.get_by!(Application, name: app_name).id
+    experiments =
+      Experiment.all_for_application(app_id)
+      |> Experiment.with_exclusions
+      |> Repo.all
+    render(conn, "index.json", experiments: experiments)
   end
 
   def show(conn, %{"id" => id}) do
     experiment =
-      Repo.get!(Experiment, id)
-      |> Repo.preload(:exclusions)
+      Experiment.with_exclusions(Experiment)
+      |> Repo.get!(id)
     render(conn, "show.json", experiment: experiment)
   end
 

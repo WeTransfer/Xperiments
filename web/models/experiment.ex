@@ -134,10 +134,16 @@ defmodule Xperiments.Experiment do
   def with_exclusions(query) do
     exclusions_query =
       from(ex in query,
-        where: not(ex.state == "terminated"),
+        where: not(ex.state in ["terminated", "deleted"]),
         select: map(ex, [:id, :name]))
-    from e in query,
-      preload: [exclusions: ^exclusions_query]
+    from(e in query,
+      preload: [exclusions: ^exclusions_query])
+  end
+
+  def all_for_application(app_id) do
+    from(e in __MODULE__,
+      where: e.application_id == ^app_id,
+      where: e.state != "deleted")
   end
 
   ## Serializer
