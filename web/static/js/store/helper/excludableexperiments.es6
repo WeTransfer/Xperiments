@@ -1,5 +1,4 @@
 export default {
   isFetching: false,
-  list: [],
-  indexedList: {}
+  list: []
 };

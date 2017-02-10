@@ -6,11 +6,14 @@ import API from 'modules/api/index.es6';
 
 import config from 'config.es6';
 
-const validateVariant = (data, variants) => {
+const validateVariant = (data, variants = []) => {
   let errors = {};
-  let totalAllocation = variants.reduce((a, b) => {
-    return a.allocation + b.allocation;
-  });
+  let totalAllocation = 0;
+  try {
+    totalAllocation = variants.reduce((a, b) => {
+      return a.allocation + b.allocation;
+    });
+  } catch(e) {}
   let allocationLeft = 100 - totalAllocation;
 
   if (!data.name)

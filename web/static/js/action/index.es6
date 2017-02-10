@@ -4,6 +4,7 @@ import Applications from './applications.es6';
 import NewExperiment from './newexperiment.es6';
 import Experiment from './experiment.es6';
 import Experiments from './experiments.es6';
+import ExcludableExperiments from './excludableexperiments.es6';
 import NewRule from './newrule.es6';
 import ValidationErrors from './validationerrors.es6';
 
@@ -14,6 +15,7 @@ export default {
   NewExperiment,
   Experiment,
   Experiments,
+  ExcludableExperiments,
   NewRule,
   ValidationErrors
 };
