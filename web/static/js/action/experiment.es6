@@ -6,14 +6,21 @@ import API from 'modules/api/index.es6';
 
 import config from 'config.es6';
 
-const validateVariant = data => {
+const validateVariant = (data, variants) => {
   let errors = {};
+  let totalAllocation = variants.reduce((a, b) => {
+    return a.allocation + b.allocation;
+  });
+  let allocationLeft = 100 - totalAllocation;
+
   if (!data.name)
     errors.name = 'This field is required';
   if (!data.allocation)
     errors.allocation = 'This field is required';
   else if (isNaN(data.allocation))
     errors.allocation = 'Provide a valid number';
+  else if (data.allocation > allocationLeft)
+    errors.allocation = `Allocation can not be greater than 100% (${allocationLeft}% left)`;
   if (!data.payload) {
     errors.payload = 'This field is required';
   } else {
@@ -67,13 +74,13 @@ export default ActionHelper.generate({
   },
 
   pushVariant(data, formName) {
-    return dispatch => {
+    return (dispatch, getState) => {
       dispatch({
         type: ValidationErrorsActions.RESET_VALIDATION_ERRORS,
         form: formName
       });
 
-      const validationErrors = validateVariant(data);
+      const validationErrors = validateVariant(data, getState().experiment.data.variants);
       if (Object.keys(validationErrors).length) {
         dispatch({
           type: ValidationErrorsActions.SET_VALIDATION_ERRORS,
