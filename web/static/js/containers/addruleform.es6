@@ -11,7 +11,8 @@ const setValue = (key, value) => {
 
 const mapStateToProps = (state) => {
   return {
-    rule: state.newrule
+    rule: state.newrule,
+    validationErrors: state.validationerrors.addRuleForm
   };
 }
 
@@ -22,7 +23,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setOperator: value => {dispatch(setValue('operator', value))},
     setValue: value => {dispatch(setValue('value', value))},
     set: data => {
-      dispatch(Actions.Experiment.pushRule(data))
+      dispatch(Actions.NewRule.validate(data, 'addRuleForm'));
+      dispatch(Actions.Experiment.pushRule(data));
       dispatch(Actions.NewRule.reset());
       ownProps.onAdd();
     },

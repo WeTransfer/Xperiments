@@ -7,8 +7,15 @@ import {Link} from 'react-router';
 import VisibleApplicationsMenu from 'containers/visibleapplicationsmenu.es6';
 
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 export default class Layout extends React.Component {
+  static propTypes = {
+    notifications: React.PropTypes.object,
+    resetNotification: React.PropTypes.func
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -26,9 +33,28 @@ export default class Layout extends React.Component {
   selectTab = (event, index, selectedTab) => this.setState({selectedTab});
 
   render() {
+    let notification = null;
+    if (this.props.notification) {
+      let actions = [
+        <FlatButton
+          label="Okay"
+          primary={true}
+          onTouchTap={this.props.resetNotification}
+        />
+      ];
+      notification = <MuiThemeProvider>
+        <Dialog actions={actions} modal={false} open={true}>
+          {this.props.notification && this.props.notification.message ? this.props.notification.message : ''}
+        </Dialog>
+      </MuiThemeProvider>;
+    }
+
     let children = null;
-    if (this.props.children !== null)
-      children = <MuiThemeProvider>{this.props.children}</MuiThemeProvider>;
+    if (this.props.children !== null) {
+      children = <MuiThemeProvider>
+        {this.props.children}
+      </MuiThemeProvider>;
+    }
 
     return <div>
       <MuiThemeProvider>
@@ -39,6 +65,7 @@ export default class Layout extends React.Component {
         </Toolbar>
       </MuiThemeProvider>
       {children}
+      {notification}
     </div>;
   }
 }

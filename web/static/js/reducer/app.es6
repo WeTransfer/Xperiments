@@ -15,6 +15,18 @@ export default function(state = {}, action) {
         ...state,
         redirectPath: null
       };
+
+    case actions.SET_APP_NOTIFICATION:
+      return {
+        ...state,
+        notificationData: action.notificationData
+      };
+
+    case actions.RESET_APP_NOTIFICATION:
+      return {
+        ...state,
+        notificationData: null
+      };
   }
 
   return state;

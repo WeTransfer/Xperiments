@@ -22,6 +22,7 @@ const styling = {
 };
 
 const dataSource = {
+  device: [{text: 'Desktop', value: 'desktop'}, {text: 'Mobile', value: 'mobile'}],
   language: [{text: 'English - US', value: 'en-us'}, {text: 'Dutch', value: 'nl'}],
   country: [{text: 'United States of America', value: "usa"}, {text: 'Netherlands', value: "nl"}]
 };
@@ -29,10 +30,12 @@ const dataSource = {
 export default class AddRule extends React.Component {
   static propTypes = {
     rule: React.PropTypes.object,
+    currentRules: React.PropTypes.array,
     set: React.PropTypes.func,
     onCancel: React.PropTypes.func,
     onAdd: React.PropTypes.func,
-    open: React.PropTypes.bool
+    open: React.PropTypes.bool,
+    validationErrors: React.PropTypes.object
   }
 
   handleAdd = () => {
@@ -62,36 +65,31 @@ export default class AddRule extends React.Component {
     return <div className="form__create-rule">
       <Dialog title="Add Rule" actions={actions} modal={true} open={this.props.open} style={styling.dialog}>
         <div className="row">
-          <div className="col-md-12">
-            <SelectField floatingLabelText="Parameter" value={this.props.rule.parameter} onChange={(e, key, payload) => {this.props.setParameter(payload);}} ref="parameter">
+          <div className="col-md-6">
+            <SelectField
+              fullWidth={true}
+              floatingLabelText="Parameter"
+              value={this.props.rule.parameter}
+              onChange={(e, key, payload) => {this.props.setParameter(payload);}}
+              ref="parameter"
+              errorText={this.props.validationErrors.parameter || null}
+            >
               <MenuItem value={null} primaryText="" />
+              <MenuItem value="device" primaryText="Device" />
               <MenuItem value="language" primaryText="Language" />
               <MenuItem value="country" primaryText="Country" />
             </SelectField>
           </div>
-          <div className="col-md-12">
-            <SelectField floatingLabelText="Type" value={this.props.rule.type} ref="type" onChange={(e, key, payload) => {this.props.setType(payload);}}>
-              <MenuItem value={null} primaryText="" />
-              <MenuItem value="string" primaryText="String" />
-            </SelectField>
-          </div>
-          <div className="col-md-12">
-            <SelectField floatingLabelText="Operator" value={this.props.rule.operator} ref="operator" onChange={(e, key, payload) => {this.props.setOperator(payload);}}>
-              <MenuItem value={null} primaryText="" />
-              <MenuItem value="==" primaryText="Equals" />
-              <MenuItem value=">" primaryText="Is greater than" />
-              <MenuItem value="<" primaryText="Is less than" />
-              <MenuItem value="!=" primaryText="Is not equal to" />
-            </SelectField>
-          </div>
-          <div className="col-md-12">
+          <div className="col-md-6">
             <AutoComplete
+              fullWidth={true}
               floatingLabelText="Value"
               filter={AutoComplete.noFilter}
               dataSource={selectedDataSource}
               openOnFocus={true}
               ref="value"
               onNewRequest={(request) => {this.props.setValue(request.value);}}
+              errorText={this.props.validationErrors.value || null}
             />
           </div>
         </div>

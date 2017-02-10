@@ -1,3 +1,4 @@
 export default {
-  redirectPath: null
+  redirectPath: null,
+  notificationData: null
 };
