@@ -16,7 +16,8 @@ defmodule Xperiments.Experiment do
       [
         name:  :run,
         from:  [:draft, :stopped],
-        to:    :running
+        to:    :running,
+        callback: &(validate_model_has_variants(&1))
       ], [
         name:  :stop,
         from:  [:running],
@@ -47,7 +48,7 @@ defmodule Xperiments.Experiment do
     many_to_many :exclusions, __MODULE__, join_through: "experiments_exclusions",
       join_keys: [experiment_a_id: :id, experiment_b_id: :id]
 
-    embeds_many :variants, Variant
+    embeds_many :variants, Variant, on_replace: :delete
     embeds_many :rules, Rule
 
     timestamps()
@@ -106,6 +107,14 @@ defmodule Xperiments.Experiment do
   def maybe_validate_number(changeset, nil, _opts), do: changeset
   def maybe_validate_number(changeset, field, opts) do
     validate_number(changeset, field, opts)
+  end
+
+  def validate_model_has_variants(changeset) do
+    if length(changeset.data.variants) == 0 do
+      add_error(changeset, :variants, "It should be at least one variant to run an experiment")
+    else
+      changeset
+    end
   end
 
   @doc """
