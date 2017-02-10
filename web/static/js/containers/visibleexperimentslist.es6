@@ -2,18 +2,21 @@ import { connect } from 'react-redux';
 import Actions from 'action/index.es6';
 import ExperimentsTable from 'component/experimentstable.es6';
 
-const getVisibleExperiments = (experiments, filter = 'SHOW_ALL') => {
+const getVisibleExperiments = (experiments, filter = 'all') => {
   switch (filter) {
-    case 'SHOW_ALL':
+    case 'all':
       return experiments;
-    case 'SHOW_ACTIVE':
-      return experiments.filter(t => !t.isActive);
+    default:
+      return experiments.filter(t => t.state === filter);
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    experiments: getVisibleExperiments(state.experiments, state.visibilityFilter)
+    list: getVisibleExperiments(state.experiments.list, state.experiments.filter),
+    isFetching: state.experiments.isFetching,
+    isUpdatingState: state.experiments.isUpdatingState,
+    currentFilter: state.experiments.filter
   }
 }
 
@@ -21,7 +24,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     start: experimentId => dispatch(Actions.Experiments.startExperiment(experimentId)),
     stop: experimentId => dispatch(Actions.Experiments.stopExperiment(experimentId)),
-    terminate: experimentId => dispatch(Actions.Experiments.terminateExperiment(experimentId))
+    terminate: experimentId => dispatch(Actions.Experiments.terminateExperiment(experimentId)),
+    filter: state => dispatch(Actions.Experiments.filter(state))
   }
 }
 

@@ -47,13 +47,15 @@ export default class ExperimentsDashboardPage extends React.Component {
         <div className="col-md-12">
           <div className="pull-right">
             <RaisedButton style={styling.button} label="create experiment" primary={true} onTouchTap={this.showCreateExperiment} />
-            <CreateExperimentStepOne isVisible={this.state.isCreateExperimentVisible} onClose={this.hideCreateExperiment} onSave={this.hideCreateExperiment} />
           </div>
         </div>
         <div className="col-md-12">
-          <Paper style={styling.paper} zDepth={1} rounded={false}><VisibleExperimentsList /></Paper>
+          <Paper style={styling.paper} zDepth={1} rounded={false}>
+            <VisibleExperimentsList />
+          </Paper>
         </div>
       </div>
+      <CreateExperimentStepOne isVisible={this.state.isCreateExperimentVisible} onClose={this.hideCreateExperiment} onSave={this.hideCreateExperiment} />
     </div>
   }
 }

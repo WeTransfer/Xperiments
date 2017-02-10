@@ -25,6 +25,12 @@ export default function(state = {}, action) {
         isFetching: false
       };
 
+    case actions.FILTER_EXPERIMENTS_BY_STATE:
+      return {
+        ...state,
+        filter: action.state
+      };
+
     case actions.FETCHED_EXPERIMENT:
       return {
         ...state,

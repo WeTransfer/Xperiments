@@ -6,6 +6,8 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 
 const styling = {
   emptyTD: {
@@ -13,9 +15,20 @@ const styling = {
   }
 };
 
+const filters = [
+  {label: 'All', value: 'all'},
+  {label: 'Draft', value: 'draft'},
+  {label: 'Running', value: 'running'},
+  {label: 'Stopped', value: 'stopped'},
+  {label: 'Terminated', value: 'terminated'}
+];
+
 export default class ExperimentsTable extends React.Component {
   static propTypes = {
-    experiments: React.PropTypes.object.isRequired,
+    list: React.PropTypes.object.isRequired,
+    isUpdatingState: React.PropTypes.bool.isRequired,
+    isFetching: React.PropTypes.bool.isRequired,
+    currentFilter: React.PropTypes.string.isRequired,
     start: React.PropTypes.func.isRequired,
     stop: React.PropTypes.func.isRequired,
     terminate: React.PropTypes.func.isRequired
@@ -38,19 +51,19 @@ export default class ExperimentsTable extends React.Component {
   }
 
   startExperiment(experimentId) {
-    if (this.props.experiments.isUpdatingState !== false) return;
+    if (this.props.isUpdatingState !== false) return;
     this.props.start(experimentId);
   }
 
   stopExperiment(experimentId) {
-    if (this.props.experiments.isUpdatingState !== false) return;
+    if (this.props.isUpdatingState !== false) return;
     this.props.stop(experimentId);
   }
 
   render() {
     let renderedExperiments = [];
-    if (!this.props.experiments.isFetching) {
-      this.props.experiments.list.forEach((experiment) => {
+    if (!this.props.isFetching) {
+      this.props.list.forEach((experiment) => {
         let actions = [];
         
         // Edit
@@ -64,7 +77,7 @@ export default class ExperimentsTable extends React.Component {
         actions.push(" | ");
 
         // Run / Stop
-        let ingPostfix = this.props.experiments.isUpdatingState === experiment.id ? 'ing' : '';
+        let ingPostfix = this.props.isUpdatingState === experiment.id ? 'ing' : '';
         if (experiment.state === 'draft' || experiment.state === 'stopped') {
           actions.push(<a onClick={() => this.startExperiment(experiment.id)}>{`Start${ingPostfix}`}</a>);
         } else if (experiment.state === 'running') {
@@ -86,7 +99,7 @@ export default class ExperimentsTable extends React.Component {
 
     if (!renderedExperiments.length) {
       renderedExperiments.push(<TableRow>
-        <TableRowColumn style={styling.emptyTD} colSpan={5}>{this.props.experiments.isFetching ? 'Getting your data, hang on...' : 'No data'}</TableRowColumn>
+        <TableRowColumn style={styling.emptyTD} colSpan={5}>{this.props.isFetching ? 'Getting your data, hang on...' : 'No data'}</TableRowColumn>
       </TableRow>);
     }
 
@@ -110,8 +123,25 @@ export default class ExperimentsTable extends React.Component {
       }
     }
 
+    let filterItems = [];
+    filters.forEach(filter => {
+      filterItems.push(<MenuItem value={filter.value} primaryText={filter.label} />);
+    });
+
     return <div className="experiments__table">
-      {dialog}
+      <div className="row">
+        <div className="col-xs-12">
+          <div className="pull-right">
+            <SelectField
+              floatingLabelText="Filter by"
+              value={this.props.currentFilter}
+              onChange={(e, index, value) => this.props.filter(value)}
+            >
+              {filterItems}
+            </SelectField>
+          </div>
+        </div>
+      </div>
       <Table>
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
@@ -125,6 +155,7 @@ export default class ExperimentsTable extends React.Component {
         </TableHeader>
         <TableBody displayRowCheckbox={false}>{renderedExperiments}</TableBody>
       </Table>
+      {dialog}
     </div>;
   }
 }

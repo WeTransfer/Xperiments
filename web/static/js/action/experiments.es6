@@ -8,8 +8,9 @@ export const actions = ActionHelper.types([
   'FETCH_EXPERIMENTS',
   'FETCHED_EXPERIMENTS',
   'PUSH_TO_EXPERIMENTS',
+  'FILTER_EXPERIMENTS_BY_STATE',
   'UPDATE_EXPERIMENT_STATE',
-  'UPDATED_EXPERIMENT_STATE',
+  'UPDATED_EXPERIMENT_STATE'
 ]);
 
 export default ActionHelper.generate({
@@ -27,6 +28,15 @@ export default ActionHelper.generate({
           });
         });
     }
+  },
+
+  filter(state) {
+    return dispatch => {
+      dispatch({
+        type: actions.FILTER_EXPERIMENTS_BY_STATE,
+        state
+      });
+    };
   },
 
   startExperiment(experimentId) {
