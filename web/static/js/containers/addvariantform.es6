@@ -14,14 +14,15 @@ const allowControlGroupSelection = (variants = []) => {
 
 const mapStateToProps = (state) => {
   return {
-    allowControlGroupSelection: allowControlGroupSelection(state.experiment.data.variants)
+    allowControlGroupSelection: allowControlGroupSelection(state.experiment.data.variants),
+    validationErrors: state.validationerrors.addVariantForm
   };
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     set: data => {
-      dispatch(Actions.Experiment.pushVariant(data))
+      dispatch(Actions.Experiment.pushVariant(data, 'addVariantForm'))
       ownProps.onAdd();
     }
   }
