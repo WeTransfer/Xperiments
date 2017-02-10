@@ -41,7 +41,7 @@ defmodule Xperiments.ExperimentTest do
 
   test "validate embedded fields: variants and rules", context do
     variants = [
-      %{name: "var a", allocation: 1, description: "nothing", payload: "test"}
+      %{name: "var a", allocation: 100, description: "nothing", payload: "test"}
     ]
     rules = [
       %{parameter: "lang", type: "string", operator: "==", value: "ru"}

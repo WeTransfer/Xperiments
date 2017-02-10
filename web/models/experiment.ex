@@ -76,6 +76,7 @@ defmodule Xperiments.Experiment do
     |> changeset(params)
     |> cast_embed(:variants, required: true)
     |> cast_embed(:rules)
+    |> validate_variants()
   end
 
   # TODO: Make a refactor for dates validation
@@ -102,16 +103,33 @@ defmodule Xperiments.Experiment do
   end
 
   @doc """
-  Validate a number if it set only, otherwise do nothing
+  Validates any given number, only if it set, otherwise does nothing
   """
   def maybe_validate_number(changeset, nil, _opts), do: changeset
   def maybe_validate_number(changeset, field, opts) do
     validate_number(changeset, field, opts)
   end
 
+  @doc """
+  Validate that an experiment has variants and allow to run it
+  """
   def validate_model_has_variants(changeset) do
     if length(changeset.data.variants) == 0 do
       add_error(changeset, :variants, "It should be at least one variant to run an experiment")
+    else
+      changeset
+    end
+  end
+
+  @doc """
+  Checks that sum of allocations of all provided variants equals to 100
+  """
+  def validate_variants(changeset) do
+    sum_allocation =
+      Ecto.Changeset.get_field(changeset, :variants)
+      |> Enum.reduce(0, & &1.allocation + &2)
+    if sum_allocation != 100 do
+      add_error(changeset, :variants, "Sum of allocations for variants should be 100")
     else
       changeset
     end

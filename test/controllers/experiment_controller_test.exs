@@ -45,7 +45,7 @@ defmodule Xperiments.ExperimentControllerTest do
     exp_id = insert(:experiment, application: context.app).id
     variant = %{
       name: "Var A",
-      allocation: 40,
+      allocation: 100,
       control_group: true,
       description: "",
       payload: "{}"
@@ -84,7 +84,7 @@ defmodule Xperiments.ExperimentControllerTest do
 
     assert body == %{"errors" => %{"rules" => [%{"type" => ["is invalid"]}],
                                    "sampling_rate" => ["must be less than or equal to 100"],
-                                   "variants" => [%{"allocation" => ["must be greater than 0"]}]}}
+                                   "variants" => [%{}, %{"allocation" => ["must be greater than 0"]}]}}
   end
 
   test "/index returns a list of experiments, except those which are in a deleted state", context do
