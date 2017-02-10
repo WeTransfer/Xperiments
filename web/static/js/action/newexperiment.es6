@@ -38,6 +38,12 @@ export const actions = ActionHelper.types([
 export default ActionHelper.generate({
   create(data, formName) {
     return async dispatch => {
+      // Alright lets go, reset the validation errors
+      dispatch({
+        type: ValidationErrorsActions.RESET_VALIDATION_ERRORS,
+        form: formName
+      });
+
       const validationErrors = validate(data);
       if (Object.keys(validationErrors).length) {
         dispatch({
@@ -47,12 +53,6 @@ export default ActionHelper.generate({
         });
         throw 'ValidationErrors';
       }
-
-      // Alright lets go, reset the validation errors
-      dispatch({
-        type: ValidationErrorsActions.RESET_VALIDATION_ERRORS,
-        form: formName
-      });
 
       return API.post(config.api.resources.experiments.POST, {experiment: data})
         .then(response => {

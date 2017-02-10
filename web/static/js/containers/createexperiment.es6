@@ -32,7 +32,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         ownProps.onSave();
       });
     },
-    cancel: ownProps.onClose
+    cancel: () => {
+      dispatch(Actions.ValidationErrors.reset('createExperimentForm'));
+      ownProps.onClose();
+    }
   }
 }
 

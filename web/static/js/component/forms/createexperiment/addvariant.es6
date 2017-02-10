@@ -18,7 +18,7 @@ const styling = {
 export default class AddVariant extends React.Component {
   static propTypes = {
     set: React.PropTypes.func,
-    onCancel: React.PropTypes.func,
+    cancel: React.PropTypes.func,
     onAdd: React.PropTypes.func,
     allowControlGroupSelection: React.PropTypes.props,
     validationErrors: React.PropTypes.object
@@ -39,7 +39,7 @@ export default class AddVariant extends React.Component {
       <FlatButton
         label="Cancel"
         primary={true}
-        onTouchTap={this.props.onCancel}
+        onTouchTap={this.props.cancel}
         style={styling.flatButton}
       />,
       <RaisedButton

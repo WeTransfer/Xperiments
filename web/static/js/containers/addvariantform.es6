@@ -24,6 +24,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     set: data => {
       dispatch(Actions.Experiment.pushVariant(data, 'addVariantForm'))
       ownProps.onAdd();
+    },
+    cancel: () => {
+      dispatch(Actions.ValidationErrors.reset('addVariantForm'));
+      ownProps.onCancel();
     }
   }
 }

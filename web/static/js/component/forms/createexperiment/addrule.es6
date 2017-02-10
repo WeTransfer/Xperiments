@@ -32,7 +32,7 @@ export default class AddRule extends React.Component {
     rule: React.PropTypes.object,
     currentRules: React.PropTypes.array,
     set: React.PropTypes.func,
-    onCancel: React.PropTypes.func,
+    cancel: React.PropTypes.func,
     onAdd: React.PropTypes.func,
     open: React.PropTypes.bool,
     validationErrors: React.PropTypes.object
@@ -47,7 +47,7 @@ export default class AddRule extends React.Component {
       <FlatButton
         label="Cancel"
         primary={true}
-        onTouchTap={this.props.onCancel}
+        onTouchTap={this.props.cancel}
         style={styling.flatButton}
       />,
       <RaisedButton

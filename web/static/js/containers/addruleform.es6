@@ -28,7 +28,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(Actions.NewRule.reset());
       ownProps.onAdd();
     },
-    unset: () => {}
+    unset: () => {},
+    cancel: () => {
+      dispatch(Actions.ValidationErrors.reset('addRuleForm'));
+      ownProps.onCancel();
+    }
   }
 }
 
