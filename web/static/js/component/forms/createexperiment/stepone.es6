@@ -26,11 +26,12 @@ export default class CreateExperimentFormStepOne extends React.Component {
     setSamplingRate: React.PropTypes.func,
     save: React.PropTypes.func,
     cancel: React.PropTypes.func,
-    isVisible: React.PropTypes.bool
+    isVisible: React.PropTypes.bool,
+    validationErrors: React.PropTypes.object
   };
 
   save = () => {
-    this.props.save(this.props.experiment);
+    this.props.save(this.props.experiment, 'createExperimentForm');
   }
 
   render() {
@@ -58,6 +59,7 @@ export default class CreateExperimentFormStepOne extends React.Component {
               defaultValue={this.props.experiment.name || ""}
               floatingLabelText="Name"
               onChange={(e, value) => {this.props.setName(value);}}
+              errorText={this.props.validationErrors.name || null}
             />
           </div>
         </div>
@@ -101,6 +103,7 @@ export default class CreateExperimentFormStepOne extends React.Component {
               defaultValue={this.props.experiment.max_users !== null ? this.props.experiment.max_users : ''}
               floatingLabelText="Maximum Participants (optional)"
               onChange={(e, value) => {this.props.setMaxUsers(value);}}
+              errorText={this.props.validationErrors.max_users || null}
             />
           </div>
           <div className="col-md-5">
@@ -109,6 +112,7 @@ export default class CreateExperimentFormStepOne extends React.Component {
               disabled={true}
               floatingLabelText="Sampling Rate (%)"
               onChange={(e, value) => {this.props.setSamplingRate(value);}}
+              errorText={this.props.validationErrors.sampling_rate || null}
             />
           </div>
         </div>
@@ -121,6 +125,7 @@ export default class CreateExperimentFormStepOne extends React.Component {
               rows={2}
               onChange={(e, value) => {this.props.setDescription(value);}}
               fullWidth={true}
+              errorText={this.props.validationErrors.description || null}
             />
           </div>
         </div>

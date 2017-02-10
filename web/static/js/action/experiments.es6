@@ -7,7 +7,9 @@ import config from 'config.es6';
 export const actions = ActionHelper.types([
   'FETCH_EXPERIMENTS',
   'FETCHED_EXPERIMENTS',
-  'PUSH_TO_EXPERIMENTS'
+  'PUSH_TO_EXPERIMENTS',
+  'UPDATE_EXPERIMENT_STATE',
+  'UPDATED_EXPERIMENT_STATE',
 ]);
 
 export default ActionHelper.generate({
@@ -24,6 +26,54 @@ export default ActionHelper.generate({
             });
           });
         });
+    }
+  },
+
+  startExperiment(experimentId) {
+    return this.updateState(experimentId, {event: 'run'});
+  },
+  
+  stopExperiment(experimentId) {
+    return this.updateState(experimentId, {event: 'stop'});
+  },
+  
+  terminateExperiment(experimentId) {
+    return this.updateState(experimentId, {event: 'terminate'});
+  },
+
+  updateState(experimentId, data) {
+    return async (dispatch) => {
+      dispatch({
+        type: actions.UPDATE_EXPERIMENT_STATE,
+        data: {
+          experimentId
+        }
+      });
+
+      try {
+        const response = await API.put(`${config.api.resources.experiments.GET}/${experimentId}/state`, data);
+        if (response.status === 200) {
+          response.json().then(json => {
+            dispatch({
+              type: actions.UPDATED_EXPERIMENT_STATE,
+              data: {
+                experimentId,
+                state: json.state
+              }
+            });
+          });
+        } else {
+          dispatch({
+            type: AppActions.SET_APP_NOTIFICATION,
+            notificationData: {
+              type: 'error',
+              message: 'There was an error updating the experiment state, please try again'
+            }
+          });
+        }
+      } catch(e) {
+        throw 'APIPutFailed';
+      }
     }
   }
 });

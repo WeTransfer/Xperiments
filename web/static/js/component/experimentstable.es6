@@ -15,13 +15,10 @@ const styling = {
 
 export default class ExperimentsTable extends React.Component {
   static propTypes = {
-    experiments: React.PropTypes.arrayOf(React.PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      state: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      variants: PropTypes.array.isRequired,
-      isActive: PropTypes.bool.isRequired
-    }).isRequired).isRequired
+    experiments: React.PropTypes.object.isRequired,
+    start: React.PropTypes.func.isRequired,
+    stop: React.PropTypes.func.isRequired,
+    terminate: React.PropTypes.func.isRequired
   };
 
   state = {
@@ -40,20 +37,47 @@ export default class ExperimentsTable extends React.Component {
     });
   }
 
+  startExperiment(experimentId) {
+    if (this.props.experiments.isUpdatingState !== false) return;
+    this.props.start(experimentId);
+  }
+
+  stopExperiment(experimentId) {
+    if (this.props.experiments.isUpdatingState !== false) return;
+    this.props.stop(experimentId);
+  }
+
   render() {
     let renderedExperiments = [];
     if (!this.props.experiments.isFetching) {
       this.props.experiments.list.forEach((experiment) => {
         let actions = [];
-        if (!experiment.isActive)
-          actions.push(<Link to={`/experiments/${experiment.id}/edit`}>Edit</Link>);
-        actions.push(" | ");
+        
+        // Edit
+        if (experiment.state === 'draft') {
+          actions.push(<Link to={`/experiments/${experiment.id}/edit`} disabled={true}>Edit</Link>);
+          actions.push(" | ");
+        }
+        
+        // View
         actions.push(<a href="#" onClick={() => this.showExperiment(experiment.id)}>View</a>);
+        actions.push(" | ");
+
+        // Run / Stop
+        let ingPostfix = this.props.experiments.isUpdatingState === experiment.id ? 'ing' : '';
+        if (experiment.state === 'draft' || experiment.state === 'stopped') {
+          actions.push(<a onClick={() => this.startExperiment(experiment.id)}>{`Start${ingPostfix}`}</a>);
+        } else if (experiment.state === 'running') {
+          actions.push(<a onClick={() => this.stopExperiment(experiment.id)}>{`Stop${ingPostfix}`}</a>);
+        }
+
+
 
         renderedExperiments.push(React.createElement(TableRow, {key: `experiment__table-row-${experiment.id}`}, [
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-id-${experiment.id}`}, experiment.id),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-variants-${experiment.id}`}, experiment.variants.length),
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-rules-${experiment.id}`}, experiment.rules.length),
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-exclusions-${experiment.id}`}, experiment.exclusions.length),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-state-${experiment.id}`}, experiment.state),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-actions-${experiment.id}`}, actions)
         ]));
@@ -92,8 +116,9 @@ export default class ExperimentsTable extends React.Component {
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>Name</TableHeaderColumn>
-            <TableHeaderColumn>ID</TableHeaderColumn>
             <TableHeaderColumn>Variants</TableHeaderColumn>
+            <TableHeaderColumn>Rules</TableHeaderColumn>
+            <TableHeaderColumn>Exclusions</TableHeaderColumn>
             <TableHeaderColumn>Status</TableHeaderColumn>
             <TableHeaderColumn></TableHeaderColumn>
           </TableRow>

@@ -3,14 +3,27 @@ import {connect} from 'react-redux';
 import Actions from 'action/index.es6';
 import AddExclusion from 'component/forms/createexperiment/addexclusion.es6';
 
+const list = (experiments, excludedIds) => {
+  const list = [];
+  experiments.forEach(experiment => {
+    if (excludedIds.indexOf(experiment.id) === -1)
+      list.push(experiment);
+  });
+
+  return list;
+};
+
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    list: list(state.experiments.list, [state.experiment.data.id]),
+    currentlyExcluded: state.experiment.data.exclusions
+  };
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    set: experimentId => {
-      dispatch(Actions.Experiment.pushExclusion(experimentId))
+    set: exclusions => {
+      dispatch(Actions.Experiment.setValues({exclusions}))
       ownProps.onAdd();
     }
   }

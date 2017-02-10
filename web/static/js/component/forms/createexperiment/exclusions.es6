@@ -15,7 +15,8 @@ const styling = {
 export default class Exclusions extends React.Component {
   static propTypes = {
     title: React.PropTypes.string,
-    list: React.PropTypes.array
+    list: React.PropTypes.array,
+    indexedExperimentsList: React.PropTypes.object
   }
 
   defaultProps = {
@@ -40,11 +41,12 @@ export default class Exclusions extends React.Component {
 
   render() {
     let renderedExperiments = [];
-    this.props.list.forEach((experiment) => {
+    this.props.list.forEach((experimentId) => {
+      const experiment = this.props.indexedExperimentsList[experimentId];
       renderedExperiments.push(<TableRow>
         <TableRowColumn>{experiment.name}</TableRowColumn>
-        <TableRowColumn>{experiment.startDate}</TableRowColumn>
-        <TableRowColumn>{experiment.endDate}</TableRowColumn>
+        <TableRowColumn>{experiment.start_date}</TableRowColumn>
+        <TableRowColumn>{experiment.end_date}</TableRowColumn>
       </TableRow>);
     });
 
@@ -58,7 +60,7 @@ export default class Exclusions extends React.Component {
       <div className="row">
         <div className="col-md-6"><h5>{this.props.title}</h5></div>
         <div className="col-md-6">
-          <RaisedButton label="add exclusion" secondary={true} onTouchTap={this.showAddExclusion} className="pull-right" />
+          <RaisedButton label="select experiments" secondary={true} onTouchTap={this.showAddExclusion} className="pull-right" />
           <AddExclusionForm open={this.state.isAddExclusionVisible} onCancel={this.hideAddExclusion} onAdd={this.hideAddExclusion} />
         </div>
       </div>

@@ -18,16 +18,10 @@ const styling = {
 export default class AddVariant extends React.Component {
   static propTypes = {
     set: React.PropTypes.func,
-    onCancel: React.PropTypes.func,
+    cancel: React.PropTypes.func,
     onAdd: React.PropTypes.func,
-    allowControlGroupSelection: React.PropTypes.props
-  }
-
-  state = {
-    variant: {
-      name: '',
-
-    }
+    allowControlGroupSelection: React.PropTypes.props,
+    validationErrors: React.PropTypes.object
   }
 
   handleAdd = () => {
@@ -45,7 +39,7 @@ export default class AddVariant extends React.Component {
       <FlatButton
         label="Cancel"
         primary={true}
-        onTouchTap={this.props.onCancel}
+        onTouchTap={this.props.cancel}
         style={styling.flatButton}
       />,
       <RaisedButton
@@ -60,15 +54,30 @@ export default class AddVariant extends React.Component {
       <Dialog title="Add Variant" actions={actions} modal={true} open={this.props.open}>
         <div className="row">
           <div className="col-md-12">
-            <TextField defaultValue="" floatingLabelText="Name" ref="name" />
+            <TextField
+              defaultValue=""
+              floatingLabelText="Name"
+              ref="name"
+              errorText={this.props.validationErrors.name || null}
+            />
           </div>
         </div>
         <div className="row">
           <div className="col-md-5">
-            <TextField defaultValue="" floatingLabelText="Allocation (%)" ref="allocation" />
+            <TextField
+              defaultValue=""
+              floatingLabelText="Allocation (%)"
+              ref="allocation"
+              errorText={this.props.validationErrors.allocation || null}
+            />
           </div>
           <div className="col-md-7">
-            <Checkbox label="Control Group" style={styling.checkbox} disabled={!this.props.allowControlGroupSelection} ref="controlGroup" />
+            <Checkbox
+              label="Control Group"
+              style={styling.checkbox}
+              disabled={!this.props.allowControlGroupSelection}
+              ref="controlGroup"
+            />
           </div>
         </div>
         <div className="row">
@@ -79,6 +88,7 @@ export default class AddVariant extends React.Component {
               rows={3}
               fullWidth={true}
               ref="description"
+              errorText={this.props.validationErrors.description || null}
             />
           </div>
         </div>
@@ -90,6 +100,7 @@ export default class AddVariant extends React.Component {
               rows={4}
               fullWidth={true}
               ref="payload"
+              errorText={this.props.validationErrors.payload || null}
             />
           </div>
         </div>

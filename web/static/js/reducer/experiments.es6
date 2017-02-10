@@ -2,6 +2,7 @@ import {actions} from 'action/experiments.es6';
 
 export default function(state = {}, action) {
   const {type} = action;
+  let newList = null;
 
   switch (type) {
     case actions.FETCH_EXPERIMENTS:
@@ -12,9 +13,15 @@ export default function(state = {}, action) {
       };
 
     case actions.FETCHED_EXPERIMENTS:
+      const indexedList = {};
+      action.list.forEach(experiment => {
+        indexedList[experiment.id] = experiment;
+      });
+
       return {
         ...state,
         list: action.list,
+        indexedList,
         isFetching: false
       };
 
@@ -26,10 +33,29 @@ export default function(state = {}, action) {
       };
 
     case actions.PUSH_TO_EXPERIMENTS:
-      let newList = state.list;
+      newList = state.list;
       newList.push(action.data);
       return {
         ...state,
+        list: newList
+      };
+
+    case actions.UPDATE_EXPERIMENT_STATE:
+      return {
+        ...state,
+        isUpdatingState: action.data.experimentId
+      };
+
+    case actions.UPDATED_EXPERIMENT_STATE:
+      newList = state.list.map(experiment => {
+        if (experiment.id === action.data.experimentId) {
+          return Object.assign({}, experiment, {state: action.data.state});
+        }
+        return experiment;
+      });
+      return {
+        ...state,
+        isUpdatingState: false,
         list: newList
       };
   }

@@ -7,6 +7,6 @@ Store.subscribe(() => {
 
   if (app.redirectPath !== null) {
     browserHistory.push(app.redirectPath);
-    Actions.App.resetRedirectPath();
+    Store.dispatch(Actions.App.resetRedirectPath());
   }
 });

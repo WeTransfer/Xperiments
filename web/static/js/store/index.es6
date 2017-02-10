@@ -8,7 +8,9 @@ import applications from './helper/applications.es6';
 import newexperiment from './helper/newexperiment.es6';
 import experiment from './helper/experiment.es6';
 import experiments from './helper/experiments.es6';
+import excludableexperiments from './helper/excludableexperiments.es6';
 import newrule from './helper/newrule.es6';
+import validationerrors from './helper/validationerrors.es6';
 
 // Create our initial state
 const initialState = {
@@ -19,7 +21,9 @@ const initialState = {
   newexperiment,
   experiment,
   experiments,
-  newrule
+  excludableexperiments,
+  newrule,
+  validationerrors
 };
 
 // We'll create a Store that has our Reducers and an initial state,

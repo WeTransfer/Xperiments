@@ -27,11 +27,13 @@ const styling = {
 export default class EditExperimentPage extends React.Component {
   static propTypes = {
     experiment: React.PropTypes.object,
+    indexedExperimentsList: React.PropTypes.object,
     save: React.PropTypes.func
   };
 
   componentWillMount() {
     Store.dispatch(Actions.Experiment.get(this.props.params.experimentId));
+    Store.dispatch(Actions.Experiments.list());
   }
 
   handleClickOnSave = () => {
@@ -44,11 +46,13 @@ export default class EditExperimentPage extends React.Component {
 
     return <div className="page__edit-experiment">
       <Paper style={styling.paper} zDepth={1} rounded={false}>
+        <h4>Edit {this.props.experiment.data.name}</h4>
+        <div className="spacing"></div>
         <Rules title="What users do you want to target?" list={this.props.experiment.data.rules} />
         <div className="spacing spacing--is-30"></div>
         <Variants title="What do you want to show to your users?" list={this.props.experiment.data.variants} />
         <div className="spacing spacing--is-30"></div>
-        <Exclusions title="What experiments do you want to exclude?" list={this.props.experiment.data.exclusions} />
+        <Exclusions title="What experiments do you want to exclude?" list={this.props.experiment.data.exclusions} indexedExperimentsList={this.props.indexedExperimentsList} />
       </Paper>
       <div className="spacing"></div>
       <div className="pull-right">

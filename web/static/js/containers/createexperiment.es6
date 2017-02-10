@@ -11,7 +11,8 @@ const setValue = (key, value) => {
 
 const mapStateToProps = (state) => {
   return {
-    experiment: state.newexperiment
+    experiment: state.newexperiment,
+    validationErrors: state.validationerrors.createExperimentForm
   }
 }
 
@@ -25,11 +26,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setDescription: value => {dispatch(setValue('description', value))},
     setSamplingRate: value => {dispatch(setValue('sampling_rate', value))},
     setMaxUsers: value => {dispatch(setValue('max_users', value))},
-    save: (data) => {
-      dispatch(Actions.NewExperiment.create(data));
-      ownProps.onSave();
+    save: (data, formName) => {
+      let promise = dispatch(Actions.NewExperiment.create(data, formName));
+      promise.then(() => {
+        ownProps.onSave();
+      });
     },
-    cancel: ownProps.onClose
+    cancel: () => {
+      dispatch(Actions.ValidationErrors.reset('createExperimentForm'));
+      ownProps.onClose();
+    }
   }
 }
 
