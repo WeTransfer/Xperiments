@@ -74,9 +74,9 @@ export default class AddExclusion extends React.Component {
               selectable={true}
             >
               <TableHeader
-                displaySelectAll={true}
+                displaySelectAll={false}
                 adjustForCheckbox={true}
-                enableSelectAll={true}
+                enableSelectAll={false}
               >
                 <TableRow>
                   <TableHeaderColumn>Name</TableHeaderColumn>

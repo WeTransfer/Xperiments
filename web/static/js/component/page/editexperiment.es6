@@ -46,6 +46,8 @@ export default class EditExperimentPage extends React.Component {
 
     return <div className="page__edit-experiment">
       <Paper style={styling.paper} zDepth={1} rounded={false}>
+        <h4>Edit {this.props.experiment.data.name}</h4>
+        <div className="spacing"></div>
         <Rules title="What users do you want to target?" list={this.props.experiment.data.rules} />
         <div className="spacing spacing--is-30"></div>
         <Variants title="What do you want to show to your users?" list={this.props.experiment.data.variants} />

@@ -15,13 +15,7 @@ const styling = {
 
 export default class ExperimentsTable extends React.Component {
   static propTypes = {
-    experiments: React.PropTypes.arrayOf(React.PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      state: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      variants: PropTypes.array.isRequired,
-      isActive: PropTypes.bool.isRequired
-    }).isRequired).isRequired
+    experiments: React.PropTypes.object.isRequired
   };
 
   state = {
@@ -52,8 +46,9 @@ export default class ExperimentsTable extends React.Component {
 
         renderedExperiments.push(React.createElement(TableRow, {key: `experiment__table-row-${experiment.id}`}, [
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-id-${experiment.id}`}, experiment.id),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-variants-${experiment.id}`}, experiment.variants.length),
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-rules-${experiment.id}`}, experiment.rules.length),
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-exclusions-${experiment.id}`}, experiment.exclusions.length),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-state-${experiment.id}`}, experiment.state),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-actions-${experiment.id}`}, actions)
         ]));
@@ -92,8 +87,9 @@ export default class ExperimentsTable extends React.Component {
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>Name</TableHeaderColumn>
-            <TableHeaderColumn>ID</TableHeaderColumn>
             <TableHeaderColumn>Variants</TableHeaderColumn>
+            <TableHeaderColumn>Rules</TableHeaderColumn>
+            <TableHeaderColumn>Exclusions</TableHeaderColumn>
             <TableHeaderColumn>Status</TableHeaderColumn>
             <TableHeaderColumn></TableHeaderColumn>
           </TableRow>
