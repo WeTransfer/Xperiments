@@ -41,9 +41,9 @@ defmodule Xperiments.ExperimentController do
   def update(conn, %{"id" => id, "experiment" => updates}) do
     exp = Repo.get!(Experiment, id) |> Repo.preload(:exclusions)
 
-    {exclusion_ids, updates} = Map.pop(updates, "exclusion_ids", [])
+    {exclusions, updates} = Map.pop(updates, "exclusions", [])
     exclusions =
-      Experiment.avialable_experiments_for_exclsions(conn.assigns.application, exclusion_ids)
+      Experiment.avialable_experiments_for_exclsions(conn.assigns.application, exclusions)
       |> Repo.all()
     changeset =
       Experiment.changeset_update(exp, updates)
