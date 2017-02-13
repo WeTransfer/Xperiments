@@ -89,9 +89,7 @@ export default class ExperimentsTable extends React.Component {
 
         renderedExperiments.push(React.createElement(TableRow, {key: `experiment__table-row-${experiment.id}`}, [
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-variants-${experiment.id}`}, experiment.variants.length),
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-rules-${experiment.id}`}, experiment.rules.length),
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-exclusions-${experiment.id}`}, experiment.exclusions.length),
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-vre-${experiment.id}`}, `${experiment.rules.length} - ${experiment.variants.length} - ${experiment.exclusions.length}`),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-state-${experiment.id}`}, experiment.state),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-actions-${experiment.id}`}, actions)
         ]));
@@ -148,9 +146,7 @@ export default class ExperimentsTable extends React.Component {
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>Name</TableHeaderColumn>
-            <TableHeaderColumn>Variants</TableHeaderColumn>
-            <TableHeaderColumn>Rules</TableHeaderColumn>
-            <TableHeaderColumn>Exclusions</TableHeaderColumn>
+            <TableHeaderColumn>Rules - Variants - Exclusions</TableHeaderColumn>
             <TableHeaderColumn>Status</TableHeaderColumn>
             <TableHeaderColumn></TableHeaderColumn>
           </TableRow>
