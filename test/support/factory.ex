@@ -23,7 +23,7 @@ defmodule Xperiments.Factory do
       end_date: Timex.shift(Timex.now(), days: 3),
       max_users: 100,
       application: build(:application),
-      variants: [variant(10)]
+      variants: [variant(100)]
     }
   end
 
