@@ -14,7 +14,8 @@ defmodule Xperiments.Router do
 
     resources "/applications", ApplicationController, only: [:index], param: :name do
       resources "/experiments", ExperimentController, except: [:delete, :new] do
-        put "/state", ExperimentController, :change_state, as: :state
+        put "/state",  ExperimentController, :change_state, as: :state
+        get "/variant/:variant_id", ExperimentController, :variant, as: :variant
       end
     end
   end

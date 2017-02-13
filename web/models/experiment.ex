@@ -214,6 +214,5 @@ defmodule Xperiments.Experiment do
     defp update_exclusions_list(experiment) do
       Map.update(experiment, :exclusions, [], &(Enum.map(&1, fn el -> el.id end)))
     end
-
   end
 end

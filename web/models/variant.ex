@@ -32,5 +32,4 @@ defmodule Xperiments.Variant do
       validate_required(changeset, [field])
     end
   end
-
 end

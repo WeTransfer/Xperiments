@@ -87,6 +87,20 @@ defmodule Xperiments.ExperimentController do
     render conn, "exclusions.json", exclusions: experiment.exclusions, id: experiment.id
   end
 
+  def variant(conn, %{"experiment_id" => e_id, "variant_id" => var_id}) do
+    exp =
+      Experiment
+      |> Repo.get!(e_id)
+    case Enum.find(exp.variants, &(&1.id == var_id)) do
+      nil ->
+        msg = "Variant with id '#{var_id}' for the experiment with id '#{e_id}' is not found"
+        put_status(conn, :not_found)
+        |> render(Xperiments.ErrorView, "common_error.json", %{error: %{experiment: msg}})
+      var ->
+        render(conn, Xperiments.VariantView, "show.json", variant: var)
+    end
+  end
+
   defp get_application(conn, _params) do
     app_name = conn.params["application_name"]
     case Repo.get_by(Application, name: app_name) do

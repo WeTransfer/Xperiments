@@ -149,4 +149,21 @@ defmodule Xperiments.ExperimentControllerTest do
       |> json_response(422)
     assert body["errors"] == %{"application" => "The application wrong_app doesn't exists"}
   end
+
+  test "/variant returns a variant", context do
+    exp = insert(:experiment)
+    variant = List.first(exp.variants)
+    body =
+      get(context.conn, @api_path <> "/experiments/" <> exp.id <> "/variant/" <> variant.id)
+      |> json_response(200)
+    assert body["variant"]["id"] == variant.id
+  end
+
+  test "/variant returns error if requested veriant is not in the given experiment", context do
+    exp = insert(:experiment)
+    body =
+      get(context.conn, @api_path <> "/experiments/" <> exp.id <> "/variant/" <> "bad_id")
+      |> json_response(404)
+    assert body["errors"] == %{"experiment" => "Variant with id 'bad_id' for the experiment with id '#{exp.id}' is not found"}
+  end
 end
