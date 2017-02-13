@@ -20,7 +20,7 @@ defmodule Xperiments.ErrorView do
     %{errors: errors}
   end
 
-  def render("common_error.json", message) do
+  def render("common_error.json", %{error: message}) do
     %{errors: message}
   end
 

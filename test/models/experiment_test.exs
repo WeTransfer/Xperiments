@@ -94,4 +94,13 @@ defmodule Xperiments.ExperimentTest do
     db_var_payload = (exp.variants |> List.first).payload
     assert db_var_payload == variant.payload
   end
+
+  # test "changeset with given exclusions" do
+  #   app = insert(:application)
+  #   exp1 = insert(:experiment, application: app)
+  #   exp2 = insert(:experiment, application: app)
+  #   changeset = Experiment.changeset_update(exp2, %{exclusions: [exp1]})
+  #   assert changeset.valid?
+  #   assert length(changeset.exclusions) == 1
+  # end
 end

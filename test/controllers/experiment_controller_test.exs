@@ -121,4 +121,32 @@ defmodule Xperiments.ExperimentControllerTest do
       |> json_response(422)
     assert body["errors"] == %{"state" => ["You can't move state from :draft to :stopped"]}
   end
+
+  test "/update add an exclusions associacion if exclusion_ids are given", context do
+    exp = insert(:experiment, application: context.app)
+    exclusion_ids = insert_list(3, :experiment, application: context.app) |> Enum.map(& &1.id)
+    removed_experiments = insert_list(3, :experiment, application: context.app, state: "deleted") |> Enum.map(& &1.id)
+    body =
+      put(context.conn, @api_path <> "/experiments/" <> exp.id, %{experiment:
+                                                                  %{exclusion_ids: exclusion_ids ++ removed_experiments}})
+      |> json_response(200)
+    assert body["experiment"]["exclusions"] == exclusion_ids
+  end
+
+  test "replaces a whole exclusions list on update", context do
+    exclusions = insert_list(3, :experiment, application: context.app)
+    exp = insert(:experiment, application: context.app, exclusions: exclusions)
+    body =
+      put(context.conn, @api_path <> "/experiments/" <> exp.id, %{experiment: %{exclusion_ids: []}})
+      |> json_response(200)
+    assert body["experiment"]["exclusions"] == []
+  end
+
+  test "return an error if given application is not exists for any requests", context do
+    bad_path =  "/api/v1/applications/wrong_app/experiments"
+    body =
+      get(context.conn, bad_path)
+      |> json_response(422)
+    assert body["errors"] == %{"application" => "The application wrong_app doesn't exists"}
+  end
 end
