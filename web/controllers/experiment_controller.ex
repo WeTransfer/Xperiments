@@ -3,11 +3,11 @@ defmodule Xperiments.ExperimentController do
   alias Xperiments.{Experiment, Application}
 
   plug :scrub_params, "experiment" when action in [:create, :update]
+  plug :get_application when action in [:index, :create, :update]
 
-  def index(conn, %{"application_name" => app_name}) do
-    app_id = Repo.get_by!(Application, name: app_name).id
+  def index(conn, _params) do
     experiments =
-      Experiment.all_for_application(app_id)
+      Experiment.all_for_application(conn.assigns.application)
       |> Experiment.with_exclusions
       |> Repo.all
     render(conn, "index.json", experiments: experiments)
@@ -20,11 +20,10 @@ defmodule Xperiments.ExperimentController do
     render(conn, "show.json", experiment: experiment)
   end
 
-  def create(conn, %{"application_name" => app, "experiment" => experiment_data}) do
-    app = Repo.get_by!(Application, name: app)
+  def create(conn, %{"experiment" => experiment_data}) do
     changeset =
       Experiment.changeset(%Experiment{}, experiment_data)
-      |> Ecto.Changeset.put_assoc(:application, app)
+      |> Ecto.Changeset.put_assoc(:application, conn.assigns.application)
 
     case Repo.insert(changeset) do
       {:ok, exp} ->
@@ -39,9 +38,13 @@ defmodule Xperiments.ExperimentController do
     end
   end
 
-  def update(conn, %{"id" => id, "experiment" => updates}) do
+  def update(conn, %{"id" => id, "experiment" => updates} = params) do
     exp = Repo.get!(Experiment, id)
     changeset = Experiment.changeset_update(exp, updates)
+
+    # exclusions_ids = params["exclusion_ids"] || []
+    # exclusions = Repo.all(Experiment.experiments_for_exclusions)
+    # changeset = put_assoc(changeset, :exclusions, exclusions)
 
     case Repo.update(changeset) do
       {:ok, exp} ->
@@ -80,4 +83,17 @@ defmodule Xperiments.ExperimentController do
       |> Repo.get(id)
     render conn, "exclusions.json", exclusions: experiment.exclusions, id: experiment.id
   end
+
+  defp get_application(conn, params) do
+    app_name = conn.params["application_name"]
+    case Repo.get_by!(Application, name: app_name) do
+      nil ->
+        err_message = "The application #{app_name} doesn't exists"
+        render(conn, Xperiments.ErrorView, "common_error.json", %{application: err_message})
+        |> halt()
+      app ->
+        assign(conn, :application, app)
+    end
+  end
+
 end
