@@ -32,7 +32,6 @@ defmodule Xperiments.Factory do
     build(:experiment, state: "running", application: app) |> with_balanced_variants |> insert
   end
 
-
   def variant(allocation \\ 100) do
     payload = Enum.reduce(0..1000, "", fn _, acc -> acc <> "dummy" end)
     %{

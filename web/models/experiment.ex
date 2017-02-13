@@ -141,6 +141,9 @@ defmodule Xperiments.Experiment do
     end
   end
 
+  @doc """
+  Validate that at least one variant is a control group when run an experiment
+  """
   def validate_at_least_variant_is_control_group(changeset) do
     control_variant =
       Ecto.Changeset.get_field(changeset, :variants)
