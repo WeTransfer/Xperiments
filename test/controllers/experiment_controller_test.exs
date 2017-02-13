@@ -97,7 +97,7 @@ defmodule Xperiments.ExperimentControllerTest do
   end
 
   test "/state changes state for a given experiemnt", context do
-    exp = insert(:experiment, application: context.app)
+    exp = insert(:experiment, application: context.app, variants: [%{ Xperiments.Factory.variant() | control_group: true }])
     assert exp.state == "draft"
     body =
       put(context[:conn], @api_path <> "/experiments/" <> exp.id <> "/state", %{event: "run"})

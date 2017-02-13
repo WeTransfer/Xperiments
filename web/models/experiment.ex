@@ -82,6 +82,7 @@ defmodule Xperiments.Experiment do
     struct
     |> validate_model_has_variants
     |> validate_variants
+    |> validate_at_least_variant_is_control_group
   end
 
   # TODO: Make a refactor for dates validation
@@ -137,6 +138,17 @@ defmodule Xperiments.Experiment do
       add_error(changeset, :variants, "Sum of allocations for variants should be 100")
     else
       changeset
+    end
+  end
+
+  def validate_at_least_variant_is_control_group(changeset) do
+    control_variant =
+      Ecto.Changeset.get_field(changeset, :variants)
+      |> Enum.find(&(&1.control_group == true))
+    if control_variant do
+      changeset
+    else
+      add_error(changeset, :variants, "At least one variant should be a control group")
     end
   end
 

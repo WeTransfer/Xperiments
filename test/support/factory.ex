@@ -39,7 +39,8 @@ defmodule Xperiments.Factory do
       name: sequence("Variant"),
       allocation: allocation,
       description: "bla bla",
-      payload: payload
+      payload: payload,
+      control_group: false
     }
   end
 
