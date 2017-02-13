@@ -9,6 +9,10 @@ defmodule Xperiments.Router do
     plug :accepts, ["html"]
   end
 
+  pipeline :external do
+    plug CORSPlug, origin: Application.get_env(:xperiments, :cors)[:origin]
+  end
+
   scope "/api/v1", Xperiments do
     pipe_through :api
 
@@ -21,9 +25,11 @@ defmodule Xperiments.Router do
   end
 
   scope "/assigner", Xperiments do
-    pipe_through :api
+    pipe_through [:api, :external]
 
     get "/application/:app_name/experiments", AssignerController, :experiments
+    options  "/application/:app_name/experiments", AssignerController, :options
+    options  "/application/:app_name/experiments", AssignerController, :options
   end
 
   # should be last, because scope is too wide
