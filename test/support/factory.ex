@@ -23,7 +23,7 @@ defmodule Xperiments.Factory do
       end_date: Timex.shift(Timex.now(), days: 3),
       max_users: 100,
       application: build(:application),
-      variants: [variant(10)]
+      variants: [variant(100)]
     }
   end
 
@@ -32,14 +32,14 @@ defmodule Xperiments.Factory do
     build(:experiment, state: "running", application: app) |> with_balanced_variants |> insert
   end
 
-
   def variant(allocation \\ 100) do
     payload = Enum.reduce(0..1000, "", fn _, acc -> acc <> "dummy" end)
     %{
       name: sequence("Variant"),
       allocation: allocation,
       description: "bla bla",
-      payload: payload
+      payload: payload,
+      control_group: false
     }
   end
 

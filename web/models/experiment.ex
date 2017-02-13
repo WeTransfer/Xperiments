@@ -17,7 +17,7 @@ defmodule Xperiments.Experiment do
         name:  :run,
         from:  [:draft, :stopped],
         to:    :running,
-        callback: &(validate_model_has_variants(&1))
+        callback: &(changeset_run_state(&1))
       ], [
         name:  :stop,
         from:  [:running],
@@ -46,7 +46,7 @@ defmodule Xperiments.Experiment do
     belongs_to :application, Application
 
     many_to_many :exclusions, __MODULE__, join_through: "experiments_exclusions",
-      join_keys: [experiment_a_id: :id, experiment_b_id: :id]
+      join_keys: [experiment_a_id: :id, experiment_b_id: :id], on_replace: :delete
 
     embeds_many :variants, Variant, on_replace: :delete
     embeds_many :rules, Rule
@@ -76,7 +76,13 @@ defmodule Xperiments.Experiment do
     |> changeset(params)
     |> cast_embed(:variants, required: true)
     |> cast_embed(:rules)
-    |> validate_variants()
+  end
+
+  def changeset_run_state(struct) do
+    struct
+    |> validate_model_has_variants
+    |> validate_variants
+    |> validate_at_least_variant_is_control_group
   end
 
   # TODO: Make a refactor for dates validation
@@ -94,8 +100,8 @@ defmodule Xperiments.Experiment do
     end
   end
 
-  defp do_compare_two_dates(changeset, _, nil, nil, _), do: changeset
-  defp do_compare_two_dates(changeset, field, start_date, end_date, message) do
+  def do_compare_two_dates(changeset, _, nil, nil, _), do: changeset
+  def do_compare_two_dates(changeset, field, start_date, end_date, message) do
     case DateTime.compare(start_date, end_date) do
       :lt -> add_error(changeset, field, message)
       _ -> changeset
@@ -136,6 +142,20 @@ defmodule Xperiments.Experiment do
   end
 
   @doc """
+  Validate that at least one variant is a control group when run an experiment
+  """
+  def validate_at_least_variant_is_control_group(changeset) do
+    control_variant =
+      Ecto.Changeset.get_field(changeset, :variants)
+      |> Enum.find(&(&1.control_group == true))
+    if control_variant do
+      changeset
+    else
+      add_error(changeset, :variants, "At least one variant should be a control group")
+    end
+  end
+
+  @doc """
   Tries to change a state for a given experiment and returns a changeset
   """
   def change_state(experiment, event) do
@@ -167,10 +187,17 @@ defmodule Xperiments.Experiment do
       preload: [exclusions: ^exclusions_query])
   end
 
-  def all_for_application(app_id) do
+  def all_for_application(app) do
     from(e in __MODULE__,
-      where: e.application_id == ^app_id,
+      where: e.application_id == ^app.id,
       where: e.state != "deleted")
+  end
+
+  def avialable_experiments_for_exclsions(app, ids \\ []) do
+    from(e in __MODULE__,
+      where: e.application_id == ^app.id,
+      where: e.id in ^ids,
+      where: e.state in ["running", "stopped", "draft"])
   end
 
   ## Serializer
@@ -179,8 +206,13 @@ defmodule Xperiments.Experiment do
     def encode(model, _opts) do
       model
       |> Map.from_struct
+      |> update_exclusions_list()
       |> Map.drop([:__meta__, :__struct__, :application])
       |> Poison.encode!
+    end
+
+    defp update_exclusions_list(experiment) do
+      Map.update(experiment, :exclusions, [], &(Enum.map(&1, fn el -> el.id end)))
     end
   end
 end

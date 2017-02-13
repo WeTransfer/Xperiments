@@ -38,6 +38,7 @@ defmodule Xperiments.Mixfile do
      {:cowboy, "~> 1.0"},
      {:ecto_state_machine, "~> 0.3.0"},
      {:timex, "~> 3.0"},
+     {:cors_plug, "~> 1.2"},
      {:ex_machina, "~> 1.0", only: :test}]
   end
 

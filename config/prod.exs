@@ -1,6 +1,6 @@
 use Mix.Config
 
-# For production, we configure the host to read the PORT
+For production, we configure the host to read the PORT
 # from the system environment. Therefore, you will need
 # to set PORT=80 before running your server.
 #
@@ -15,6 +15,9 @@ config :xperiments, Xperiments.Endpoint,
   http: [port: {:system, "PORT"}],
   url: [host: "example.com", port: 80],
   cache_static_manifest: "priv/static/manifest.json"
+
+config :xperiments, :cors,
+  origin: ~r/http(s)?.*wetransfer\d?\.com$/
 
 # Do not print debug messages in production
 config :logger, level: :info

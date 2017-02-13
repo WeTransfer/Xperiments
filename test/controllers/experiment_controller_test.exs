@@ -97,7 +97,7 @@ defmodule Xperiments.ExperimentControllerTest do
   end
 
   test "/state changes state for a given experiemnt", context do
-    exp = insert(:experiment, application: context.app)
+    exp = insert(:experiment, application: context.app, variants: [%{ Xperiments.Factory.variant() | control_group: true }])
     assert exp.state == "draft"
     body =
       put(context[:conn], @api_path <> "/experiments/" <> exp.id <> "/state", %{event: "run"})
@@ -120,5 +120,50 @@ defmodule Xperiments.ExperimentControllerTest do
       put(context[:conn], @api_path <> "/experiments/" <> exp.id <> "/state", %{event: "stop"})
       |> json_response(422)
     assert body["errors"] == %{"state" => ["You can't move state from :draft to :stopped"]}
+  end
+
+  test "/update add an exclusions associacion if exclusions are given", context do
+    exp = insert(:experiment, application: context.app)
+    exclusions = insert_list(3, :experiment, application: context.app) |> Enum.map(& &1.id)
+    removed_experiments = insert_list(3, :experiment, application: context.app, state: "deleted") |> Enum.map(& &1.id)
+    body =
+      put(context.conn, @api_path <> "/experiments/" <> exp.id, %{experiment:
+                                                                  %{exclusions: exclusions ++ removed_experiments}})
+      |> json_response(200)
+    assert body["experiment"]["exclusions"] == exclusions
+  end
+
+  test "replaces a whole exclusions list on update", context do
+    exclusions = insert_list(3, :experiment, application: context.app)
+    exp = insert(:experiment, application: context.app, exclusions: exclusions)
+    body =
+      put(context.conn, @api_path <> "/experiments/" <> exp.id, %{experiment: %{exclusions: []}})
+      |> json_response(200)
+    assert body["experiment"]["exclusions"] == []
+  end
+
+  test "return an error if given application is not exists for any requests", context do
+    bad_path =  "/api/v1/applications/wrong_app/experiments"
+    body =
+      get(context.conn, bad_path)
+      |> json_response(422)
+    assert body["errors"] == %{"application" => "The application wrong_app doesn't exists"}
+  end
+
+  test "/variant returns a variant", context do
+    exp = insert(:experiment)
+    variant = List.first(exp.variants)
+    body =
+      get(context.conn, @api_path <> "/experiments/" <> exp.id <> "/variant/" <> variant.id)
+      |> json_response(200)
+    assert body["variant"]["id"] == variant.id
+  end
+
+  test "/variant returns error if requested veriant is not in the given experiment", context do
+    exp = insert(:experiment)
+    body =
+      get(context.conn, @api_path <> "/experiments/" <> exp.id <> "/variant/" <> "bad_id")
+      |> json_response(404)
+    assert body["errors"] == %{"experiment" => "Variant with id 'bad_id' for the experiment with id '#{exp.id}' is not found"}
   end
 end
