@@ -23,11 +23,16 @@ defmodule Xperiments.Assigner.Dispatcher do
     {:reply, response, state}
   end
 
+  def do_get_suitable_experiments(rules, exps) when exps == %{} do
+    assigns =
+      ExperimentSupervisor.experiment_pids()
+      |> get_new_experiments()
+    %{assign: assigns, unassign: []}
+  end
   def do_get_suitable_experiments(rules, assigned_experiments) do
     requested_experiments = check_experiments(assigned_experiments)
     exclusion_pids = get_exclusions_pids(requested_experiments.assign)
-    experiment_pids = ExperimentSupervisor.experiment_pids()
-    new_experiments = get_new_experiments(experiment_pids -- exclusion_pids)
+    new_experiments = get_new_experiments(ExperimentSupervisor.experiment_pids() -- exclusion_pids)
     Map.update!(requested_experiments, :assign, & new_experiments ++ &1)
   end
 
