@@ -1,4 +1,4 @@
-defmodule Xperiments.Assigner.Manager do
+defmodule Xperiments.Assigner.ExperimentSupervisor do
   use Supervisor
   require Logger
 

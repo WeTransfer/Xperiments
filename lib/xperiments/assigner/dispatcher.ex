@@ -1,6 +1,6 @@
 defmodule Xperiments.Assigner.Dispatcher do
   use GenServer
-  alias Xperiments.Assigner.{Manager, Experiment}
+  alias Xperiments.Assigner.{ExperimentSupervisor, Experiment}
 
   def start_link do
     GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
@@ -19,8 +19,10 @@ defmodule Xperiments.Assigner.Dispatcher do
   ## Server
 
   def handle_call({:return_suitable_experiments, rules, assigned_experiments}, _caller, state) do
+    # find finished experiments
+    # find exclusions for running experiments
     result =
-      Manager.experiments_list
+      ExperimentSupervisor.experiments_list
       |> Enum.map(fn pid -> Experiment.get_random_variant(pid) end)
     {:reply, result, state}
   end

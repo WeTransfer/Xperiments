@@ -10,7 +10,7 @@ defmodule Xperiments.Assigner.Supervisor do
   def init([]) do
     children = [
       supervisor(Registry, [:unique, @registry_name]),
-      supervisor(Xperiments.Assigner.Manager, []),
+      supervisor(Xperiments.Assigner.ExperimentSupervisor, []),
       worker(Task, [&Xperiments.Assigner.Loader.load_experiments_from_db/0], restart: :temporary),
       worker(Xperiments.Assigner.Dispatcher, [])
     ]

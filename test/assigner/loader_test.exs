@@ -3,8 +3,8 @@ defmodule Xperiments.Assigner.LoaderTest do
   alias Xperiments.Assigner
 
   setup do
-    for e_pid <- Assigner.Manager.experiments_list() do
-      Supervisor.terminate_child(Assigner.Manager, e_pid)
+    for e_pid <- Assigner.ExperimentSupervisor.experiments_list() do
+      Supervisor.terminate_child(Assigner.ExperimentSupervisor, e_pid)
     end
     app = insert(:application, name: "frontend")
     runned_exps = insert_list(4, :experiment, application: app, state: "running")
@@ -13,10 +13,10 @@ defmodule Xperiments.Assigner.LoaderTest do
   end
 
   test "load experiment in a `running` state only and run them" do
-    list = Assigner.Manager.experiments_list()
+    list = Assigner.ExperimentSupervisor.experiments_list()
     assert length(list) == 0
     Assigner.Loader.load_experiments_from_db()
-    list = Assigner.Manager.experiments_list()
+    list = Assigner.ExperimentSupervisor.experiments_list()
     assert length(list) == 4
   end
 end

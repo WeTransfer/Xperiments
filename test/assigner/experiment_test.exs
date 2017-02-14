@@ -1,6 +1,6 @@
 defmodule Xperiments.Assigner.ExperimentTest do
   use Xperiments.AssignCase
-  alias Xperiments.Assigner.{Manager, Experiment}
+  alias Xperiments.Assigner.{ExperimentSupervisor, Experiment}
 
   setup do
     app = insert(:application, name: "web")
@@ -8,7 +8,7 @@ defmodule Xperiments.Assigner.ExperimentTest do
     exp =
       insert(:experiment, state: "running", exclusions: [excluded_exp])
       |> Repo.preload(:exclusions)
-    Manager.start_experiment(exp)
+    ExperimentSupervisor.start_experiment(exp)
     [exp: exp, excluded_exp: excluded_exp]
   end
 
@@ -22,14 +22,14 @@ defmodule Xperiments.Assigner.ExperimentTest do
 
   test "experiment return a randomly (according to an allocation) assigned result" do
     exp = Xperiments.Factory.experiment_with_balanced_variants()
-    Manager.start_experiment(exp)
+    ExperimentSupervisor.start_experiment(exp)
     variant = Experiment.get_random_variant(exp.id)
     assert is_map(variant)
   end
 
   test "correctly assignes of variants based for many requests based on variants allocations" do
     exp = Xperiments.Factory.experiment_with_balanced_variants()
-    Manager.start_experiment(exp)
+    ExperimentSupervisor.start_experiment(exp)
     allocations = for _i <- 0..10000 do
       exp = Experiment.get_random_variant(exp.id)
       exp.variant.allocation

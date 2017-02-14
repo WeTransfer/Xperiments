@@ -7,7 +7,7 @@ defmodule Xperiments.AssignerControllerTest do
       build(:experiment, state: "running", application: app)
       |> Xperiments.Factory.with_balanced_variants
       |> insert
-      |> Xperiments.Assigner.Manager.start_experiment
+      |> Xperiments.Assigner.ExperimentSupervisor.start_experiment
     end
     conn =
       build_conn()
