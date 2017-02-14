@@ -21,11 +21,12 @@ defmodule Xperiments.AssignerControllerTest do
     body =
       get(context.conn, @api_path <> "/experiments")
       |> json_response(200)
-    assert Map.size(body) == 3
+    assert length(body["assign"]) == 3
     ids =
       Xperiments.Repo.all(Xperiments.Experiment)
       |> Enum.map(& &1.id)
-    assert Enum.sort(Map.keys(body)) == Enum.sort(ids)
+    returned_ids = body["assign"] |> Enum.map(fn e -> e["id"] end)
+    assert Enum.sort(returned_ids) == Enum.sort(ids)
   end
 
 end

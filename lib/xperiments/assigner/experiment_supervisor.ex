@@ -34,10 +34,21 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
     Supervisor.terminate_child(__MODULE__, pid)
   end
 
-  @doc "Returns a list of pid of all runninng experiments"
-  @spec experiments_list() :: List
-  def experiments_list do
+  @doc "Returns a list of pid of all runninng/stopped experiments"
+  @spec experiment_pids() :: List
+  def experiment_pids do
     Supervisor.which_children(__MODULE__)
     |> Enum.map(fn {_, pid, _, _} -> pid end)
+  end
+
+  @doc """
+  Returns experiment ids by given list of pids
+  """
+  @spec get_experiment_pids_by_ids(ids :: List) :: List
+  def get_experiment_pids_by_ids(ids) do
+    Enum.map(ids, fn id ->
+      [{pid, _}] = Registry.lookup(:registry_experiments, id)
+      pid
+    end)
   end
 end

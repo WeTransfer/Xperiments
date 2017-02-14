@@ -39,10 +39,10 @@ defmodule Xperiments.Assigner.Experiment do
   end
 
   @doc """
-  Get a specific variant of the experiment
+  Gets a specific variant of the experiment
   """
-  def get_variant(id, var_name) do
-
+  def get_experiment_data(pid, var_id) do
+    GenServer.call(pid, {:get_experiment_data, var_id})
   end
 
   @doc """
@@ -86,6 +86,20 @@ defmodule Xperiments.Assigner.Experiment do
     {:reply, [], state}
   end
 
+  def handle_call({:get_experiment_data, var_id}, _caller, state) do
+    result = case Enum.find(state.variants, &(&1.id == var_id)) do
+               nil -> {:error, %{id: state.id}}
+               variant ->
+                 {:ok,
+                  %{id: state.id,
+                    state: state.state, # heh, looks stupid
+                    start_date: state.start_date,
+                    end_date: state.end_date,
+                    variant: variant}}
+             end
+    {:reply, result, state}
+  end
+
   # TODO: WIP
   def handle_call({:check_rules, rules}, _caller, state) do
     {:reply, true, state}
@@ -105,13 +119,13 @@ defmodule Xperiments.Assigner.Experiment do
     {segmented_variants, _} =
       variants
       |> Enum.sort(& &1.allocation >= &2.allocation)
-      |> Enum.map_reduce(0, fn var, cursor ->
-        new_cursor = cursor + var.allocation
-        {
-          Map.merge(var, %{segment_range: Range.new(cursor + 1, new_cursor)}),
-          new_cursor
-        }
-      end)
+    |> Enum.map_reduce(0, fn var, cursor ->
+      new_cursor = cursor + var.allocation
+      {
+        Map.merge(var, %{segment_range: Range.new(cursor + 1, new_cursor)}),
+        new_cursor
+      }
+    end)
     segmented_variants
   end
 

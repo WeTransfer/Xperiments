@@ -4,7 +4,7 @@ defmodule Xperiments.Assigner.ExperimentSupervisorTest do
   alias Xperiments.Assigner.{ExperimentSupervisor}
 
   setup do
-    for e_pid <- ExperimentSupervisor.experiments_list() do
+    for e_pid <- ExperimentSupervisor.experiment_pids() do
       Supervisor.terminate_child(ExperimentSupervisor, e_pid)
     end
     [
@@ -22,13 +22,13 @@ defmodule Xperiments.Assigner.ExperimentSupervisorTest do
   test "start a new experiment", context do
     {:ok, pid} = ExperimentSupervisor.start_experiment(context.exp)
     assert is_pid(pid)
-    assert length(ExperimentSupervisor.experiments_list()) == 1
+    assert length(ExperimentSupervisor.experiment_pids()) == 1
   end
 
   test "terminate an experiment", context do
     {:ok, _} = ExperimentSupervisor.start_experiment(context[:exp])
-    assert length(ExperimentSupervisor.experiments_list()) == 1
+    assert length(ExperimentSupervisor.experiment_pids()) == 1
     ExperimentSupervisor.terminate_experiment(context.exp.id)
-    assert length(ExperimentSupervisor.experiments_list()) == 0
+    assert length(ExperimentSupervisor.experiment_pids()) == 0
   end
 end
