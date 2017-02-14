@@ -18,10 +18,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    setParameter: value => {dispatch(setValue('parameter', value))},
-    setType: value => {dispatch(setValue('type', value))},
-    setOperator: value => {dispatch(setValue('operator', value))},
-    setValue: value => {dispatch(setValue('value', value))},
+    setParameter: value => {dispatch(setValue('parameter', value));},
+    setType: value => {dispatch(setValue('type', value));},
+    setOperator: value => {dispatch(setValue('operator', value));},
+    setValue: value => {dispatch(setValue('value', value));},
     set: data => {
       dispatch(Actions.NewRule.validate(data, 'addRuleForm'));
       dispatch(Actions.Experiment.pushRule(data));

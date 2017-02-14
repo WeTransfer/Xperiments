@@ -39,7 +39,6 @@ export default class AddSegments extends React.Component {
     this.props.list.forEach(rule => {
       renderedList.push(<TableRow>
         <TableRowColumn>{rule.parameter}</TableRowColumn>
-        <TableRowColumn>{rule.type}</TableRowColumn>
         <TableRowColumn>{rule.operator}</TableRowColumn>
         <TableRowColumn>{rule.value}</TableRowColumn>
         <TableRowColumn>-</TableRowColumn>
@@ -66,7 +65,6 @@ export default class AddSegments extends React.Component {
             <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
               <TableRow>
                 <TableHeaderColumn>Parameter</TableHeaderColumn>
-                <TableHeaderColumn>Type</TableHeaderColumn>
                 <TableHeaderColumn>Operator</TableHeaderColumn>
                 <TableHeaderColumn>Value</TableHeaderColumn>
                 <TableHeaderColumn>Actions</TableHeaderColumn>
