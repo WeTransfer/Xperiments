@@ -27,7 +27,7 @@ defmodule Xperiments.Router do
   scope "/assigner", Xperiments do
     pipe_through [:api, :external]
 
-    get "/application/:app_name/experiments", AssignerController, :experiments
+    post "/application/:app_name/experiments", AssignerController, :experiments
     options  "/application/:app_name/experiments", AssignerController, :options
     options  "/application/:app_name/experiments", AssignerController, :options
   end

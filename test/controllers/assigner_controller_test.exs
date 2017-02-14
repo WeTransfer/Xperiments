@@ -19,7 +19,7 @@ defmodule Xperiments.AssignerControllerTest do
 
   test "/experiments returns assigner variants", context do
     body =
-      get(context.conn, @api_path <> "/experiments")
+      post(context.conn, @api_path <> "/experiments", %{})
       |> json_response(200)
     assert length(body["assign"]) == 3
     ids =
