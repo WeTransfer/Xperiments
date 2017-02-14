@@ -1,5 +1,8 @@
 import React from 'react';
 
+import Countries from 'countries.es6';
+import Languages from 'languages.es6';
+
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
@@ -22,9 +25,9 @@ const styling = {
 };
 
 const dataSource = {
-  device: [{text: 'Desktop', value: 'desktop'}, {text: 'Mobile', value: 'mobile'}],
-  language: [{text: 'English - US', value: 'en-us'}, {text: 'Dutch', value: 'nl'}],
-  country: [{text: 'United States of America', value: "usa"}, {text: 'Netherlands', value: "nl"}]
+  device: [{label: 'Desktop', id: 'desktop'}, {label: 'Mobile', id: 'mobile'}],
+  language: Languages,
+  country: Countries
 };
 
 export default class AddRule extends React.Component {
@@ -84,12 +87,14 @@ export default class AddRule extends React.Component {
             <AutoComplete
               fullWidth={true}
               floatingLabelText="Value"
-              filter={AutoComplete.noFilter}
+              filter={AutoComplete.caseInsensitiveFilter}
               dataSource={selectedDataSource}
               openOnFocus={true}
               ref="value"
-              onNewRequest={(request) => {this.props.setValue(request.value);}}
+              onNewRequest={(request) => {this.props.setValue(request.id);}}
               errorText={this.props.validationErrors.value || null}
+              dataSourceConfig={{text: 'label', value: 'id'}}
+              maxSearchResults={5}
             />
           </div>
         </div>
