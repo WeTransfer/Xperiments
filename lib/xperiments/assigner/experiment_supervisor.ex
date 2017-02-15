@@ -55,7 +55,8 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
   """
   @spec get_experiment_pids_by_ids(ids :: List) :: List
   def get_experiment_pids_by_ids(ids) do
-    Enum.map(ids, fn id ->
+    List.wrap(ids)
+    |> Enum.map(fn id ->
       [{pid, _}] = Registry.lookup(:registry_experiments, id)
       pid
     end)
