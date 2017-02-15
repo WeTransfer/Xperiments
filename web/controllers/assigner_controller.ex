@@ -1,8 +1,17 @@
 defmodule Xperiments.AssignerController do
   use Xperiments.Web, :controller
+  alias Xperiments.{Repo, Experiment}
 
   def experiments(conn, params) do
     experiments = Xperiments.Assigner.Dispatcher.get_suitable_experiments(0, %{})
     render conn, "experiments.json", experiments: experiments
+  end
+
+  # This one only for testing purpose
+  # TODO: don't forget to chech auth
+  def example(conn, %{"id" => id, "variant_id" => var_id}) do
+    experiment = Repo.get!(Experiment, id)
+    variant = Enum.find(experiment.variants, & &1.id == var_id)
+    render conn, "example.json", experiment: experiment, variant: variant
   end
 end
