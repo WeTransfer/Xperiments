@@ -30,4 +30,12 @@ defmodule Xperiments.AssignerControllerTest do
     assert Enum.sort(returned_ids) == Enum.sort(ids)
   end
 
+  test "returning of a specific variant as to check how it looks like", context do
+    exp = insert(:experiment)
+    var = List.first(exp.variants)
+    body =
+      get(context.conn, "#{@api_path}/experiments/#{exp.id}/variants/#{var.id}")
+      |> json_response(200)
+    assert List.first(body["assign"])["id"] == exp.id
+  end
 end
