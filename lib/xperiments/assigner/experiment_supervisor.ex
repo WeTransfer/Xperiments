@@ -1,6 +1,7 @@
 defmodule Xperiments.Assigner.ExperimentSupervisor do
   use Supervisor
   require Logger
+  alias Xperiments.Assigner.Experiment
 
   def start_link do
     Supervisor.start_link(__MODULE__, :ok, name: __MODULE__)
@@ -8,7 +9,7 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
 
   def init(:ok) do
     children = [
-      worker(Xperiments.Assigner.Experiment, [], restart: :transient)
+      worker(Experiment, [], restart: :transient)
     ]
     supervise(children, strategy: :simple_one_for_one)
   end
@@ -18,7 +19,10 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
   @doc "Start an experiment using data from the DB"
   def start_experiment(experiment_info) do
     case Supervisor.start_child(__MODULE__, [experiment_info]) do
-      {:ok, pid} -> {:ok, pid}
+      {:ok, pid} ->
+        Experiment.register_priority(pid)
+        Logger.info "Experiment #{experiment_info.name} successfully started"
+        {:ok, pid}
       {:error, {:bad_experiment, experiment}} ->
         Logger.error "Given experiment is not started: #{inspect experiment}"
         :error
@@ -38,7 +42,12 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
   @spec experiment_pids() :: List
   def experiment_pids do
     Supervisor.which_children(__MODULE__)
-    |> Enum.map(fn {_, pid, _, _} -> pid end)
+    |> Enum.map(fn {_, pid, _, _} ->
+      [{_, priority}] = Registry.lookup(:registry_priorities, pid)
+      {pid, priority}
+    end)
+    |> Enum.sort(fn {_, p1}, {_, p2} -> p1 > p2 end)
+    |> Enum.map(fn {pid, _} -> pid end)
   end
 
   @doc """
