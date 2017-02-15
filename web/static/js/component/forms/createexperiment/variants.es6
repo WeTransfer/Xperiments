@@ -15,7 +15,8 @@ const styling = {
 export default class Variants extends React.Component {
   static propTypes = {
     title: React.PropTypes.string,
-    list: React.PropTypes.array
+    list: React.PropTypes.array,
+    experimentId: React.PropTypes.string
   }
 
   defaultProps = {
@@ -42,11 +43,16 @@ export default class Variants extends React.Component {
     let renderedList = [];
 
     this.props.list.forEach(variant => {
+      let actions = [];
+
+      if (variant.id)
+        actions.push(<a target="_blank" href={`http://lvh.me:4000/?experiment_id=${this.props.experimentId}&vairant_id=${variant.id}`}>Preview</a>);
+
       renderedList.push(<TableRow>
         <TableRowColumn>{variant.name}</TableRowColumn>
         <TableRowColumn>{variant.allocation}</TableRowColumn>
         <TableRowColumn>{variant.control_group ? 'Yes' : 'No'}</TableRowColumn>
-        <TableRowColumn>-</TableRowColumn>
+        <TableRowColumn>{actions}</TableRowColumn>
       </TableRow>);
     });
 
