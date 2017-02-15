@@ -46,7 +46,7 @@ export default class Variants extends React.Component {
       let actions = [];
 
       if (variant.id)
-        actions.push(<a target="_blank" href={`http://lvh.me:4000/?experiment_id=${this.props.experimentId}&vairant_id=${variant.id}`}>Preview</a>);
+        actions.push(<a target="_blank" href={`http://lvh.me:4000/?experiment_id=${this.props.experimentId}&variant_id=${variant.id}`}>Preview</a>);
 
       renderedList.push(<TableRow>
         <TableRowColumn>{variant.name}</TableRowColumn>
