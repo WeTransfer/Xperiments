@@ -1,6 +1,15 @@
 defmodule Xperiments.Assigner.Dispatcher do
+  @moduledoc """
+  *Manage requests for experiments.*
+  Prepare a response, based on a request.
+  If new client asks for experiment we check segments and assign it to experiments,
+  based on priority, exclude all futher experiments on the way if need it
+  """
   alias Xperiments.Assigner.{ExperimentSupervisor, Experiment}
 
+  @doc """
+  Entry point for the module.
+  """
   def get_suitable_experiments(rules, exps) when exps == %{} do
     assigns =
       ExperimentSupervisor.experiment_pids()
@@ -9,10 +18,11 @@ defmodule Xperiments.Assigner.Dispatcher do
   end
   def get_suitable_experiments(rules, assigned_experiments) do
     requested_experiments = check_experiments(assigned_experiments)
-    exclusion_pids = Enum.map(requested_experiments.assign, & &1.id) |> get_exclusions_pids()
-    new_experiments = get_new_experiments(
-      ExperimentSupervisor.experiment_pids() -- exclusion_pids)
-    Map.update!(requested_experiments, :assign, & new_experiments ++ &1)
+    requested_ids         = Enum.map(requested_experiments.assign, & &1.id)
+    requested_pids        = requested_ids |> ExperimentSupervisor.get_experiment_pids_by_ids()
+    exclusion_pids        = requested_ids |> get_exclusions_pids()
+    pids = (ExperimentSupervisor.experiment_pids() -- exclusion_pids) -- requested_pids
+    Map.update!(requested_experiments, :assign, & get_new_experiments(pids) ++ &1)
   end
 
   def get_new_experiments([]), do: []
@@ -61,6 +71,7 @@ defmodule Xperiments.Assigner.Dispatcher do
       end
     end)
     |> Enum.group_by(fn {k, _} -> k end, fn {_, v} -> v end)
+    |> Map.put_new(:unassign, [])
+    |> Map.put_new(:assign, [])
   end
-
 end
