@@ -3,7 +3,8 @@ defmodule Xperiments.AssignerController do
   alias Xperiments.{Repo, Experiment}
 
   def experiments(conn, params) do
-    experiments = Xperiments.Assigner.Dispatcher.get_suitable_experiments(0, %{})
+    experiments = Xperiments.Assigner.Dispatcher.get_suitable_experiments(
+      params["segments"], params["assigned"])
     render conn, "experiments.json", experiments: experiments
   end
 

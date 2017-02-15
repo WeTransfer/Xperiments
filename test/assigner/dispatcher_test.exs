@@ -29,23 +29,24 @@ defmodule Xperiments.Assigner.DispatcherTest do
   end
 
   test "returning of experiments for an empty request without excluded experiments" do
-    response = Dispatcher.get_suitable_experiments([], %{})
+    response = Dispatcher.get_suitable_experiments([], [])
     assert length(response.assign) == 1
   end
 
   test "returning of experiments for a request with assigned experiment", context do
-    response = Dispatcher.get_suitable_experiments([], %{})
+    response = Dispatcher.get_suitable_experiments([], [])
     assert length(response.assign) == 1
     run_new_experiments(context.app)
     exp = List.first(response.assign)
     exp_id = exp.id
     var_id = exp.variant.id
-    new_response = Dispatcher.get_suitable_experiments([], %{exp_id => var_id})
+    new_response = Dispatcher.get_suitable_experiments([],
+      [%{"experiment_id" => exp_id, "variant_id" => var_id}])
     assert length(new_response.assign) == 4
   end
 
   test "returning of unassigned experiments and assign those, which were excluded" do
-    response = Dispatcher.get_suitable_experiments([], %{})
+    response = Dispatcher.get_suitable_experiments([], [])
     exp = List.first(response.assign)
     exp_id = exp.id
     var_id = exp.variant.id
@@ -53,13 +54,15 @@ defmodule Xperiments.Assigner.DispatcherTest do
     |> List.first
     |> GenServer.stop()
     :timer.sleep 100 # yeah, we need to wait, until Registry reeives the message about killed process
-    new_response = Dispatcher.get_suitable_experiments([], %{exp_id => var_id})
+    new_response = Dispatcher.get_suitable_experiments([],
+      [%{"experiment_id" => exp_id, "variant_id" => var_id}])
     assert length(new_response.unassign) == 1
     assert length(new_response.assign) == 2
   end
 
   test "returning of unassigned experiments if given bad variant_id", context do
-    response = Dispatcher.get_suitable_experiments([], %{context.exp.id => "bad_id"})
+    response = Dispatcher.get_suitable_experiments([],
+      [%{"experiment_id" => context.exp.id, "variant_id" => "bad_id"}])
     assert length(response.unassign) == 1
   end
 end

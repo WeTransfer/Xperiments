@@ -1,7 +1,11 @@
 defmodule Xperiments.AssignerControllerTest do
   use Xperiments.ConnCase, async: false
+  alias Xperiments.Assigner.ExperimentSupervisor
 
   setup do
+    for e_pid <- ExperimentSupervisor.experiment_pids() do
+      Supervisor.terminate_child(ExperimentSupervisor, e_pid)
+    end
     app = insert(:application, name: "test_app")
     for _i <- 0..2 do
       build(:experiment, state: "running", application: app)

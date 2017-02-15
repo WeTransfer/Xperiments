@@ -10,7 +10,7 @@ defmodule Xperiments.Assigner.Dispatcher do
   @doc """
   Entry point for the module.
   """
-  def get_suitable_experiments(rules, exps) when exps == %{} do
+  def get_suitable_experiments(rules, nil) do
     assigns =
       ExperimentSupervisor.experiment_pids()
       |> get_new_experiments()
@@ -56,10 +56,10 @@ defmodule Xperiments.Assigner.Dispatcher do
   Returns %{assigned: [experiment_data], unassign: [ids_to_delete]}
   """
   @spec check_experiments(assigned_experiments :: List) :: Map
-  def check_experiments(exps) when exps == %{}, do: %{assign: [], unassign: []}
+  def check_experiments([]), do: %{assign: [], unassign: []}
   def check_experiments(assigned_experiments) do
     assigned_experiments
-    |> Enum.map(fn {eid, var_id} ->
+    |> Enum.map(fn %{"experiment_id" => eid, "variant_id" => var_id} ->
       case Registry.lookup(:registry_experiments, eid) do
         [{pid, _}] ->
           case Experiment.get_experiment_data(pid, var_id) do
