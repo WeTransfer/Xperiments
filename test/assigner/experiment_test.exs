@@ -17,7 +17,7 @@ defmodule Xperiments.Assigner.ExperimentTest do
     assert length(exclusions) == 1
     exc_list = Experiment.get_exclusions_list(context.exp.id)
     assert length(exc_list) == 1
-    assert exc_list == exclusions
+    assert exc_list == Enum.map(exclusions, & &1.id)
   end
 
   test "experiment return a randomly (according to an allocation) assigned result" do

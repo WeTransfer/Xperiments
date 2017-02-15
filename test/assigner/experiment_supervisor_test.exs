@@ -31,4 +31,18 @@ defmodule Xperiments.Assigner.ExperimentSupervisorTest do
     ExperimentSupervisor.terminate_experiment(context.exp.id)
     assert length(ExperimentSupervisor.experiment_pids()) == 0
   end
+
+  test "returning pids of children in order sorted by priority", context do
+    use Timex
+    :timer.sleep 100
+    exp1 = insert(:experiment, state: "running")
+    :timer.sleep 100
+    exp2 = insert(:experiment, state: "running")
+    :timer.sleep 100
+    {:ok, pid2} = ExperimentSupervisor.start_experiment(exp2)
+    {:ok, pid} = ExperimentSupervisor.start_experiment(context.exp)
+    {:ok, pid1} = ExperimentSupervisor.start_experiment(exp1)
+    pids = ExperimentSupervisor.experiment_pids()
+    assert pids == [pid2, pid1, pid]
+  end
 end

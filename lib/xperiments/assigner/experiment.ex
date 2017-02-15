@@ -12,7 +12,7 @@ defmodule Xperiments.Assigner.Experiment do
   def init(%{state: state} = experiment) when state in ["running", "stopped"] do
     :random.seed(:erlang.now)
     temp_state = Map.take(experiment, [:id, :name, :rules, :start_date, :end_date,
-                                       :created_at, :state, :exclusions])
+                                       :inserted_at, :state, :exclusions])
     state = Map.merge(temp_state, %{variants: do_build_segmented_variants(experiment.variants)})
     {:ok, state}
   end
@@ -38,6 +38,10 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.cast(via_tuple(id), {:restart})
   end
 
+  def register_priority(pid) do
+    GenServer.call(pid, {:register_priority})
+  end
+
   @doc """
   Gets a specific variant of the experiment
   """
@@ -55,8 +59,11 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.call(via_tuple(id), {:get_random_variant})
   end
 
+  def get_exclusions_list(pid) when is_pid(pid) do
+    GenServer.call(pid, {:get_exclusions_list})
+  end
   def get_exclusions_list(id) do
-    GenServer.call(via_tuple(id), {:get_exclusion_list})
+    GenServer.call(via_tuple(id), {:get_exclusions_list})
   end
 
   def accept_rules?(pid, rules) do
@@ -75,14 +82,20 @@ defmodule Xperiments.Assigner.Experiment do
     {:noreply, new_state}
   end
 
+  def handle_call({:register_priority}, _caller, state) do
+    {:ok, _} = Registry.register(:registry_priorities, self(), state.inserted_at)
+    {:reply, :ok, state}
+  end
+
   @doc """
   Returns an exclusions list only if state is `running`
   Otherwise returns an empty list
   """
-  def handle_call({:get_exclusion_list}, _caller, %{state: "running", exclusions: exclusions} = state) do
-    {:reply, exclusions, state}
+  def handle_call({:get_exclusions_list}, _caller, %{state: "running", exclusions: exclusions} = state) do
+    response = Enum.map(exclusions, & &1.id)
+    {:reply, response, state}
   end
-  def handle_call({:get_exclusion_list}, _caller, state) do
+  def handle_call({:get_exclusions_list}, _caller, state) do
     {:reply, [], state}
   end
 
