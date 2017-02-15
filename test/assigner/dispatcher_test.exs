@@ -1,6 +1,6 @@
 defmodule Xperiments.Assigner.DispatcherTest do
   use Xperiments.AssignCase
-  alias Xperiments.Assigner.{ExperimentSupervisor, Experiment, Dispatcher}
+  alias Xperiments.Assigner.{ExperimentSupervisor, Dispatcher}
 
   setup do
     for e_pid <- ExperimentSupervisor.experiment_pids() do
@@ -56,5 +56,10 @@ defmodule Xperiments.Assigner.DispatcherTest do
     new_response = Dispatcher.get_suitable_experiments([], %{exp_id => var_id})
     assert length(new_response.unassign) == 1
     assert length(new_response.assign) == 2
+  end
+
+  test "returning of unassigned experiments if given bad variant_id", context do
+    response = Dispatcher.get_suitable_experiments([], %{context.exp.id => "bad_id"})
+    assert length(response.unassign) == 1
   end
 end
