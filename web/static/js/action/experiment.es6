@@ -18,20 +18,16 @@ const validateVariant = (data, variants = []) => {
 
   if (!data.name)
     errors.name = 'This field is required';
+  
   if (!data.allocation)
     errors.allocation = 'This field is required';
   else if (isNaN(data.allocation))
     errors.allocation = 'Provide a valid number';
   else if (data.allocation > allocationLeft)
     errors.allocation = `Allocation can not be greater than 100% (${allocationLeft}% left)`;
+  
   if (!data.payload) {
     errors.payload = 'This field is required';
-  } else {
-    try {
-      JSON.parse(data.payload);
-    } catch(e) {
-      errors.payload = 'Provide a valid JSON, you can use http://pro.jsonlint.com/ to validate your changes';
-    }
   }
 
   return errors;

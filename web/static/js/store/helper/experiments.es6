@@ -3,6 +3,6 @@ export default {
   isUpdatingState: false,
   list: [],
   filteredList: [],
-  filter: 'draft',
+  filter: 'all',
   indexedList: {}
 };
