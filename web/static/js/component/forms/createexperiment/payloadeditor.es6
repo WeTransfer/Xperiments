@@ -27,8 +27,6 @@ export default class PayloadEditor extends React.Component {
     if (type === 'number')
       payload[key] = parseInt(value);
     this.setState({payload});
-
-    console.log(payload);
   }
 
   setType(index, type) {
@@ -64,7 +62,7 @@ export default class PayloadEditor extends React.Component {
         <SelectField
           fullWidth={true}
           floatingLabelText={property.title}
-          value={property.enum[0].value}
+          value={this.state.payload[property.key] || null}
           onChange={(e, index, value) => {this.setPayload(property.key, value, property.type);}}
         >
           {options}

@@ -26,6 +26,7 @@ const styling = {
 
 export default class EditExperimentPage extends React.Component {
   static propTypes = {
+    selectedApplication: React.PropTypes.object,
     experiment: React.PropTypes.object,
     indexedExperimentsList: React.PropTypes.object,
     save: React.PropTypes.func
@@ -50,7 +51,12 @@ export default class EditExperimentPage extends React.Component {
         <div className="spacing"></div>
         <Rules title="What users do you want to target?" list={this.props.experiment.data.rules} />
         <div className="spacing spacing--is-30"></div>
-        <Variants title="What do you want to show to your users?" list={this.props.experiment.data.variants} experimentId={this.props.experiment.data.id} />
+        <Variants
+          title="What do you want to show to your users?"
+          list={this.props.experiment.data.variants}
+          experimentId={this.props.experiment.data.id}
+          selectedApplication={this.props.selectedApplication}
+        />
         <div className="spacing spacing--is-30"></div>
         <Exclusions title="What experiments do you want to exclude?" list={this.props.experiment.data.exclusions} indexedExperimentsList={this.props.indexedExperimentsList} />
       </Paper>

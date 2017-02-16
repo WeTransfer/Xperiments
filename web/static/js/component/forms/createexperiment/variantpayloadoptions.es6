@@ -29,7 +29,10 @@ const options = [
       text: 'ExperimentTooltip',
       align: '.transfer__window',
       timeout: null,
-      delay: null
+      delay: null,
+      buttonText: null,
+      buttonAction: null,
+      when: 'transferComplete'
     },
     schema: {
       type: 'object',
@@ -48,8 +51,9 @@ const options = [
           key: 'when',
           type: 'string',
           enum: [
-            {label: 'transfer is complete', value: 'transferComplete'},
-            {label: 'transfer is in progress', value: 'transferInProgress'}
+            {label: 'transfer upload is in progress', value: 'transferInProgress'},
+            {label: 'transfer upload is complete', value: 'transferComplete'},
+            {label: 'transfer download has started', value: 'transferDownloadStarted'},
           ],
           title: 'When'
         },
@@ -63,6 +67,20 @@ const options = [
           }
         },
         {
+          key: 'buttonText',
+          type: 'string',
+          title: 'Button Text'
+        },
+        {
+          key: 'buttonAction',
+          type: 'string',
+          enum: [
+            {label: '', value: null},
+            {label: 'Create New Transfer', value: 'createNewTransfer'}
+          ],
+          title: 'Button Action'
+        },
+        {
           key: 'text',
           type: 'string',
           title: 'Text',
@@ -73,7 +91,7 @@ const options = [
           type: 'string',
           title: 'Align',
           hidden: true
-        },
+        }
       ]
     }
   },

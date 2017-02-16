@@ -14,9 +14,11 @@ const styling = {
 
 export default class Variants extends React.Component {
   static propTypes = {
+    selectedApplication: React.PropTypes.object,
     title: React.PropTypes.string,
     list: React.PropTypes.array,
-    experimentId: React.PropTypes.string
+    experimentId: React.PropTypes.string,
+    delete: React.PropTypes.func
   }
 
   defaultProps = {
@@ -45,8 +47,12 @@ export default class Variants extends React.Component {
     this.props.list.forEach(variant => {
       let actions = [];
 
-      if (variant.id)
-        actions.push(<a target="_blank" href={`http://lvh.me:4000/?experiment_id=${this.props.experimentId}&variant_id=${variant.id}`}>Preview</a>);
+      if (variant.id) {
+        actions.push(<a target="_blank" href={`${this.props.selectedApplication.url}/?experiment_id=${this.props.experimentId}&variant_id=${variant.id}`}>Preview</a>);
+        actions.push(" | ");
+      }
+
+      actions.push(<a href="#" onClick={() => this.props.delete(variant)}>Delete</a>);
 
       renderedList.push(<TableRow>
         <TableRowColumn>{variant.name}</TableRowColumn>
