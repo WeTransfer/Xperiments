@@ -43,6 +43,28 @@ defmodule Xperiments.Factory do
     }
   end
 
+  def rules_1 do
+    [%{
+      parameter: "lang",
+      operator: "==",
+      value: "ru",
+      type: "string"},
+     %{
+       parameter: "system",
+       operator: "==",
+       value: "osx",
+       type: "string"
+     }]
+  end
+
+  def rules_2 do
+    [%{
+        parameter: "lang",
+        operator: "==",
+        value: "en",
+        type: "string"}]
+  end
+
   def with_balanced_variants(exp) do
     variants = [
       variant(30),

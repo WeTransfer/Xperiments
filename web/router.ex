@@ -30,8 +30,8 @@ defmodule Xperiments.Router do
     post "/application/:app_name/experiments", AssignerController, :experiments
     options "/application/:app_name/experiments", AssignerController, :options
 
-    get "application/:app_name/experiments/:id/variants/:variant_id", AssignerController, :example
-    options "application/:app_name/experiments/:id/variants/:variant_id", AssignerController, :example
+    get "/application/:app_name/experiments/:id/variants/:variant_id", AssignerController, :example
+    options "/application/:app_name/experiments/:id/variants/:variant_id", AssignerController, :example
   end
 
   # should be last, because scope is too wide

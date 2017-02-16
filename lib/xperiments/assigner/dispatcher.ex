@@ -10,32 +10,36 @@ defmodule Xperiments.Assigner.Dispatcher do
   @doc """
   Entry point for the module.
   """
-  def get_suitable_experiments(rules, nil) do
+  def get_suitable_experiments(segments, nil) do
     assigns =
       ExperimentSupervisor.experiment_pids()
-      |> get_new_experiments()
+      |> get_new_experiments(segments)
     %{assign: assigns, unassign: []}
   end
-  def get_suitable_experiments(rules, assigned_experiments) do
+  def get_suitable_experiments(segments, assigned_experiments) do
     requested_experiments = check_experiments(assigned_experiments)
     requested_ids         = Enum.map(requested_experiments.assign, & &1.id)
-    requested_pids        = requested_ids |> ExperimentSupervisor.get_experiment_pids_by_ids()
-    exclusion_pids        = requested_ids |> get_exclusions_pids()
+    requested_pids        = ExperimentSupervisor.get_experiment_pids_by_ids(requested_ids)
+    exclusion_pids        = get_exclusions_pids(requested_ids)
     pids = (ExperimentSupervisor.experiment_pids() -- exclusion_pids) -- requested_pids
-    Map.update!(requested_experiments, :assign, & get_new_experiments(pids) ++ &1)
+    Map.update!(requested_experiments, :assign, & get_new_experiments(pids, segments) ++ &1)
   end
 
-  def get_new_experiments([]), do: []
-  def get_new_experiments(pids) do
-    do_get_new_experiments(pids, [])
+  def get_new_experiments([], _), do: []
+  def get_new_experiments(pids, segments) do
+    do_get_new_experiments(pids, [], segments)
   end
-  defp do_get_new_experiments([], result), do: result
-  defp do_get_new_experiments([pid | tail], result) do
-    variant = Experiment.get_random_variant(pid)
-    exclusions_pids =
-      Experiment.get_exclusions_list(pid)
-      |> ExperimentSupervisor.get_experiment_pids_by_ids
-    do_get_new_experiments(tail -- exclusions_pids, [variant | result])
+  defp do_get_new_experiments([], result, _), do: result
+  defp do_get_new_experiments([pid | tail], result, segments) do
+    if Experiment.accept_segments?(pid, segments) do
+      variant = Experiment.get_random_variant(pid)
+      exclusions_pids =
+        Experiment.get_exclusions_list(pid)
+        |> ExperimentSupervisor.get_experiment_pids_by_ids
+      do_get_new_experiments(tail -- exclusions_pids, [variant | result], segments)
+    else
+      do_get_new_experiments(tail, result, segments)
+    end
   end
 
   @doc """

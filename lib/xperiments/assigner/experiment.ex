@@ -66,8 +66,8 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.call(via_tuple(id), {:get_exclusions_list})
   end
 
-  def accept_rules?(pid, rules) do
-    GenServer.call(pid, {:check_rules, rules})
+  def accept_segments?(pid, segments \\ %{}) do
+    GenServer.call(pid, {:check_segemets, segments})
   end
 
   ## Server
@@ -113,9 +113,13 @@ defmodule Xperiments.Assigner.Experiment do
     {:reply, result, state}
   end
 
-  # TODO: WIP
-  def handle_call({:check_rules, rules}, _caller, state) do
-    {:reply, true, state}
+  @doc """
+  Experiment may don't have rules. In this case it accepts any segements.
+  If there are no segements given and experiment have any rules, return `false`.
+  Otherwise check that segments are satisfy rules
+  """
+  def handle_call({:check_segemets, segments}, _caller, state) do
+    {:reply, do_compare_rules(segments, state.rules), state}
   end
 
   def handle_call({:get_random_variant}, _caller, state) do
@@ -124,6 +128,23 @@ defmodule Xperiments.Assigner.Experiment do
       %{variant: do_get_random_variant(state.variants)}
     )
     {:reply, response, state}
+  end
+
+  defp do_compare_rules(_, []), do: true
+  defp do_compare_rules(segments, _) when segments == %{}, do: false
+  defp do_compare_rules(segments, _) when is_nil(segments), do: false
+  defp do_compare_rules(segments, rules) when map_size(segments) < length(rules), do: false
+  defp do_compare_rules(segments, rules) do
+    result =
+      Enum.map(rules, fn r ->
+        if given_value = Map.get(segments, r.parameter) do
+          apply(Kernel, String.to_atom(r.operator), [given_value, r.value])
+        else
+          false
+        end
+      end)
+      |> Enum.dedup
+    [true] == result
   end
 
   # Create segment ranges for each variant based on their allocations
