@@ -38,8 +38,12 @@ export default function(state = {}, action) {
       };
 
     case actions.SET_EXPERIMENT_VARIANT:
+      let variant = action.data;
+      if (typeof variant.payload === 'object')
+        variant.payload = JSON.stringify(variant.payload);
+
       newData = Object.assign({}, state.data);
-      newData.variants = newData.variants.concat(action.data);
+      newData.variants = newData.variants.concat(variant);
       return {
         ...state,
         data: newData

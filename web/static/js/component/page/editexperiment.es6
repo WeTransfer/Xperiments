@@ -50,7 +50,7 @@ export default class EditExperimentPage extends React.Component {
         <div className="spacing"></div>
         <Rules title="What users do you want to target?" list={this.props.experiment.data.rules} />
         <div className="spacing spacing--is-30"></div>
-        <Variants title="What do you want to show to your users?" list={this.props.experiment.data.variants} />
+        <Variants title="What do you want to show to your users?" list={this.props.experiment.data.variants} experimentId={this.props.experiment.data.id} />
         <div className="spacing spacing--is-30"></div>
         <Exclusions title="What experiments do you want to exclude?" list={this.props.experiment.data.exclusions} indexedExperimentsList={this.props.indexedExperimentsList} />
       </Paper>

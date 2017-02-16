@@ -1,9 +1,14 @@
 import React from 'react';
 
+import VariantPayloadOptions from './variantpayloadoptions.es6';
+import PayloadEditor from './payloadeditor.es6';
+
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/SelectField';
 import Checkbox from 'material-ui/Checkbox';
 
 const styling = {
@@ -30,7 +35,7 @@ export default class AddVariant extends React.Component {
       allocation: this.refs.allocation.getValue(),
       control_group: this.refs.controlGroup.isChecked(),
       description: this.refs.description.getValue(),
-      payload: this.refs.payload.getValue()
+      payload: this.refs.payloadeditor.getPayload
     });
   }
 
@@ -80,6 +85,7 @@ export default class AddVariant extends React.Component {
             />
           </div>
         </div>
+        <PayloadEditor types={VariantPayloadOptions.web} ref="payloadeditor" errors={this.props.validationErrors.payload || null} />
         <div className="row">
           <div className="col-md-12">
             <TextField
@@ -89,18 +95,6 @@ export default class AddVariant extends React.Component {
               fullWidth={true}
               ref="description"
               errorText={this.props.validationErrors.description || null}
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-12">
-            <TextField
-              floatingLabelText="Payload"
-              multiLine={true}
-              rows={4}
-              fullWidth={true}
-              ref="payload"
-              errorText={this.props.validationErrors.payload || null}
             />
           </div>
         </div>
