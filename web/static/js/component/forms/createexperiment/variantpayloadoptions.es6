@@ -23,10 +23,10 @@ const options = [
     }
   },
   {
-    name: 'Transfer-Complete tooltip',
-    key: 'transferCompleteGrowthBubble',
+    name: 'Transfer tooltip',
+    key: 'transferBubble',
     defaults: {
-      text: null,
+      text: 'ExperimentTooltip',
       align: '.transfer__window',
       timeout: null,
       delay: null
@@ -35,26 +35,45 @@ const options = [
       type: 'object',
       properties: [
         {
+          key: 'delay',
+          type: 'number',
+          title: 'Show after (in milliseconds)'
+        },
+        {
+          key: 'timeout',
+          type: 'number',
+          title: 'For a period of (in milliseconds)'
+        },
+        {
+          key: 'when',
+          type: 'string',
+          enum: [
+            {label: 'transfer is complete', value: 'transferComplete'},
+            {label: 'transfer is in progress', value: 'transferInProgress'}
+          ],
+          title: 'When'
+        },
+        {
+          key: 'textContent',
+          type: 'string',
+          title: 'what',
+          uiOptions: {
+            multiLine: true,
+            rows: 3
+          }
+        },
+        {
           key: 'text',
           type: 'string',
-          title: 'Text'
+          title: 'Text',
+          hidden: true
         },
         {
           key: 'align',
           type: 'string',
           title: 'Align',
-          disabled: true
+          hidden: true
         },
-        {
-          key: 'timeout',
-          type: 'number',
-          title: 'Timeout (in milliseconds)'
-        },
-        {
-          key: 'delay',
-          type: 'number',
-          title: 'Delay (in milliseconds)'
-        }
       ]
     }
   },

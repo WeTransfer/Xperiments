@@ -56,7 +56,7 @@ export default class AddVariant extends React.Component {
     ];
 
     return <div className="form__create-variant">
-      <Dialog title="Add Variant" actions={actions} modal={true} open={this.props.open} >
+      <Dialog title="Add Variant" actions={actions} modal={true} open={this.props.open}>
         <div className="row">
           <div className="col-md-12">
             <TextField

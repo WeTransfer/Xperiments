@@ -21,10 +21,14 @@ export default class PayloadEditor extends React.Component {
     return payload;
   }
 
-  setPayload(key, value) {
+  setPayload(key, value, type) {
     let payload = Object.assign({}, this.state.payload);
     payload[key] = value;
+    if (type === 'number')
+      payload[key] = parseInt(value);
     this.setState({payload});
+
+    console.log(payload);
   }
 
   setType(index, type) {
@@ -40,22 +44,32 @@ export default class PayloadEditor extends React.Component {
   }
 
   makePropertyField(property) {
-    switch(property.type) {
-      case 'string':
-      case 'number':
-
-        return <div className="col-md-6">
-          <TextField
-            fullWidth={true}
-            onChange={(e, value) => {this.setPayload(property.key, value)}}
-            floatingLabelText={property.title}
-            disabled={!!property.disabled}
-            value={this.state.payload[property.key] || ''}
-            {...property.uiOptions}
-          />
-        </div>;
-      case 'string' && property.enum:
-        return <SelectField></SelectField>
+    if ((property.type === 'string' && !property.enum) || property.type == 'number') {
+      return <div className="col-md-6">
+        <TextField
+          fullWidth={true}
+          onChange={(e, value) => {this.setPayload(property.key, value, property.type);}}
+          floatingLabelText={property.title}
+          disabled={!!property.disabled}
+          value={this.state.payload[property.key] || ''}
+          {...property.uiOptions}
+        />
+      </div>;
+    } else if (property.type === 'string' && property.enum) {
+      let options = [];
+      property.enum.forEach(option => {
+        options.push(<MenuItem value={option.value} primaryText={option.label} />);
+      })
+      return <div className="col-md-6">
+        <SelectField
+          fullWidth={true}
+          floatingLabelText={property.title}
+          value={property.enum[0].value}
+          onChange={(e, index, value) => {this.setPayload(property.key, value, property.type);}}
+        >
+          {options}
+        </SelectField>
+      </div>;
     }
   }
 
@@ -72,6 +86,8 @@ export default class PayloadEditor extends React.Component {
     let typeFields = [];
     if (selectedType !== null) {
       selectedType.schema.properties.forEach(property => {
+        if (property.hidden === true)
+          return;
         typeFields.push(this.makePropertyField(property));
       })
     }
