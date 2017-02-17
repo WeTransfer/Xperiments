@@ -62,14 +62,14 @@ defmodule Xperiments.AssignerControllerTest do
       assert length(body["assign"]) == 4
     end
 
-    test "bad segments with all rules", context do
+    test "one wrong segment", context do
       body =
         post(context.conn, @api_path <> "/experiments", segments: %{lang: "ru", system: "windows"})
         |> json_response(200)
       assert length(body["assign"]) == 3
 
     end
-    test "one bad segment only", context do
+    test "one segment for an experiment with two rules", context do
       body =
         post(context.conn, @api_path <> "/experiments", segments: %{lang: "ru"})
         |> json_response(200)

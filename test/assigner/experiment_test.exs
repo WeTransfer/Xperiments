@@ -6,7 +6,7 @@ defmodule Xperiments.Assigner.ExperimentTest do
     app = insert(:application, name: "web")
     excluded_exp = insert(:experiment, application: app)
     exp =
-      insert(:experiment, state: "running", exclusions: [excluded_exp])
+      insert(:experiment, state: "running", exclusions: [excluded_exp], rules: Xperiments.Factory.rules_1)
       |> Repo.preload(:exclusions)
     ExperimentSupervisor.start_experiment(exp)
     [exp: exp, excluded_exp: excluded_exp]
@@ -38,5 +38,20 @@ defmodule Xperiments.Assigner.ExperimentTest do
     assert_in_delta Enum.count(allocations, &(&1 == 50)), 5000, 200
     assert_in_delta Enum.count(allocations, &(&1 == 30)), 3000, 200
     assert_in_delta Enum.count(allocations, &(&1 == 20)), 2000, 200
+  end
+
+  test "check rules correctly", context do
+    eid = context.exp.id
+    bad_segment_1 = %{"type" => "plus"}
+    bad_segment_2 = %{"lang" => "de"}
+    bad_segment_3 = %{"lang" => "ru", "system" => "windows"}
+    bad_segment_4 = %{"system" => "osx"}
+    refute Experiment.accept_segments?(eid, bad_segment_1)
+    refute Experiment.accept_segments?(eid, bad_segment_2)
+    refute Experiment.accept_segments?(eid, bad_segment_3)
+    refute Experiment.accept_segments?(eid, bad_segment_4)
+
+    good_segment = %{"lang" => "ru", "system" => "osx"}
+    assert Experiment.accept_segments?(eid, good_segment)
   end
 end

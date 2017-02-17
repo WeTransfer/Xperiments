@@ -66,8 +66,12 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.call(via_tuple(id), {:get_exclusions_list})
   end
 
-  def accept_segments?(pid, segments \\ %{}) do
+  def accept_segments?(pid, segments \\ %{})
+  def accept_segments?(pid, segments) when is_pid(pid) do
     GenServer.call(pid, {:check_segemets, segments})
+  end
+  def accept_segments?(id, segments) do
+    GenServer.call(via_tuple(id), {:check_segemets, segments})
   end
 
   ## Server
