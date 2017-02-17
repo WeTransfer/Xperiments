@@ -54,8 +54,9 @@ export default class CreateExperimentFormStepOne extends React.Component {
     return <Dialog modal={true} actions={actions} open={this.props.isVisible} title="Create Experiment">
       <div className="form__create-experiment form__create-experiment--is-step-one">
         <div className="row">
-          <div className="col-md-3">
+          <div className="col-md-12">
             <TextField
+              fullWidth={true}
               defaultValue={this.props.experiment.name || ""}
               floatingLabelText="Name"
               onChange={(e, value) => {this.props.setName(value);}}

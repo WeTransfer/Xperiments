@@ -5,6 +5,7 @@ import EditExperimentPage from 'component/page/editexperiment.es6';
 
 const mapStateToProps = (state) => {
   return {
+    selectedApplication: {url: 'http://lvh.me:4000'},
     experiment: state.experiment,
     indexedExperimentsList: state.experiments.indexedList
   }
