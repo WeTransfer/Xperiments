@@ -13,7 +13,7 @@ defmodule Xperiments.Assigner.Experiment do
   def init(experiment) do
     case validate_experiment(experiment) do
       :ok ->
-        :random.seed(:erlang.now)
+        :rand.seed(:exsplus)
         schedule_ending(experiment.end_date)
         {:ok, prepare_state(experiment)}
       {:error, reason} ->
@@ -21,7 +21,7 @@ defmodule Xperiments.Assigner.Experiment do
     end
   end
 
-  def terminate(reason, state) do
+  def terminate(_reason, state) do
     Logger.info "Shutting down the experiment '#{state.name}' with id #{state.id}"
     :normal
   end
@@ -85,6 +85,9 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.call(via_tuple(id), {:get_random_variant})
   end
 
+  @doc """
+  Returns an exclusion list for the specific experiment
+  """
   def get_exclusions_list(pid) when is_pid(pid) do
     GenServer.call(pid, {:get_exclusions_list})
   end
@@ -92,6 +95,9 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.call(via_tuple(id), {:get_exclusions_list})
   end
 
+  @doc """
+  Check if segments satisfy to experiment rules
+  """
   def accept_segments?(pid, segments \\ %{})
   def accept_segments?(pid, segments) when is_pid(pid) do
     GenServer.call(pid, {:check_segemets, segments})
@@ -155,7 +161,7 @@ defmodule Xperiments.Assigner.Experiment do
   def handle_call({:get_random_variant}, _caller, state) do
     response = Map.merge(
       Map.take(state, [:id, :name, :start_date, :end_date, :state]),
-      %{variant: do_get_random_variant(state.variants)}
+      %{variant: do_get_random_variant(state.variants) |> Map.drop([:segment_range])}
     )
     {:reply, response, state}
   end
