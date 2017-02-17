@@ -4,23 +4,49 @@ defmodule Xperiments.Assigner.Experiment do
   Each experiment stores the name in Registry, e.g. `{:via, Registry, {:registry_experiments, exp_id}}`
   """
   use GenServer
+  require Logger
 
   def start_link(%{id: id} = experiment) do
     GenServer.start_link(__MODULE__, experiment, name: via_tuple(id))
   end
 
-  def init(%{state: state} = experiment) when state in ["running", "stopped"] do
-    :random.seed(:erlang.now)
-    temp_state = Map.take(experiment, [:id, :name, :rules, :start_date, :end_date,
-                                       :inserted_at, :state, :exclusions])
-    state = Map.merge(temp_state, %{variants: do_build_segmented_variants(experiment.variants)})
-    {:ok, state}
+  def init(experiment) do
+    case validate_experiment(experiment) do
+      :ok ->
+        :random.seed(:erlang.now)
+        schedule_ending(experiment.end_date)
+        {:ok, prepare_state(experiment)}
+      {:error, reason} ->
+        {:stop, reason}
+    end
   end
-  def init(experiment),
-    do: {:stop, {:bad_experiment, experiment}}
 
-  def via_tuple(id) do
+  def terminate(reason, state) do
+    Logger.info "Shutting down the experiment '#{state.name}' with id #{state.id}"
+    :normal
+  end
+
+  defp schedule_ending(end_date) do
+    duration = DateTime.to_unix(end_date, :milliseconds) - DateTime.to_unix(DateTime.utc_now(), :milliseconds)
+    Process.send_after(self(), :end_experiment, duration)
+  end
+
+  defp via_tuple(id) do
     {:via, Registry, {:registry_experiments, id}}
+  end
+
+  defp prepare_state(experiment) do
+    Map.take(experiment, [:id, :name, :rules, :start_date, :end_date, :inserted_at, :state, :exclusions])
+    |> Map.merge(%{variants: do_build_segmented_variants(experiment.variants)})
+  end
+
+  defp validate_experiment(experiment) do
+    with :gt <- DateTime.compare(experiment.end_date, DateTime.utc_now()),
+         true <- experiment.state in ["running", "stopped"] do
+      :ok
+    else
+      _ -> {:error, {:bad_experiment, experiment}}
+    end
   end
 
   ## Client API
@@ -134,6 +160,10 @@ defmodule Xperiments.Assigner.Experiment do
     {:reply, response, state}
   end
 
+  def hand_info(:end_experiment, state) do
+    {:stop, :normal, state}
+  end
+
   defp do_compare_rules(_, []), do: true
   defp do_compare_rules(segments, _) when segments == %{}, do: false
   defp do_compare_rules(segments, _) when is_nil(segments), do: false
@@ -173,5 +203,4 @@ defmodule Xperiments.Assigner.Experiment do
     |> List.first
     |> Map.drop([:segment_range])
   end
-
 end

@@ -54,4 +54,16 @@ defmodule Xperiments.Assigner.ExperimentTest do
     good_segment = %{"lang" => "ru", "system" => "osx"}
     assert Experiment.accept_segments?(eid, good_segment)
   end
+
+  test "not allow to run an out-of-date experiment" do
+    exp = insert(:experiment, state: "running", end_date: DateTime.utc_now())
+    {result, _} = Experiment.init(exp)
+    assert result == :stop
+  end
+
+  test "automaticly shutdown an experiment on end_date" do
+    exp = insert(:experiment, state: "running", end_date: DateTime.utc_now() |> Timex.shift(milliseconds: 80))
+    {:ok, _} = Experiment.init(exp)
+    assert_receive :end_experiment
+  end
 end
