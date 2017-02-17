@@ -66,45 +66,48 @@ export default class ExperimentsTable extends React.Component {
     this.props.terminate(experimentId);
   }
 
+  getActions (experiment) {
+    let actions = [];
+    // Edit
+    if (experiment.state === 'draft') {
+      actions.push(<Link to={`/experiments/${experiment.id}/edit`} disabled={true}>Edit</Link>);
+      actions.push(" | ");
+    }
+    
+    // View
+    actions.push(<a href="#" onClick={() => this.showExperiment(experiment.id)}>View</a>);
+
+    // Run / Stop
+    let ingPostfix = this.props.isUpdatingState === experiment.id ? 'ing' : '';
+    let startAction = <a onClick={() => this.startExperiment(experiment.id)}>{`Start${ingPostfix}`}</a>;
+    let terminateAction = <a onClick={() => this.terminateExperiment(experiment.id)}>{`Kill${ingPostfix}`}</a>;
+    let stopAction = <a onClick={() => this.stopExperiment(experiment.id)}>{`Stop${ingPostfix}`}</a>;
+    
+    if (experiment.state === 'draft') {
+      actions.push(" | ");
+      actions.push(startAction);
+    } else if (experiment.state === 'stopped') {
+      actions.push(" | ");
+      actions.push(startAction);
+      actions.push(" | ");
+      actions.push(terminateAction);
+    } else if (experiment.state === 'running') {
+      actions.push(" | ");
+      actions.push(stopAction);
+    }
+
+    return actions;
+  }
+
   render() {
     let renderedExperiments = [];
     if (!this.props.isFetching) {
       this.props.list.forEach((experiment) => {
-        let actions = [];
-        
-        // Edit
-        if (experiment.state === 'draft') {
-          actions.push(<Link to={`/experiments/${experiment.id}/edit`} disabled={true}>Edit</Link>);
-          actions.push(" | ");
-        }
-        
-        // View
-        actions.push(<a href="#" onClick={() => this.showExperiment(experiment.id)}>View</a>);
-
-        // Run / Stop
-        let ingPostfix = this.props.isUpdatingState === experiment.id ? 'ing' : '';
-        let startAction = <a onClick={() => this.startExperiment(experiment.id)}>{`Start${ingPostfix}`}</a>;
-        let terminateAction = <a onClick={() => this.terminateExperiment(experiment.id)}>{`Kill${ingPostfix}`}</a>;
-        let stopAction = <a onClick={() => this.stopExperiment(experiment.id)}>{`Stop${ingPostfix}`}</a>;
-        
-        if (experiment.state === 'draft') {
-          actions.push(" | ");
-          actions.push(startAction);
-        } else if (experiment.state === 'stopped') {
-          actions.push(" | ");
-          actions.push(startAction);
-          actions.push(" | ");
-          actions.push(terminateAction);
-        } else if (experiment.state === 'running') {
-          actions.push(" | ");
-          actions.push(stopAction);
-        }
-
         renderedExperiments.push(React.createElement(TableRow, {key: `experiment__table-row-${experiment.id}`}, [
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-vre-${experiment.id}`}, `${experiment.rules.length} - ${experiment.variants.length} - ${experiment.exclusions.length}`),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-state-${experiment.id}`}, experiment.state),
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-actions-${experiment.id}`}, actions)
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-actions-${experiment.id}`}, this.getActions(experiment))
         ]));
       });
     }
