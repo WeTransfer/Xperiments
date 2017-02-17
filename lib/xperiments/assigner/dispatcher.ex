@@ -75,7 +75,7 @@ defmodule Xperiments.Assigner.Dispatcher do
       end
     end)
     |> Enum.group_by(fn {k, _} -> k end, fn {_, v} -> v end)
-    |> Map.put_new(:unassign, [])
+    |> Map.put_new(:unassign, []) # Complete the result, so it always has keys: `unassign` and `assign`
     |> Map.put_new(:assign, [])
   end
 end

@@ -60,7 +60,7 @@ defmodule Xperiments.Assigner.DispatcherTest do
     assert length(new_response.assign) == 2
   end
 
-  test "returning of unassigned experiments if given bad variant_id", context do
+  test "returning of unassigned experiments if a bad variant_id given", context do
     response = Dispatcher.get_suitable_experiments([],
       [%{"experiment_id" => context.exp.id, "variant_id" => "bad_id"}])
     assert length(response.unassign) == 1
