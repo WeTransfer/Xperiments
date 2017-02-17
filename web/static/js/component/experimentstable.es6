@@ -61,6 +61,11 @@ export default class ExperimentsTable extends React.Component {
     this.props.stop(experimentId);
   }
 
+  terminateExperiment(experimentId) {
+    if (this.props.isUpdatingState !== false) return;
+    this.props.terminate(experimentId);
+  }
+
   render() {
     let renderedExperiments = [];
     if (!this.props.isFetching) {
@@ -75,17 +80,25 @@ export default class ExperimentsTable extends React.Component {
         
         // View
         actions.push(<a href="#" onClick={() => this.showExperiment(experiment.id)}>View</a>);
-        actions.push(" | ");
 
         // Run / Stop
         let ingPostfix = this.props.isUpdatingState === experiment.id ? 'ing' : '';
-        if (experiment.state === 'draft' || experiment.state === 'stopped') {
-          actions.push(<a onClick={() => this.startExperiment(experiment.id)}>{`Start${ingPostfix}`}</a>);
+        let startAction = <a onClick={() => this.startExperiment(experiment.id)}>{`Start${ingPostfix}`}</a>;
+        let terminateAction = <a onClick={() => this.terminateExperiment(experiment.id)}>{`Kill${ingPostfix}`}</a>;
+        let stopAction = <a onClick={() => this.stopExperiment(experiment.id)}>{`Stop${ingPostfix}`}</a>;
+        
+        if (experiment.state === 'draft') {
+          actions.push(" | ");
+          actions.push(startAction);
+        } else if (experiment.state === 'stopped') {
+          actions.push(" | ");
+          actions.push(startAction);
+          actions.push(" | ");
+          actions.push(terminateAction);
         } else if (experiment.state === 'running') {
-          actions.push(<a onClick={() => this.stopExperiment(experiment.id)}>{`Stop${ingPostfix}`}</a>);
+          actions.push(" | ");
+          actions.push(stopAction);
         }
-
-
 
         renderedExperiments.push(React.createElement(TableRow, {key: `experiment__table-row-${experiment.id}`}, [
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
