@@ -128,7 +128,7 @@ defmodule Xperiments.Assigner.Experiment do
 
   def handle_call({:get_random_variant}, _caller, state) do
     response = Map.merge(
-      Map.take(state, [:id, :name, :start_date, :end_date]),
+      Map.take(state, [:id, :name, :start_date, :end_date, :state]),
       %{variant: do_get_random_variant(state.variants)}
     )
     {:reply, response, state}
