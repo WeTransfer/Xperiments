@@ -12,6 +12,11 @@ defmodule Xperiments.ExperimentControllerTest do
     {:ok, conn: conn, app: app}
   end
 
+  def insert_experiment(context) do
+    insert(:experiment, application: context.app, start_date: Timex.now |> Timex.shift(days: 1))
+  end
+
+
   @api_path "/api/v1/applications/frontend"
 
   test "/create a draft experiment", context do
@@ -32,7 +37,7 @@ defmodule Xperiments.ExperimentControllerTest do
   end
 
   test "/show an experiment", context do
-    exp = insert(:experiment, application: context.app)
+    exp = insert_experiment(context)
     body =
       get(context.conn, @api_path <> "/experiments/" <> exp.id)
       |> json_response(200)
@@ -42,7 +47,7 @@ defmodule Xperiments.ExperimentControllerTest do
   end
 
   test "/update any experiment with embded data", context do
-    exp_id = insert(:experiment, application: context.app).id
+    exp_id = insert_experiment(context).id
     variant = %{
       name: "Var A",
       allocation: 100,
@@ -64,7 +69,7 @@ defmodule Xperiments.ExperimentControllerTest do
   end
 
   test "/update returns errors when bad data is given", context do
-    exp_id = insert(:experiment, application: context.app).id
+    exp_id = insert_experiment(context).id
     variant = %{
       name: "Var A",
       allocation: 0,
@@ -107,7 +112,7 @@ defmodule Xperiments.ExperimentControllerTest do
   end
 
   test "/state returns an error if given an unsupported state", context do
-    exp = insert(:experiment, application: context[:app])
+    exp = insert_experiment(context)
     body =
       put(context[:conn], @api_path <> "/experiments/" <> exp.id <> "/state", %{event: "bad_event"})
       |> json_response(400)
@@ -115,7 +120,7 @@ defmodule Xperiments.ExperimentControllerTest do
   end
 
   test "/state returns an error if we try to make an unsupported transittion", context do
-    exp = insert(:experiment, application: context[:app])
+    exp = insert_experiment(context)
     body =
       put(context[:conn], @api_path <> "/experiments/" <> exp.id <> "/state", %{event: "stop"})
       |> json_response(422)
@@ -123,7 +128,7 @@ defmodule Xperiments.ExperimentControllerTest do
   end
 
   test "/update add an exclusions associacion if exclusions are given", context do
-    exp = insert(:experiment, application: context.app)
+    exp = insert_experiment(context)
     exclusions = insert_list(3, :experiment, application: context.app) |> Enum.map(& &1.id)
     removed_experiments = insert_list(3, :experiment, application: context.app, state: "deleted") |> Enum.map(& &1.id)
     body =
@@ -134,8 +139,8 @@ defmodule Xperiments.ExperimentControllerTest do
   end
 
   test "replaces a whole exclusions list on update", context do
-    exclusions = insert_list(3, :experiment, application: context.app)
-    exp = insert(:experiment, application: context.app, exclusions: exclusions)
+    exclusions = insert_list(3, :experiment, application: context.app, start_date: Timex.shift(Timex.now, days: 1))
+    exp = insert(:experiment, application: context.app, exclusions: exclusions, start_date: Timex.shift(Timex.now, days: 1))
     body =
       put(context.conn, @api_path <> "/experiments/" <> exp.id, %{experiment: %{exclusions: []}})
       |> json_response(200)

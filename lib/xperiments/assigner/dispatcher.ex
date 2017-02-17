@@ -31,7 +31,7 @@ defmodule Xperiments.Assigner.Dispatcher do
   end
   defp do_get_new_experiments([], result, _), do: result
   defp do_get_new_experiments([pid | tail], result, segments) do
-    if Experiment.accept_segments?(pid, segments) do
+    if Experiment.accept_segments?(pid, segments) && Experiment.is_started?(pid) do
       variant = Experiment.get_random_variant(pid)
       exclusions_pids =
         Experiment.get_exclusions_list(pid)

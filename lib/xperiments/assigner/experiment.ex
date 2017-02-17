@@ -86,7 +86,8 @@ defmodule Xperiments.Assigner.Experiment do
   end
 
   @doc """
-  Returns an exclusion list for the specific experiment
+  Returns an exclusions list only if state is `running`
+  Otherwise returns an empty list
   """
   def get_exclusions_list(pid) when is_pid(pid) do
     GenServer.call(pid, {:get_exclusions_list})
@@ -96,7 +97,10 @@ defmodule Xperiments.Assigner.Experiment do
   end
 
   @doc """
-  Check if segments satisfy to experiment rules
+  Check if segments satisfy to experiment rules.
+  Experiment may don't have rules. In this case it accepts any segements.
+  If there are no segements given and experiment have any rules, return `false`.
+  Otherwise check that segments are satisfying rules
   """
   def accept_segments?(pid, segments \\ %{})
   def accept_segments?(pid, segments) when is_pid(pid) do
@@ -104,6 +108,16 @@ defmodule Xperiments.Assigner.Experiment do
   end
   def accept_segments?(id, segments) do
     GenServer.call(via_tuple(id), {:check_segemets, segments})
+  end
+
+  @doc """
+  Check that an experiment is started.
+  """
+  def is_started?(pid) when is_pid(pid) do
+    GenServer.call(pid, :is_started)
+  end
+  def is_started?(id) do
+    GenServer.call(via_tuple(id), :is_started)
   end
 
   ## Server
@@ -123,10 +137,6 @@ defmodule Xperiments.Assigner.Experiment do
     {:reply, :ok, state}
   end
 
-  @doc """
-  Returns an exclusions list only if state is `running`
-  Otherwise returns an empty list
-  """
   def handle_call({:get_exclusions_list}, _caller, %{state: "running", exclusions: exclusions} = state) do
     response = Enum.map(exclusions, & &1.id)
     {:reply, response, state}
@@ -135,34 +145,36 @@ defmodule Xperiments.Assigner.Experiment do
     {:reply, [], state}
   end
 
-  def handle_call({:get_experiment_data, var_id}, _caller, state) do
-    result = case Enum.find(state.variants, &(&1.id == var_id)) do
-               nil -> {:error, %{id: state.id}}
-               variant ->
-                 {:ok,
-                  %{id: state.id,
-                    state: state.state, # heh, looks stupid
-                    start_date: state.start_date,
-                    end_date: state.end_date,
-                    variant: variant}}
-             end
-    {:reply, result, state}
-  end
-
-  @doc """
-  Experiment may don't have rules. In this case it accepts any segements.
-  If there are no segements given and experiment have any rules, return `false`.
-  Otherwise check that segments are satisfy rules
-  """
   def handle_call({:check_segemets, segments}, _caller, state) do
     {:reply, do_compare_rules(segments, state.rules), state}
   end
 
+  def handle_call(:is_started, _caller, state) do
+    response = :gt == DateTime.compare(DateTime.utc_now(), state.start_date)
+    {:reply, response, state}
+  end
+
+  def handle_call({:get_experiment_data, var_id}, _caller, state) do
+    response =
+      case Enum.find(state.variants, &(&1.id == var_id)) do
+        nil -> {:error, %{id: state.id}}
+        variant ->
+          {:ok,
+           %{id: state.id,
+             state: state.state, # heh, looks stupid
+             start_date: state.start_date,
+             end_date: state.end_date,
+             variant: variant}}
+      end
+    {:reply, response, state}
+  end
+
   def handle_call({:get_random_variant}, _caller, state) do
-    response = Map.merge(
-      Map.take(state, [:id, :name, :start_date, :end_date, :state]),
-      %{variant: do_get_random_variant(state.variants) |> Map.drop([:segment_range])}
-    )
+    response =
+      Map.merge(
+        Map.take(state, [:id, :name, :start_date, :end_date, :state]),
+        %{variant: do_get_random_variant(state.variants) |> Map.drop([:segment_range])}
+      )
     {:reply, response, state}
   end
 

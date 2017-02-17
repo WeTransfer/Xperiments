@@ -66,4 +66,10 @@ defmodule Xperiments.Assigner.ExperimentTest do
     {:ok, _} = Experiment.init(exp)
     assert_receive :end_experiment
   end
+
+  test "that an experiment start checker works" do
+    exp = insert(:experiment, state: "running", start_date: Timex.now |> Timex.shift(days: 1))
+    ExperimentSupervisor.start_experiment(exp)
+    refute Experiment.is_started?(exp.id)
+  end
 end
