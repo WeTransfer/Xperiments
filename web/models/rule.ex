@@ -10,6 +10,7 @@ defmodule Xperiments.Rule do
   """
   use Xperiments.Web, :model
 
+  @primary_key false
   embedded_schema do
     field :parameter
     field :type, :string, default: "string"

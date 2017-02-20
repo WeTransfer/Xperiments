@@ -35,8 +35,8 @@ defmodule Xperiments.ExperimentTest do
 
   test "number validation when a field can be set or not", context do
     changeset = Experiment.changeset(context[:experiment], %{context[:valid_attrs] | max_users: 0})
-    refute changeset.valid?
     assert changeset.errors == [max_users: {"must be greater than %{number}", [validation: :number, number: 0]}]
+    refute changeset.valid?
   end
 
   test "validate embedded fields: variants and rules", context do
@@ -106,5 +106,30 @@ defmodule Xperiments.ExperimentTest do
     exp = insert(:experiment, variants: variants)
     changeset = Experiment.run(exp)
     assert changeset.valid?
+  end
+
+  test "rules should be without a primary key" do
+    exp = insert(:experiment, rules: Xperiments.Factory.rules_1)
+    Enum.map(exp.rules, fn r ->
+      assert nil == Map.get(r, :id)
+    end)
+  end
+
+  test "rules replaces on update" do
+    exp = insert(:experiment, start_date: Timex.now |> Timex.shift(days: 1), rules: Xperiments.Factory.rules_1)
+    assert Xperiments.Factory.rules_1 == Enum.map(exp.rules, &Map.from_struct/1)
+    changeset = Experiment.changeset_update(exp, %{rules: Xperiments.Factory.rules_2})
+    assert changeset.valid?
+    updated_exp = Repo.update!(changeset)
+    assert Xperiments.Factory.rules_2 == Enum.map(updated_exp.rules, &Map.from_struct/1)
+  end
+
+  test "able to update an experiment with draft state only" do
+    exp = build(:experiment, start_date: Timex.now |> Timex.shift(days: 1))
+    changeset = Experiment.changeset_update(exp, %{name: "New super name"})
+    assert changeset.valid?
+    exp_2 = build(:experiment, start_date: Timex.now |> Timex.shift(days: 1), state: "running")
+    changeset = Experiment.changeset_update(exp_2, %{name: "New super name"})
+    refute changeset.valid?
   end
 end

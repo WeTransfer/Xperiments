@@ -4,23 +4,49 @@ defmodule Xperiments.Assigner.Experiment do
   Each experiment stores the name in Registry, e.g. `{:via, Registry, {:registry_experiments, exp_id}}`
   """
   use GenServer
+  require Logger
 
   def start_link(%{id: id} = experiment) do
     GenServer.start_link(__MODULE__, experiment, name: via_tuple(id))
   end
 
-  def init(%{state: state} = experiment) when state in ["running", "stopped"] do
-    :random.seed(:erlang.now)
-    temp_state = Map.take(experiment, [:id, :name, :rules, :start_date, :end_date,
-                                       :inserted_at, :state, :exclusions])
-    state = Map.merge(temp_state, %{variants: do_build_segmented_variants(experiment.variants)})
-    {:ok, state}
+  def init(experiment) do
+    case validate_experiment(experiment) do
+      :ok ->
+        :rand.seed(:exsplus)
+        schedule_ending(experiment.end_date)
+        {:ok, prepare_state(experiment)}
+      {:error, reason} ->
+        {:stop, reason}
+    end
   end
-  def init(experiment),
-    do: {:stop, {:bad_experiment, experiment}}
 
-  def via_tuple(id) do
+  def terminate(_reason, state) do
+    Logger.info "Shutting down the experiment '#{state.name}' with id #{state.id}"
+    :normal
+  end
+
+  defp schedule_ending(end_date) do
+    duration = DateTime.to_unix(end_date, :milliseconds) - DateTime.to_unix(DateTime.utc_now(), :milliseconds)
+    Process.send_after(self(), :end_experiment, duration)
+  end
+
+  defp via_tuple(id) do
     {:via, Registry, {:registry_experiments, id}}
+  end
+
+  defp prepare_state(experiment) do
+    Map.take(experiment, [:id, :name, :rules, :start_date, :end_date, :inserted_at, :state, :exclusions])
+    |> Map.merge(%{variants: do_build_segmented_variants(experiment.variants)})
+  end
+
+  defp validate_experiment(experiment) do
+    with :gt <- DateTime.compare(experiment.end_date, DateTime.utc_now()),
+         true <- experiment.state in ["running", "stopped"] do
+      :ok
+    else
+      _ -> {:error, {:bad_experiment, experiment}}
+    end
   end
 
   ## Client API
@@ -59,6 +85,10 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.call(via_tuple(id), {:get_random_variant})
   end
 
+  @doc """
+  Returns an exclusions list only if state is `running`
+  Otherwise returns an empty list
+  """
   def get_exclusions_list(pid) when is_pid(pid) do
     GenServer.call(pid, {:get_exclusions_list})
   end
@@ -66,8 +96,28 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.call(via_tuple(id), {:get_exclusions_list})
   end
 
-  def accept_segments?(pid, segments \\ %{}) do
+  @doc """
+  Check if segments satisfy to experiment rules.
+  Experiment may don't have rules. In this case it accepts any segements.
+  If there are no segements given and experiment have any rules, return `false`.
+  Otherwise check that segments are satisfying rules
+  """
+  def accept_segments?(pid, segments \\ %{})
+  def accept_segments?(pid, segments) when is_pid(pid) do
     GenServer.call(pid, {:check_segemets, segments})
+  end
+  def accept_segments?(id, segments) do
+    GenServer.call(via_tuple(id), {:check_segemets, segments})
+  end
+
+  @doc """
+  Check that an experiment is started.
+  """
+  def is_started?(pid) when is_pid(pid) do
+    GenServer.call(pid, :is_started)
+  end
+  def is_started?(id) do
+    GenServer.call(via_tuple(id), :is_started)
   end
 
   ## Server
@@ -87,10 +137,6 @@ defmodule Xperiments.Assigner.Experiment do
     {:reply, :ok, state}
   end
 
-  @doc """
-  Returns an exclusions list only if state is `running`
-  Otherwise returns an empty list
-  """
   def handle_call({:get_exclusions_list}, _caller, %{state: "running", exclusions: exclusions} = state) do
     response = Enum.map(exclusions, & &1.id)
     {:reply, response, state}
@@ -99,35 +145,41 @@ defmodule Xperiments.Assigner.Experiment do
     {:reply, [], state}
   end
 
-  def handle_call({:get_experiment_data, var_id}, _caller, state) do
-    result = case Enum.find(state.variants, &(&1.id == var_id)) do
-               nil -> {:error, %{id: state.id}}
-               variant ->
-                 {:ok,
-                  %{id: state.id,
-                    state: state.state, # heh, looks stupid
-                    start_date: state.start_date,
-                    end_date: state.end_date,
-                    variant: variant}}
-             end
-    {:reply, result, state}
-  end
-
-  @doc """
-  Experiment may don't have rules. In this case it accepts any segements.
-  If there are no segements given and experiment have any rules, return `false`.
-  Otherwise check that segments are satisfy rules
-  """
   def handle_call({:check_segemets, segments}, _caller, state) do
     {:reply, do_compare_rules(segments, state.rules), state}
   end
 
-  def handle_call({:get_random_variant}, _caller, state) do
-    response = Map.merge(
-      Map.take(state, [:id, :name, :start_date, :end_date]),
-      %{variant: do_get_random_variant(state.variants)}
-    )
+  def handle_call(:is_started, _caller, state) do
+    response = :gt == DateTime.compare(DateTime.utc_now(), state.start_date)
     {:reply, response, state}
+  end
+
+  def handle_call({:get_experiment_data, var_id}, _caller, state) do
+    response =
+      case Enum.find(state.variants, &(&1.id == var_id)) do
+        nil -> {:error, %{id: state.id}}
+        variant ->
+          {:ok,
+           %{id: state.id,
+             state: state.state, # heh, looks stupid
+             start_date: state.start_date,
+             end_date: state.end_date,
+             variant: variant}}
+      end
+    {:reply, response, state}
+  end
+
+  def handle_call({:get_random_variant}, _caller, state) do
+    response =
+      Map.merge(
+        Map.take(state, [:id, :name, :start_date, :end_date, :state]),
+        %{variant: do_get_random_variant(state.variants) |> Map.drop([:segment_range])}
+      )
+    {:reply, response, state}
+  end
+
+  def hand_info(:end_experiment, state) do
+    {:stop, :normal, state}
   end
 
   defp do_compare_rules(_, []), do: true
@@ -169,5 +221,4 @@ defmodule Xperiments.Assigner.Experiment do
     |> List.first
     |> Map.drop([:segment_range])
   end
-
 end

@@ -19,7 +19,7 @@ defmodule Xperiments.Factory do
     %Xperiments.Experiment{
       name: sequence("Experiment"),
       description: "Change some text",
-      start_date: Timex.now |> Timex.shift(hours: 3),
+      start_date: Timex.now |> Timex.shift(days: -1),
       end_date: Timex.shift(Timex.now(), days: 3),
       max_users: 100,
       application: build(:application),

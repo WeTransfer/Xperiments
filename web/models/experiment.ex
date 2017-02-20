@@ -49,7 +49,7 @@ defmodule Xperiments.Experiment do
       join_keys: [experiment_a_id: :id, experiment_b_id: :id], on_replace: :delete
 
     embeds_many :variants, Variant, on_replace: :delete
-    embeds_many :rules, Rule
+    embeds_many :rules, Rule, on_replace: :delete
 
     timestamps()
   end
@@ -70,10 +70,10 @@ defmodule Xperiments.Experiment do
     |> maybe_validate_number(:max_users, greater_than: 0)
   end
 
-  # TODO: check that at least one variant is a control group
   def changeset_update(struct, params \\ %{}) do
     struct
     |> changeset(params)
+    |> validate_allowed_state()
     |> cast_embed(:variants, required: true)
     |> cast_embed(:rules)
   end
@@ -152,6 +152,17 @@ defmodule Xperiments.Experiment do
       changeset
     else
       add_error(changeset, :variants, "At least one variant should be a control group")
+    end
+  end
+
+  @doc """
+  Allow update only if state is draft
+  """
+  def validate_allowed_state(changeset) do
+    if changeset.data.state != "draft" do
+      add_error(changeset, :state, "It's possible to update an Experiment only in draft state")
+    else
+      changeset
     end
   end
 
