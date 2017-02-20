@@ -40,7 +40,9 @@ export const actions = ActionHelper.types([
   'UPDATED_EXPERIMENT',
   'SET_EXPERIMENT_VALUES',
   'SET_EXPERIMENT_VARIANT',
+  'POP_EXPERIMENT_VARIANT',
   'SET_EXPERIMENT_RULE',
+  'POP_EXPERIMENT_RULE',
   'SET_EXPERIMENT_EXCLUSION'
 ]);
 
@@ -97,6 +99,15 @@ export default ActionHelper.generate({
     }
   },
 
+  popVariant(variant) {
+    return dispatch => {
+      dispatch({
+        type: actions.POP_EXPERIMENT_VARIANT,
+        variant
+      });
+    };
+  },
+
   pushRule(data, formName) {
     return dispatch => {
       dispatch({
@@ -104,6 +115,15 @@ export default ActionHelper.generate({
         data
       });
     }
+  },
+
+  popRule(rule) {
+    return dispatch => {
+      dispatch({
+        type: actions.POP_EXPERIMENT_RULE,
+        rule
+      });
+    };
   },
 
   pushExclusion(experimentId) {

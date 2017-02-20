@@ -29,7 +29,9 @@ export default class EditExperimentPage extends React.Component {
     selectedApplication: React.PropTypes.object,
     experiment: React.PropTypes.object,
     indexedExperimentsList: React.PropTypes.object,
-    save: React.PropTypes.func
+    save: React.PropTypes.func,
+    deleteRule: React.PropTypes.func,
+    deleteVariant: React.PropTypes.func
   };
 
   componentWillMount() {
@@ -49,13 +51,18 @@ export default class EditExperimentPage extends React.Component {
       <Paper style={styling.paper} zDepth={1} rounded={false}>
         <h4>Edit {this.props.experiment.data.name}</h4>
         <div className="spacing"></div>
-        <Rules title="What users do you want to target?" list={this.props.experiment.data.rules} />
+        <Rules
+          list={this.props.experiment.data.rules}
+          title="Rules"
+          delete={this.props.deleteRule}
+        />
         <div className="spacing spacing--is-30"></div>
         <Variants
           title="What do you want to show to your users?"
           list={this.props.experiment.data.variants}
           experimentId={this.props.experiment.data.id}
           selectedApplication={this.props.selectedApplication}
+          delete={this.props.deleteVariant}
         />
         <div className="spacing spacing--is-30"></div>
         <Exclusions title="What experiments do you want to exclude?" list={this.props.experiment.data.exclusions} indexedExperimentsList={this.props.indexedExperimentsList} />

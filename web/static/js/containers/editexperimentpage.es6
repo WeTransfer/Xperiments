@@ -13,9 +13,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    save: (data) => {
-      dispatch(Actions.Experiment.update(data));
-    }
+    save: data => dispatch(Actions.Experiment.update(data)),
+    deleteRule: rule => dispatch(Actions.Experiment.popRule(rule)),
+    deleteVariant: variant => dispatch(Actions.Experiment.popVariant(variant))
   }
 }
 

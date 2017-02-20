@@ -28,10 +28,12 @@ export default class ExperimentsTable extends React.Component {
     list: React.PropTypes.object.isRequired,
     isUpdatingState: React.PropTypes.bool.isRequired,
     isFetching: React.PropTypes.bool.isRequired,
+    isDeleting: React.PropTypes.bool.isRequired,
     currentFilter: React.PropTypes.string.isRequired,
     start: React.PropTypes.func.isRequired,
     stop: React.PropTypes.func.isRequired,
     terminate: React.PropTypes.func.isRequired,
+    delete: React.PropTypes.func.isRequired,
     title: React.PropTypes.string
   };
 
@@ -66,6 +68,11 @@ export default class ExperimentsTable extends React.Component {
     this.props.terminate(experimentId);
   }
 
+  deleteExperiment(experimentId) {
+    if (this.props.isDeleting !== false) return;
+    this.props.delete(experimentId);
+  }
+
   getActions (experiment) {
     let actions = [];
     // Edit
@@ -95,6 +102,10 @@ export default class ExperimentsTable extends React.Component {
       actions.push(" | ");
       actions.push(stopAction);
     }
+
+    // Delete
+    // actions.push(" | ");
+    // actions.push(<a onClick={() => this.deleteExperiment(experiment.id)}>{`Delete`}</a>);
 
     return actions;
   }

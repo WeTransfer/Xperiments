@@ -21,5 +21,14 @@ export default {
       }),
       body: JSON.stringify(data)
     }));
+  },
+
+  delete: (url, data) => {
+    return window.fetch(new Request(url, {
+      method: 'DELETE', 
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    }));
   }
 };

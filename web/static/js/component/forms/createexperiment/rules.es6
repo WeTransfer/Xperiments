@@ -11,10 +11,11 @@ const styling = {
   }
 };
 
-export default class AddSegments extends React.Component {
+export default class Rules extends React.Component {
   static propTypes = {
     title: React.PropTypes.string,
-    list: React.PropTypes.array
+    list: React.PropTypes.array,
+    delete: React.PropTypes.func
   };
 
   state = {
@@ -33,15 +34,26 @@ export default class AddSegments extends React.Component {
     });
   }
 
+  deleteRule(rule) {
+    this.props.delete(rule);
+  }
+
+  getActions(rule) {
+    let actions = [];
+    actions.push(<a href="#" onClick={e => this.props.delete(rule)}>Delete</a>);
+    return actions;
+  }
+
   render() {
     let renderedList = [];
 
     this.props.list.forEach(rule => {
+
       renderedList.push(<TableRow>
         <TableRowColumn>{rule.parameter}</TableRowColumn>
         <TableRowColumn>{rule.operator}</TableRowColumn>
         <TableRowColumn>{rule.value}</TableRowColumn>
-        <TableRowColumn>-</TableRowColumn>
+        <TableRowColumn>{this.getActions(rule)}</TableRowColumn>
       </TableRow>);
     });
 
@@ -51,7 +63,7 @@ export default class AddSegments extends React.Component {
       </TableRow>);
     }
 
-    return <div className="form__add-segments">
+    return <div className="form__rules">
       <div className="row">
         <div className="col-md-6"><h5>{this.props.title}</h5></div>
         <div className="col-md-6">

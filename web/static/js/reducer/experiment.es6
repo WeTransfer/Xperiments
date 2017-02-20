@@ -49,9 +49,27 @@ export default function(state = {}, action) {
         data: newData
       };
 
+    case actions.POP_EXPERIMENT_VARIANT:
+      newData = Object.assign({}, state.data);
+      if (newData.variants.indexOf(action.variant) !== -1)
+        newData.variants.splice(newData.variants.indexOf(action.variant), 1);
+      return {
+        ...state,
+        data: newData
+      };
+
     case actions.SET_EXPERIMENT_RULE:
       newData = Object.assign({}, state.data);
       newData.rules = newData.rules.concat(action.data);
+      return {
+        ...state,
+        data: newData
+      };
+
+    case actions.POP_EXPERIMENT_RULE:
+      newData = Object.assign({}, state.data);
+      if (newData.rules.indexOf(action.rule) !== -1)
+        newData.rules.splice(newData.rules.indexOf(action.rule), 1);
       return {
         ...state,
         data: newData

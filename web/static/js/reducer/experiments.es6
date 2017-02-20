@@ -64,6 +64,23 @@ export default function(state = {}, action) {
         isUpdatingState: false,
         list: newList
       };
+
+    case actions.DELETE_EXPERIMENT:
+      return {
+        ...state,
+        isDeleting: action.data.experimentId
+      };
+
+    case actions.DELETED_EXPERIMENT:
+      newList = state.list.map(experiment => {
+        if (experiment.id !== action.data.experimentId)
+          return experiment;
+      });
+      return {
+        ...state,
+        isDeleting: false,
+        list: newList
+      };
   }
 
   return state;

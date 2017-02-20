@@ -32,7 +32,7 @@ const options = [
       delay: null,
       buttonText: null,
       buttonAction: null,
-      when: 'transferComplete'
+      when: 'transferInProgress'
     },
     schema: {
       type: 'object',
@@ -51,7 +51,7 @@ const options = [
           key: 'when',
           type: 'string',
           enum: [
-            {label: 'transfer upload is in progress', value: 'transferInProgress'},
+            {label: 'upload is in progress', value: 'transferInProgress'},
             {label: 'transfer upload is complete', value: 'transferComplete'},
             {label: 'transfer download has started', value: 'transferDownloadStarted'},
           ],
@@ -91,6 +91,33 @@ const options = [
           type: 'string',
           title: 'Align',
           hidden: true
+        }
+      ]
+    }
+  },
+  {
+    name: 'Mobile Header',
+    key: 'mobileHeader',
+    defaults: {
+      pathname: null,
+      text: null
+    },
+    schema: {
+      type: 'object',
+      properties: [
+        {
+          key: 'pathname',
+          type: 'string',
+          title: 'Pathname'
+        },
+        {
+          key: 'text',
+          type: 'string',
+          title: 'Text',
+          uiOptions: {
+            multiLine: true,
+            rows: 2
+          }
         }
       ]
     }
