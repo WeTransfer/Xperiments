@@ -49,7 +49,7 @@ defmodule Xperiments.Experiment do
       join_keys: [experiment_a_id: :id, experiment_b_id: :id], on_replace: :delete
 
     embeds_many :variants, Variant, on_replace: :delete
-    embeds_many :rules, Rule
+    embeds_many :rules, Rule, on_replace: :delete
 
     timestamps()
   end
@@ -70,7 +70,6 @@ defmodule Xperiments.Experiment do
     |> maybe_validate_number(:max_users, greater_than: 0)
   end
 
-  # TODO: check that at least one variant is a control group
   def changeset_update(struct, params \\ %{}) do
     struct
     |> changeset(params)

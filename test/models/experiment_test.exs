@@ -107,4 +107,20 @@ defmodule Xperiments.ExperimentTest do
     changeset = Experiment.run(exp)
     assert changeset.valid?
   end
+
+  test "rules should be without a primary key" do
+    exp = insert(:experiment, rules: Xperiments.Factory.rules_1)
+    Enum.map(exp.rules, fn r ->
+      assert nil == Map.get(r, :id)
+    end)
+  end
+
+  test "rules replaces on update" do
+    exp = insert(:experiment, start_date: Timex.now |> Timex.shift(days: 1), rules: Xperiments.Factory.rules_1)
+    assert Xperiments.Factory.rules_1 == Enum.map(exp.rules, &Map.from_struct/1)
+    changeset = Experiment.changeset_update(exp, %{rules: Xperiments.Factory.rules_2})
+    assert changeset.valid?
+    updated_exp = Repo.update!(changeset)
+    assert Xperiments.Factory.rules_2 == Enum.map(updated_exp.rules, &Map.from_struct/1)
+  end
 end
