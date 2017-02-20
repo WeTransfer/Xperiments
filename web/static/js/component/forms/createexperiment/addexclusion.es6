@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Helper from 'helper.es6';
+
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
@@ -52,8 +54,8 @@ export default class AddExclusion extends React.Component {
       let selected = this.props.currentlyExcluded.indexOf(experiment.id) !== -1 ? true : false;
       renderedExcludedExperiments.push(<TableRow selected={selected}>
         <TableRowColumn>{experiment.name}</TableRowColumn>
-        <TableRowColumn>{experiment.start_date}</TableRowColumn>
-        <TableRowColumn>{experiment.end_date}</TableRowColumn>
+        <TableRowColumn>{Helper.formatDateTime(experiment.start_date)}</TableRowColumn>
+        <TableRowColumn>{Helper.formatDateTime(experiment.end_date)}</TableRowColumn>
       </TableRow>);
     });
 

@@ -7,7 +7,6 @@
 // });
 
 let currentAppName = 'web';
-
 const BASE_PATH = `/api/v1/applications/${currentAppName}`;
 
 export default {

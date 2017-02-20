@@ -72,11 +72,11 @@ export default class PayloadEditor extends React.Component {
   }
 
   render() {
-    let typeOptions = [<MenuItem value='none' primaryText="N/A" />];
+    let typeOptions = [];
     let selectedType = null;
 
     this.props.types.forEach(type => {
-      if (type.key === this.state.type)
+      if ( type.key === this.state.type)
         selectedType = type;
       typeOptions.push(<MenuItem value={type.key} primaryText={type.name} />)
     });

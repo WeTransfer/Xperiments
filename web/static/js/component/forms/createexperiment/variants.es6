@@ -1,5 +1,7 @@
 import React from 'react';
 
+import VariantPayloadOptions from 'variantpayloadoptions.es6';
+
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
@@ -49,20 +51,28 @@ export default class Variants extends React.Component {
       actions.push(" | ");
     }
 
-    actions.push(<a href="#" onClick={e => this.props.delete(variant)}>Delete</a>);
+    actions.push(<a onClick={e => this.props.delete(variant)}>Delete</a>);
     return actions;
+  }
+
+  makeRow(variant) {
+    let payloadKey = JSON.parse(variant.payload);
+    let type = VariantPayloadOptions.web[VariantPayloadOptions.web.findIndex(el => el.key === Object.keys(payloadKey)[0])].name;
+
+    return <TableRow>
+      <TableRowColumn>{variant.name}</TableRowColumn>
+      <TableRowColumn>{variant.allocation}%</TableRowColumn>
+      <TableRowColumn>{variant.control_group ? 'Yes' : 'No'}</TableRowColumn>
+      <TableRowColumn>{type}</TableRowColumn>
+      <TableRowColumn>{this.getActions(variant)}</TableRowColumn>
+    </TableRow>;
   }
 
   render() {
     let renderedList = [];
 
     this.props.list.forEach(variant => {
-      renderedList.push(<TableRow>
-        <TableRowColumn>{variant.name}</TableRowColumn>
-        <TableRowColumn>{variant.allocation}%</TableRowColumn>
-        <TableRowColumn>{variant.control_group ? 'Yes' : 'No'}</TableRowColumn>
-        <TableRowColumn>{this.getActions(variant)}</TableRowColumn>
-      </TableRow>);
+      renderedList.push(this.makeRow(variant));
     });
 
     if (!renderedList.length) {
@@ -87,6 +97,7 @@ export default class Variants extends React.Component {
                 <TableHeaderColumn>Name</TableHeaderColumn>
                 <TableHeaderColumn>Allocation</TableHeaderColumn>
                 <TableHeaderColumn>Control Group</TableHeaderColumn>
+                <TableHeaderColumn>Type</TableHeaderColumn>
                 <TableHeaderColumn>Actions</TableHeaderColumn>
               </TableRow>
             </TableHeader>

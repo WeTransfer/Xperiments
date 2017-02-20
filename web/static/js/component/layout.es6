@@ -33,6 +33,10 @@ export default class Layout extends React.Component {
   selectTab = (event, index, selectedTab) => this.setState({selectedTab});
 
   render() {
+    const {applications} = Store.getState();
+
+    if (applications.isFetching) return null;
+
     let notification = null;
     if (this.props.notification) {
       let actions = [
@@ -58,11 +62,14 @@ export default class Layout extends React.Component {
 
     return <div>
       <MuiThemeProvider>
-        <Toolbar>
-          <ToolbarGroup firstChild={true}>
+        <div className="row">
+          <div className="col-md-4">
             <VisibleApplicationsMenu />
-          </ToolbarGroup>
-        </Toolbar>
+          </div>
+          <div className="col-md-4">
+
+          </div>
+        </div>
       </MuiThemeProvider>
       {children}
       {notification}

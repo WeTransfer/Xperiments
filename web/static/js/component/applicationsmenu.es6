@@ -1,8 +1,8 @@
 import React from 'react';
 import Store from 'store/index.es6';
 
+import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import DropDownMenu from 'material-ui/DropDownMenu';
 
 export default class ApplicationsMenu extends React.Component {
   static propTypes = {
@@ -26,8 +26,13 @@ export default class ApplicationsMenu extends React.Component {
       });
     }
 
-    return <DropDownMenu value={this.props.selectedApplication} onChange={this.handleChange}>
+    return <SelectField
+      value={this.props.selectedApplication}
+      onChange={this.handleChange}
+      fullWidth={true}
+      floatingLabelText="Application"
+    >
       {renderedApplications}
-    </DropDownMenu>;
+    </SelectField>;
   }
 }

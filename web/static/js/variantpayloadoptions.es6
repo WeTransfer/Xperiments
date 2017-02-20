@@ -1,5 +1,14 @@
 const options = [
   {
+    name: 'None',
+    key: 'none',
+    defaults: {},
+    schema: {
+      type: 'object',
+      properties: []
+    }
+  },
+  {
     name: 'SplashPage Plus CTA link',
     key: 'splashpagePlusCTA',
     defaults: {

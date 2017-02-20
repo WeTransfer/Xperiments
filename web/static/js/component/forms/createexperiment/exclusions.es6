@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Helper from 'helper.es6';
+
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
@@ -46,8 +48,8 @@ export default class Exclusions extends React.Component {
       if (experiment) {
         renderedExperiments.push(<TableRow>
           <TableRowColumn>{experiment.name}</TableRowColumn>
-          <TableRowColumn>{experiment.start_date}</TableRowColumn>
-          <TableRowColumn>{experiment.end_date}</TableRowColumn>
+          <TableRowColumn>{Helper.formatDateTime(experiment.start_date)}</TableRowColumn>
+          <TableRowColumn>{Helper.formatDateTime(experiment.end_date)}</TableRowColumn>
         </TableRow>);
       }
     });

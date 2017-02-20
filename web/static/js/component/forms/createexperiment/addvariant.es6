@@ -1,6 +1,6 @@
 import React from 'react';
 
-import VariantPayloadOptions from './variantpayloadoptions.es6';
+import VariantPayloadOptions from 'variantpayloadoptions.es6';
 import PayloadEditor from './payloadeditor.es6';
 
 import RaisedButton from 'material-ui/RaisedButton';
