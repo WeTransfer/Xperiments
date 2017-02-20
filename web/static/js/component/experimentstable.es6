@@ -28,10 +28,12 @@ export default class ExperimentsTable extends React.Component {
     list: React.PropTypes.object.isRequired,
     isUpdatingState: React.PropTypes.bool.isRequired,
     isFetching: React.PropTypes.bool.isRequired,
+    isDeleting: React.PropTypes.bool.isRequired,
     currentFilter: React.PropTypes.string.isRequired,
     start: React.PropTypes.func.isRequired,
     stop: React.PropTypes.func.isRequired,
     terminate: React.PropTypes.func.isRequired,
+    delete: React.PropTypes.func.isRequired,
     title: React.PropTypes.string
   };
 
@@ -61,37 +63,62 @@ export default class ExperimentsTable extends React.Component {
     this.props.stop(experimentId);
   }
 
+  terminateExperiment(experimentId) {
+    if (this.props.isUpdatingState !== false) return;
+    this.props.terminate(experimentId);
+  }
+
+  deleteExperiment(experimentId) {
+    if (this.props.isDeleting !== false) return;
+    this.props.delete(experimentId);
+  }
+
+  getActions (experiment) {
+    let actions = [];
+    // Edit
+    if (experiment.state === 'draft') {
+      actions.push(<Link to={`/experiments/${experiment.id}/edit`} disabled={true}>Edit</Link>);
+      actions.push(" | ");
+    }
+    
+    // View
+    actions.push(<a href="#" onClick={() => this.showExperiment(experiment.id)}>View</a>);
+
+    // Run / Stop
+    let ingPostfix = this.props.isUpdatingState === experiment.id ? 'ing' : '';
+    let startAction = <a onClick={() => this.startExperiment(experiment.id)}>{`Start${ingPostfix}`}</a>;
+    let terminateAction = <a onClick={() => this.terminateExperiment(experiment.id)}>{`Kill${ingPostfix}`}</a>;
+    let stopAction = <a onClick={() => this.stopExperiment(experiment.id)}>{`Stop${ingPostfix}`}</a>;
+    
+    if (experiment.state === 'draft') {
+      actions.push(" | ");
+      actions.push(startAction);
+    } else if (experiment.state === 'stopped') {
+      actions.push(" | ");
+      actions.push(startAction);
+      actions.push(" | ");
+      actions.push(terminateAction);
+    } else if (experiment.state === 'running') {
+      actions.push(" | ");
+      actions.push(stopAction);
+    }
+
+    // Delete
+    // actions.push(" | ");
+    // actions.push(<a onClick={() => this.deleteExperiment(experiment.id)}>{`Delete`}</a>);
+
+    return actions;
+  }
+
   render() {
     let renderedExperiments = [];
     if (!this.props.isFetching) {
       this.props.list.forEach((experiment) => {
-        let actions = [];
-        
-        // Edit
-        if (experiment.state === 'draft') {
-          actions.push(<Link to={`/experiments/${experiment.id}/edit`} disabled={true}>Edit</Link>);
-          actions.push(" | ");
-        }
-        
-        // View
-        actions.push(<a href="#" onClick={() => this.showExperiment(experiment.id)}>View</a>);
-        actions.push(" | ");
-
-        // Run / Stop
-        let ingPostfix = this.props.isUpdatingState === experiment.id ? 'ing' : '';
-        if (experiment.state === 'draft' || experiment.state === 'stopped') {
-          actions.push(<a onClick={() => this.startExperiment(experiment.id)}>{`Start${ingPostfix}`}</a>);
-        } else if (experiment.state === 'running') {
-          actions.push(<a onClick={() => this.stopExperiment(experiment.id)}>{`Stop${ingPostfix}`}</a>);
-        }
-
-
-
         renderedExperiments.push(React.createElement(TableRow, {key: `experiment__table-row-${experiment.id}`}, [
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-vre-${experiment.id}`}, `${experiment.rules.length} - ${experiment.variants.length} - ${experiment.exclusions.length}`),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-state-${experiment.id}`}, experiment.state),
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-actions-${experiment.id}`}, actions)
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-actions-${experiment.id}`}, this.getActions(experiment))
         ]));
       });
     }

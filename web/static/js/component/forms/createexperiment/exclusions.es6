@@ -43,11 +43,13 @@ export default class Exclusions extends React.Component {
     let renderedExperiments = [];
     this.props.list.forEach((experimentId) => {
       const experiment = this.props.indexedExperimentsList[experimentId];
-      renderedExperiments.push(<TableRow>
-        <TableRowColumn>{experiment.name}</TableRowColumn>
-        <TableRowColumn>{experiment.start_date}</TableRowColumn>
-        <TableRowColumn>{experiment.end_date}</TableRowColumn>
-      </TableRow>);
+      if (experiment) {
+        renderedExperiments.push(<TableRow>
+          <TableRowColumn>{experiment.name}</TableRowColumn>
+          <TableRowColumn>{experiment.start_date}</TableRowColumn>
+          <TableRowColumn>{experiment.end_date}</TableRowColumn>
+        </TableRow>);
+      }
     });
 
     if (!this.props.list.length) {

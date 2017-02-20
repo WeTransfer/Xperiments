@@ -41,24 +41,27 @@ export default class Variants extends React.Component {
     });
   }
 
+   getActions(variant) {
+    let actions = [];
+
+    if (variant.id) {
+      actions.push(<a target="_blank" href={`${this.props.selectedApplication.url}/?experiment_id=${this.props.experimentId}&variant_id=${variant.id}`}>Preview</a>);
+      actions.push(" | ");
+    }
+
+    actions.push(<a href="#" onClick={e => this.props.delete(variant)}>Delete</a>);
+    return actions;
+  }
+
   render() {
     let renderedList = [];
 
     this.props.list.forEach(variant => {
-      let actions = [];
-
-      if (variant.id) {
-        actions.push(<a target="_blank" href={`${this.props.selectedApplication.url}/?experiment_id=${this.props.experimentId}&variant_id=${variant.id}`}>Preview</a>);
-        actions.push(" | ");
-      }
-
-      actions.push(<a href="#" onClick={() => this.props.delete(variant)}>Delete</a>);
-
       renderedList.push(<TableRow>
         <TableRowColumn>{variant.name}</TableRowColumn>
-        <TableRowColumn>{variant.allocation}</TableRowColumn>
+        <TableRowColumn>{variant.allocation}%</TableRowColumn>
         <TableRowColumn>{variant.control_group ? 'Yes' : 'No'}</TableRowColumn>
-        <TableRowColumn>{actions}</TableRowColumn>
+        <TableRowColumn>{this.getActions(variant)}</TableRowColumn>
       </TableRow>);
     });
 

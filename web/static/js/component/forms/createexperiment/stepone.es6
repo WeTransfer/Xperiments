@@ -1,11 +1,10 @@
 import React from 'react';
 
-import TextField from 'material-ui/TextField';
-import DatePicker from 'material-ui/DatePicker';
-import TimePicker from 'material-ui/TimePicker';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
+
+import AddExperiment from './addexperiment.es6';
 
 const styling = {
   flatButton: {
@@ -52,85 +51,18 @@ export default class CreateExperimentFormStepOne extends React.Component {
     ];
 
     return <Dialog modal={true} actions={actions} open={this.props.isVisible} title="Create Experiment">
-      <div className="form__create-experiment form__create-experiment--is-step-one">
-        <div className="row">
-          <div className="col-md-12">
-            <TextField
-              fullWidth={true}
-              defaultValue={this.props.experiment.name || ""}
-              floatingLabelText="Name"
-              onChange={(e, value) => {this.props.setName(value);}}
-              errorText={this.props.validationErrors.name || null}
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-5">
-            <DatePicker
-              value={this.props.experiment.start_date}
-              floatingLabelText="Start Date"
-              mode="landscape"
-              onChange={(e, value) => {this.props.setStartDate(value);}}
-            />
-          </div>
-          <div className="col-md-7">
-            <TimePicker
-              value={this.props.experiment.start_date}
-              floatingLabelText="Start Time"
-              onChange={(e, value) => {this.props.setStartTime(value);}}
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-5">
-            <DatePicker
-              value={this.props.experiment.end_date}
-              floatingLabelText="End Date"
-              mode="landscape"
-              onChange={(e, value) => {this.props.setEndDate(value);}}
-            />
-          </div>
-          <div className="col-md-7">
-            <TimePicker
-              value={this.props.experiment.end_date}
-              floatingLabelText="End Time"
-              onChange={(e, value) => {this.props.setEndTime(value);}}
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-5">
-            <TextField
-              defaultValue={this.props.experiment.max_users !== null ? this.props.experiment.max_users : ''}
-              floatingLabelText="Maximum Participants (optional)"
-              onChange={(e, value) => {this.props.setMaxUsers(value);}}
-              errorText={this.props.validationErrors.max_users || null}
-            />
-          </div>
-          <div className="col-md-5">
-            <TextField
-              defaultValue={this.props.experiment.sampling_rate}
-              disabled={true}
-              floatingLabelText="Sampling Rate (%)"
-              onChange={(e, value) => {this.props.setSamplingRate(value);}}
-              errorText={this.props.validationErrors.sampling_rate || null}
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-12">
-            <TextField
-              value={this.props.experiment.description || ""}
-              floatingLabelText="Hypothesis/Description"
-              multiLine={true}
-              rows={2}
-              onChange={(e, value) => {this.props.setDescription(value);}}
-              fullWidth={true}
-              errorText={this.props.validationErrors.description || null}
-            />
-          </div>
-        </div>
-      </div>
+      <AddExperiment
+        experiment={this.props.experiment}
+        setName={this.props.setName}
+        setStartDate={this.props.setStartDate}
+        setStartTime={this.props.setStartTime}
+        setEndDate={this.props.setEndDate}
+        setEndTime={this.props.setEndTime}
+        setDescription={this.props.setDescription}
+        setMaxUsers={this.props.setMaxUsers}
+        setSamplingRate={this.props.setSamplingRate}
+        validationErrors={this.props.validationErrors}
+      />
     </Dialog>;
   }
 }

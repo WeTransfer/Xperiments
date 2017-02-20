@@ -10,7 +10,9 @@ export const actions = ActionHelper.types([
   'PUSH_TO_EXPERIMENTS',
   'FILTER_EXPERIMENTS_BY_STATE',
   'UPDATE_EXPERIMENT_STATE',
-  'UPDATED_EXPERIMENT_STATE'
+  'UPDATED_EXPERIMENT_STATE',
+  'DELETE_EXPERIMENT',
+  'DELETED_EXPERIMENT'
 ]);
 
 export default ActionHelper.generate({
@@ -27,7 +29,7 @@ export default ActionHelper.generate({
             });
           });
         });
-    }
+    };
   },
 
   filter(state) {
@@ -49,6 +51,29 @@ export default ActionHelper.generate({
   
   terminateExperiment(experimentId) {
     return this.updateState(experimentId, {event: 'terminate'});
+  },
+
+  deleteExperiment(experimentId) {
+    return async (dispatch, getState) => {
+      dispatch({
+        type: actions.DELETE_EXPERIMENT,
+        data: {
+          experimentId
+        }
+      });
+
+      API.delete(`${config.api.resources.experiments.GET}/${experimentId}`)
+        .then(response => {
+          response.json().then(json => {
+            dispatch({
+              type: actions.DELETED_EXPERIMENT,
+              data: {
+                experimentId
+              }
+            });
+          });
+        });
+    };
   },
 
   updateState(experimentId, data) {

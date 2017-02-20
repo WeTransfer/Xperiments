@@ -17,17 +17,17 @@ const validateVariant = (data, variants = []) => {
   let allocationLeft = 100 - totalAllocation;
 
   if (!data.name)
-    errors.name = 'This field is required';
+    errors.name = ['This field is required'];
   
   if (!data.allocation)
-    errors.allocation = 'This field is required';
+    errors.allocation = ['This field is required'];
   else if (isNaN(data.allocation))
-    errors.allocation = 'Provide a valid number';
+    errors.allocation = ['Provide a valid number'];
   else if (data.allocation > allocationLeft)
-    errors.allocation = `Allocation can not be greater than 100% (${allocationLeft}% left)`;
+    errors.allocation = [`Allocation can not be greater than 100% (${allocationLeft}% left)`];
   
   if (!data.payload) {
-    errors.payload = 'This field is required';
+    errors.payload = ['This field is required'];
   }
 
   return errors;
@@ -40,7 +40,9 @@ export const actions = ActionHelper.types([
   'UPDATED_EXPERIMENT',
   'SET_EXPERIMENT_VALUES',
   'SET_EXPERIMENT_VARIANT',
+  'POP_EXPERIMENT_VARIANT',
   'SET_EXPERIMENT_RULE',
+  'POP_EXPERIMENT_RULE',
   'SET_EXPERIMENT_EXCLUSION'
 ]);
 
@@ -97,6 +99,15 @@ export default ActionHelper.generate({
     }
   },
 
+  popVariant(variant) {
+    return dispatch => {
+      dispatch({
+        type: actions.POP_EXPERIMENT_VARIANT,
+        variant
+      });
+    };
+  },
+
   pushRule(data, formName) {
     return dispatch => {
       dispatch({
@@ -104,6 +115,15 @@ export default ActionHelper.generate({
         data
       });
     }
+  },
+
+  popRule(rule) {
+    return dispatch => {
+      dispatch({
+        type: actions.POP_EXPERIMENT_RULE,
+        rule
+      });
+    };
   },
 
   pushExclusion(experimentId) {
@@ -115,9 +135,13 @@ export default ActionHelper.generate({
     }
   },
 
-  update(data) {
+  update(data, formName) {
     return async (dispatch) => {
       dispatch({type: actions.UPDATE_EXPERIMENT});
+      dispatch({
+        type: ValidationErrorsActions.RESET_VALIDATION_ERRORS,
+        form: formName
+      });
 
       try {
         const response = await API.put(`${config.api.resources.experiments.GET}/${data.id}`, {experiment: data});
@@ -132,6 +156,18 @@ export default ActionHelper.generate({
               type: AppActions.SET_APP_REDIRECT,
               path: '/experiments/'
             });
+          });
+        } else if(response.status === 422) {
+          response.json().then(json => {
+            const validationErrors = json.errors;
+            if (Object.keys(validationErrors).length) {
+              dispatch({
+                type: ValidationErrorsActions.SET_VALIDATION_ERRORS,
+                form: formName,
+                errors: validationErrors
+              });
+              throw 'ValidationErrors';
+            }
           });
         } else {
           dispatch({
