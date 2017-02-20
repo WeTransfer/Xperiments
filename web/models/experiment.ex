@@ -73,6 +73,7 @@ defmodule Xperiments.Experiment do
   def changeset_update(struct, params \\ %{}) do
     struct
     |> changeset(params)
+    |> validate_allowed_state()
     |> cast_embed(:variants, required: true)
     |> cast_embed(:rules)
   end
@@ -151,6 +152,17 @@ defmodule Xperiments.Experiment do
       changeset
     else
       add_error(changeset, :variants, "At least one variant should be a control group")
+    end
+  end
+
+  @doc """
+  Allow update only if state is draft
+  """
+  def validate_allowed_state(changeset) do
+    if changeset.data.state != "draft" do
+      add_error(changeset, :state, "It's possible to update an Experiment only in draft state")
+    else
+      changeset
     end
   end
 

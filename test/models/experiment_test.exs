@@ -35,8 +35,8 @@ defmodule Xperiments.ExperimentTest do
 
   test "number validation when a field can be set or not", context do
     changeset = Experiment.changeset(context[:experiment], %{context[:valid_attrs] | max_users: 0})
-    refute changeset.valid?
     assert changeset.errors == [max_users: {"must be greater than %{number}", [validation: :number, number: 0]}]
+    refute changeset.valid?
   end
 
   test "validate embedded fields: variants and rules", context do
@@ -122,5 +122,14 @@ defmodule Xperiments.ExperimentTest do
     assert changeset.valid?
     updated_exp = Repo.update!(changeset)
     assert Xperiments.Factory.rules_2 == Enum.map(updated_exp.rules, &Map.from_struct/1)
+  end
+
+  test "able to update an experiment with draft state only" do
+    exp = build(:experiment, start_date: Timex.now |> Timex.shift(days: 1))
+    changeset = Experiment.changeset_update(exp, %{name: "New super name"})
+    assert changeset.valid?
+    exp_2 = build(:experiment, start_date: Timex.now |> Timex.shift(days: 1), state: "running")
+    changeset = Experiment.changeset_update(exp_2, %{name: "New super name"})
+    refute changeset.valid?
   end
 end
