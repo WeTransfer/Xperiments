@@ -23,7 +23,7 @@ defmodule Xperiments.Application do
   ## Serializer
 
   defimpl Poison.Encoder, for: __MODULE__ do
-    def encode(model, opts) do
+    def encode(model, _opts) do
       model
       |> Map.from_struct
       |> Map.take([:name, :id])
