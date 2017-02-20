@@ -1,7 +1,10 @@
 import React from 'react';
 
+import RuleParameters from 'ruleparameters.es6';
+import RuleOperators from 'ruleoperators.es6';
 import Countries from 'countries.es6';
 import Languages from 'languages.es6';
+import Devices from 'devices.es6';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -25,7 +28,7 @@ const styling = {
 };
 
 const dataSource = {
-  device: [{label: 'Desktop', id: 'desktop'}, {label: 'Mobile', id: 'mobile'}],
+  device: Devices,
   language: Languages,
   country: Countries
 };
@@ -46,6 +49,22 @@ export default class AddRule extends React.Component {
 
   handleAdd = () => {
     this.props.set(this.props.rule);
+  }
+
+  getRuleParameters() {
+    let items = [<MenuItem value={null} primaryText="" />];
+    RuleParameters.forEach(parameter => {
+      items.push(<MenuItem value={parameter.value} primaryText={parameter.label} />);
+    });
+    return items;
+  }
+
+  getRuleOperators() {
+    let items = [];
+    RuleOperators.forEach(operator => {
+      items.push(<MenuItem value={operator.value} primaryText={operator.label} />);
+    });
+    return items;
   }
 
   render() {
@@ -103,12 +122,7 @@ export default class AddRule extends React.Component {
               ref="parameter"
               errorText={this.props.validationErrors.parameter || null}
             >
-              <MenuItem value={null} primaryText="" />
-              <MenuItem value="device" primaryText="Device" />
-              <MenuItem value="language" primaryText="Language" />
-              <MenuItem value="country" primaryText="Country" />
-              <MenuItem value="transfer_uploads" primaryText="Transfer - Uploads" />
-              <MenuItem value="transfer_downloads" primaryText="Transfer - Downloads" />
+              {this.getRuleParameters()}
             </SelectField>
           </div>
           <div className="col-md-4">
@@ -122,10 +136,7 @@ export default class AddRule extends React.Component {
               fullWidth={true}
               disabled={operatorFieldIsDisabled}
             >
-              <MenuItem value="==" primaryText="is equal to" />
-              <MenuItem value="!=" primaryText="is not equal to" />
-              <MenuItem value=">" primaryText="is greater than" />
-              <MenuItem value="<" primaryText="is less than" />
+              {this.getRuleOperators()}
             </SelectField>
           </div>
           <div className="col-md-4">{valueField}</div>

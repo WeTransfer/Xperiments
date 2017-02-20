@@ -10,22 +10,22 @@ const validate = data => {
   let errors = {};
 
   if (!data.name)
-    errors.name = 'This field is required';
+    errors.name = ['This field is required'];
 
   if (!data.start_date)
-    errors.start_date = 'This field is required';
+    errors.start_date = ['This field is required'];
 
   if (!data.end_date)
-    errors.end_date = 'This field is required';
+    errors.end_date = ['This field is required'];
 
   if (!!data.max_users && isNaN(data.max_users))
-    errors.max_users = 'Provide a valid number';
+    errors.max_users = ['Provide a valid number'];
   
   if (!data.sampling_rate)
-    errors.sampling_rate = 'This field is required';
+    errors.sampling_rate = ['This field is required'];
 
   if (!data.description)
-    errors.description = 'This field is required';
+    errors.description = ['This field is required'];
 
   return errors;
 }

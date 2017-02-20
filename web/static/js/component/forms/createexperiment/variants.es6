@@ -59,7 +59,7 @@ export default class Variants extends React.Component {
     this.props.list.forEach(variant => {
       renderedList.push(<TableRow>
         <TableRowColumn>{variant.name}</TableRowColumn>
-        <TableRowColumn>{variant.allocation}</TableRowColumn>
+        <TableRowColumn>{variant.allocation}%</TableRowColumn>
         <TableRowColumn>{variant.control_group ? 'Yes' : 'No'}</TableRowColumn>
         <TableRowColumn>{this.getActions(variant)}</TableRowColumn>
       </TableRow>);
