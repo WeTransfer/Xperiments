@@ -16,7 +16,6 @@ defmodule Xperiments.ExperimentControllerTest do
     insert(:experiment, application: context.app, start_date: Timex.now |> Timex.shift(days: 1))
   end
 
-
   @api_path "/api/v1/applications/frontend"
 
   test "/create a draft experiment", context do
@@ -134,7 +133,7 @@ defmodule Xperiments.ExperimentControllerTest do
     body =
       put(context.conn, @api_path <> "/experiments/" <> exp.id, %{experiment:
                                                                   %{exclusions: exclusions ++ removed_experiments}})
-      |> json_response(200)
+                                                                  |> json_response(200)
     assert body["experiment"]["exclusions"] == exclusions
   end
 
@@ -170,5 +169,44 @@ defmodule Xperiments.ExperimentControllerTest do
       get(context.conn, @api_path <> "/experiments/" <> exp.id <> "/variant/" <> "bad_id")
       |> json_response(404)
     assert body["errors"] == %{"experiment" => "Variant with id 'bad_id' for the experiment with id '#{exp.id}' is not found"}
+  end
+
+  describe "Pub/Sub broadcaster" do
+    import Mock
+    alias Xperiments.Services.BroadcastService
+
+    def insert_runnable_experiment(state \\ "draft") do
+      insert(:experiment, state: state, variants: [%{Xperiments.Factory.variant(100) | control_group: true}])
+    end
+
+    test "broadcast correct messages when we run an experiment", context do
+      exp = insert_runnable_experiment()
+      with_mock BroadcastService, [broadcast_state_changes: fn(_, _, _) -> :ok end] do
+        put(context.conn, "#{@api_path}/experiments/#{exp.id}/state", %{event: "run"})
+        |> json_response(200)
+
+        assert called BroadcastService.broadcast_state_changes("draft", "running", :_)
+      end
+    end
+
+    test "broadcast correct messages when we stop an experiment", context do
+      exp = insert_runnable_experiment("running")
+      with_mock BroadcastService, [broadcast_state_changes: fn(_, _, _) -> :ok end] do
+        put(context.conn, "#{@api_path}/experiments/#{exp.id}/state", %{event: "stop"})
+        |> json_response(200)
+
+        assert called BroadcastService.broadcast_state_changes("running", "stopped", :_)
+      end
+    end
+
+    test "broadcast correct messages when we terminate an experiment", context do
+      exp = insert_runnable_experiment("stopped")
+      with_mock BroadcastService, [broadcast_state_changes: fn(_, _, _) -> :ok end] do
+        put(context.conn, "#{@api_path}/experiments/#{exp.id}/state", %{event: "terminate"})
+        |> json_response(200)
+
+        assert called BroadcastService.broadcast_state_changes("stopped", "terminated", :_)
+      end
+    end
   end
 end

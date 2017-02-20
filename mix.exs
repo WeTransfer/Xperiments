@@ -39,7 +39,8 @@ defmodule Xperiments.Mixfile do
      {:ecto_state_machine, "~> 0.3.0"},
      {:timex, "~> 3.0"},
      {:cors_plug, "~> 1.2"},
-     {:ex_machina, "~> 1.0", only: :test}]
+     {:ex_machina, "~> 1.0", only: :test},
+     {:mock, "~> 0.2.0", only: :test}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

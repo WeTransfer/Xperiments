@@ -17,11 +17,11 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
   ## API
 
   @doc "Start an experiment using data from the DB"
-  def start_experiment(experiment_info) do
-    case Supervisor.start_child(__MODULE__, [experiment_info]) do
+  def start_experiment(experiment_data) do
+    case Supervisor.start_child(__MODULE__, [experiment_data]) do
       {:ok, pid} ->
         Experiment.register_priority(pid)
-        Logger.info "Experiment #{experiment_info.name} successfully started"
+        Logger.info "Experiment #{experiment_data.name} successfully started"
         {:ok, pid}
       {:error, {:bad_experiment, experiment}} ->
         Logger.error "Given experiment is not started: #{inspect experiment}"

@@ -1,6 +1,7 @@
 defmodule Xperiments.ExperimentController do
   use Xperiments.Web, :controller
   alias Xperiments.{Experiment, Application}
+  alias Xperiments.Services.BroadcastService
 
   plug :scrub_params, "experiment" when action in [:create, :update]
   plug :get_application when action in [:index, :create, :update]
@@ -66,6 +67,7 @@ defmodule Xperiments.ExperimentController do
       changeset = Experiment.change_state(experiment, event)
       case Repo.update(changeset) do
         {:ok, exp} ->
+          BroadcastService.broadcast_state_changes(changeset.data.state, changeset.changes.state, exp)
           render(conn, "state.json", state: exp.state)
         {:error, changeset} ->
           conn
@@ -113,5 +115,4 @@ defmodule Xperiments.ExperimentController do
         assign(conn, :application, app)
     end
   end
-
 end
