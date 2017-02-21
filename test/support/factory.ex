@@ -33,7 +33,7 @@ defmodule Xperiments.Factory do
   end
 
   def variant(allocation \\ 100) do
-    payload = Enum.reduce(0..1000, "", fn _, acc -> acc <> "dummy" end)
+    payload = Enum.reduce(0..100, "", fn _, acc -> acc <> "dummy" end)
     %{
       name: sequence("Variant"),
       allocation: allocation,
