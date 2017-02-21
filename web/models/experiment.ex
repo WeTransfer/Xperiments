@@ -45,7 +45,8 @@ defmodule Xperiments.Experiment do
 
     belongs_to :application, Application
 
-    many_to_many :exclusions, __MODULE__, join_through: "experiments_exclusions",
+    # used only for tests now, delete it after tests refactoring
+    many_to_many :exclusions, __MODULE__, join_through: Xperiments.Exclusion,
       join_keys: [experiment_a_id: :id, experiment_b_id: :id], on_replace: :delete
 
     embeds_many :variants, Variant, on_replace: :delete
@@ -189,14 +190,14 @@ defmodule Xperiments.Experiment do
       where: e.state in ["running", "stopped"]
   end
 
-  def with_exclusions(query) do
-    exclusions_query =
-      from(ex in query,
-        where: not(ex.state in ["terminated", "deleted"]),
-        select: map(ex, [:id, :name]))
-    from(e in query,
-      preload: [exclusions: ^exclusions_query])
-  end
+  # def with_exclusions(query) do
+  #   exclusions_query =
+  #     from(ex in query,
+  #       where: not(ex.state in ["terminated", "deleted"]),
+  #       select: map(ex, [:id, :name]))
+  #   from(e in query,
+  #     preload: [exclusions: ^exclusions_query, other_exclusions: ^exclusions_query])
+  # end
 
   def all_for_application(app) do
     from(e in __MODULE__,
@@ -217,13 +218,8 @@ defmodule Xperiments.Experiment do
     def encode(model, _opts) do
       model
       |> Map.from_struct
-      |> update_exclusions_list()
       |> Map.drop([:__meta__, :__struct__, :application])
       |> Poison.encode!
-    end
-
-    defp update_exclusions_list(experiment) do
-      Map.update(experiment, :exclusions, [], &(Enum.map(&1, fn el -> el.id end)))
     end
   end
 end

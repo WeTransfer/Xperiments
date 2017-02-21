@@ -1,6 +1,6 @@
 defmodule Xperiments.ExperimentController do
   use Xperiments.Web, :controller
-  alias Xperiments.{Experiment, Application}
+  alias Xperiments.{Experiment, Exclusion, Application}
   alias Xperiments.Services.BroadcastService
 
   plug :scrub_params, "experiment" when action in [:create, :update]
@@ -9,15 +9,16 @@ defmodule Xperiments.ExperimentController do
   def index(conn, _params) do
     experiments =
       Experiment.all_for_application(conn.assigns.application)
-      |> Experiment.with_exclusions
       |> Repo.all
+      |> Enum.map(fn ex -> Map.merge(ex, %{exclusions: Exclusion.for_experiment(ex.id)}) end)
+
     render(conn, "index.json", experiments: experiments)
   end
 
   def show(conn, %{"id" => id}) do
     experiment =
-      Experiment.with_exclusions(Experiment)
-      |> Repo.get!(id)
+      Repo.get!(Experiment, id)
+      |> Map.merge(%{exclusions: Exclusion.for_experiment(id)})
     render(conn, "show.json", experiment: experiment)
   end
 
@@ -28,7 +29,7 @@ defmodule Xperiments.ExperimentController do
 
     case Repo.insert(changeset) do
       {:ok, exp} ->
-        exp = Repo.preload(exp, :exclusions)
+        exp = Map.merge(exp, %{exclusions: Exclusion.for_experiment(exp.id)})
         conn
         |> put_status(:created)
         |> render("show.json", experiment: exp)
@@ -40,19 +41,21 @@ defmodule Xperiments.ExperimentController do
   end
 
   def update(conn, %{"id" => id, "experiment" => updates}) do
-    exp = Repo.get!(Experiment, id) |> Repo.preload(:exclusions)
+    exp = Repo.get!(Experiment, id)
 
     {exclusions, updates} = Map.pop(updates, "exclusions", [])
+    # NOTE: Maybe unnecessary step now
     exclusions =
       Experiment.avialable_experiments_for_exclsions(conn.assigns.application, exclusions)
       |> Repo.all()
-    changeset =
-      Experiment.changeset_update(exp, updates)
-      |> Ecto.Changeset.put_assoc(:exclusions, exclusions)
+    changeset = Experiment.changeset_update(exp, updates)
+
+    # TODO: Use Multi to use all changes in one transaction and handle results
+    Exclusion.update_exclusions(id, Enum.map(exclusions, & &1.id))
 
     case Repo.update(changeset) do
       {:ok, exp} ->
-        exp = Repo.preload(exp, :exclusions)
+        exp = Map.merge(exp, %{exclusions: Exclusion.for_experiment(exp.id)})
         render(conn, "show.json", experiment: exp)
       {:error, changeset} ->
         conn
@@ -67,6 +70,7 @@ defmodule Xperiments.ExperimentController do
       changeset = Experiment.change_state(experiment, event)
       case Repo.update(changeset) do
         {:ok, exp} ->
+          exp = Map.merge(exp, %{exclusions: Exclusion.for_experiment(exp.id)})
           BroadcastService.broadcast_state_changes(changeset.data.state, changeset.changes.state, exp)
           render(conn, "state.json", state: exp.state)
         {:error, changeset} ->
@@ -82,11 +86,8 @@ defmodule Xperiments.ExperimentController do
   end
 
   def exclusions(conn, %{"experiment_id" => id}) do
-    experiment =
-      Experiment
-      |> Experiment.with_exclusions
-      |> Repo.get(id)
-    render conn, "exclusions.json", exclusions: experiment.exclusions, id: experiment.id
+    exclusions = Exclusion.for_experiment(id)
+    render conn, "exclusions.json", exclusions: exclusions, id: id
   end
 
   def variant(conn, %{"experiment_id" => e_id, "variant_id" => var_id}) do

@@ -4,8 +4,8 @@ defmodule Xperiments.Assigner.Loader do
   def load_experiments_from_db do
     ExperimentModel
     |> ExperimentModel.ready_to_run
-    |> ExperimentModel.with_exclusions
     |> Xperiments.Repo.all
+    |> Enum.map(fn ex -> Map.merge(ex, %{exclusions: Xperiments.Exclusion.for_experiment(ex.id)}) end)
     |> Enum.each(&Xperiments.Assigner.ExperimentSupervisor.start_experiment/1)
   end
 end
