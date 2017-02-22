@@ -84,6 +84,8 @@ defmodule Xperiments.Experiment do
     |> validate_model_has_variants
     |> validate_variants
     |> validate_at_least_variant_is_control_group
+    |> validate_current_or_future_date(:start_date)
+    |> validate_current_or_future_date(:end_date)
   end
 
   # TODO: Make a refactor for dates validation
