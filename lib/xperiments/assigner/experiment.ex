@@ -45,14 +45,14 @@ defmodule Xperiments.Assigner.Experiment do
          true <- experiment.state in ["running", "stopped"] do
       :ok
     else
-      _ -> {:error, {:bad_experiment, experiment}}
+      err -> {:error, {:bad_experiment, err, experiment}}
     end
   end
 
   ## Client API
 
   @doc """
-  Set `stop` state for an experiment.
+  Sets `stop` state for an experiment.
   So it stops assigns any new requests, but still will receive events.
   In fact, it pauses the experiment.
   """
@@ -66,6 +66,23 @@ defmodule Xperiments.Assigner.Experiment do
 
   def register_priority(pid) do
     GenServer.call(pid, {:register_priority})
+  end
+
+  @doc """
+  Adds an exclusions if an experiment is running
+  """
+  def add_exclusion(id, caller_id) do
+    GenServer.cast(via_tuple(id), {:add_exclusion, caller_id})
+  end
+
+  @doc """
+  Removes an exclusion if it exists
+  """
+  def remove_exclusion(pid, caller_id) when is_pid(pid) do
+    GenServer.cast(pid, {:remove_exclusion, caller_id})
+  end
+  def remove_exclusion(id, caller_id) do
+    GenServer.cast(via_tuple(id), {:remove_exclusion, caller_id})
   end
 
   @doc """
@@ -132,14 +149,23 @@ defmodule Xperiments.Assigner.Experiment do
     {:noreply, new_state}
   end
 
+  def handle_cast({:add_exclusion, exc_id}, state) do
+    new_state = Map.update!(state, :exclusions, fn ex_list -> [exc_id | ex_list] |> Enum.uniq() end)
+    {:noreply, new_state}
+  end
+
+  def handle_cast({:remove_exclusion, exc_id}, state) do
+    new_state = Map.update!(state, :exclusions, fn ex_list -> List.delete(ex_list, exc_id) end)
+    {:noreply, new_state}
+  end
+
   def handle_call({:register_priority}, _caller, state) do
     {:ok, _} = Registry.register(:registry_priorities, self(), state.inserted_at)
     {:reply, :ok, state}
   end
 
   def handle_call({:get_exclusions_list}, _caller, %{state: "running", exclusions: exclusions} = state) do
-    response = Enum.map(exclusions, & &1.id)
-    {:reply, response, state}
+    {:reply, exclusions, state}
   end
   def handle_call({:get_exclusions_list}, _caller, state) do
     {:reply, [], state}

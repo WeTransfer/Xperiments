@@ -8,11 +8,10 @@ defmodule Xperiments.Assigner.DispatcherTest do
     end
     app = insert(:application, name: "web")
     excluded_exps = insert_list(2, :experiment, application: app, state: "running")
-    exp =
-      insert(:experiment, state: "running", exclusions: excluded_exps)
-      |> Repo.preload(:exclusions)
+    exp = insert(:experiment, state: "running", exclusions: excluded_exps)
+    exp = Map.merge(exp, %{exclusions: Xperiments.Exclusion.for_experiment(exp.id)})
     Enum.map(excluded_exps, fn e ->
-      e |> Xperiments.Repo.preload(:exclusions)
+      Map.merge(e, %{exclusions: Xperiments.Exclusion.for_experiment(e.id)})
       |> ExperimentSupervisor.start_experiment()
     end)
     ExperimentSupervisor.start_experiment(exp)

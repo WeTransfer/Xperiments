@@ -7,7 +7,7 @@ defmodule Xperiments.Assigner.ExperimentTest do
     excluded_exp = insert(:experiment, application: app)
     exp =
       insert(:experiment, state: "running", exclusions: [excluded_exp], rules: Xperiments.Factory.rules_1)
-      |> Repo.preload(:exclusions)
+    exp = Map.merge(exp, %{exclusions: Xperiments.Exclusion.for_experiment(exp.id)})
     ExperimentSupervisor.start_experiment(exp)
     [exp: exp, excluded_exp: excluded_exp]
   end
@@ -17,7 +17,7 @@ defmodule Xperiments.Assigner.ExperimentTest do
     assert length(exclusions) == 1
     exc_list = Experiment.get_exclusions_list(context.exp.id)
     assert length(exc_list) == 1
-    assert exc_list == Enum.map(exclusions, & &1.id)
+    assert exc_list == exclusions
   end
 
   test "experiment return a randomly (according to an allocation) assigned result" do
@@ -71,5 +71,17 @@ defmodule Xperiments.Assigner.ExperimentTest do
     exp = insert(:experiment, state: "running", start_date: Timex.now |> Timex.shift(days: 1))
     ExperimentSupervisor.start_experiment(exp)
     refute Experiment.is_started?(exp.id)
+  end
+
+  test "adding of an exclusion", context do
+    new_exp = insert(:experiment, state: "running", start_date: Timex.now |> Timex.shift(days: 1), exclusions: [context.exp])
+    Experiment.add_exclusion(context.exp.id, [new_exp.id])
+    assert length(Experiment.get_exclusions_list(context.exp.id)) == 2
+  end
+
+  test "removing of an exclusion", context do
+    assert length(Experiment.get_exclusions_list(context.exp.id)) == 1
+    Experiment.remove_exclusion(context.exp.id, context.excluded_exp.id)
+    assert length(Experiment.get_exclusions_list(context.exp.id)) == 0
   end
 end

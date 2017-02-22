@@ -29,13 +29,16 @@ defmodule Xperiments.Assigner.EventSubscriber do
   def handle_info(%{event: "terminate_experiment", payload: payload}, state) do
     Task.async(fn ->
       ExperimentSupervisor.terminate_experiment(payload.id)
+      ExperimentSupervisor.experiment_pids
+      |> Enum.each(fn epid -> Experiment.remove_exclusion(epid, payload.id) end)
     end)
     {:noreply, state}
   end
 
-  def handle_info(%{event: "start_experiment", payload: payload}, state) do
+  def handle_info(%{event: "start_experiment", payload: %{experiment_data: experiment_data}}, state) do
     Task.async(fn ->
-      ExperimentSupervisor.start_experiment(payload.experiment_data)
+      {:ok, _pid} = ExperimentSupervisor.start_experiment(experiment_data)
+      Enum.each(experiment_data.exclusions, fn e -> Experiment.add_exclusion(e, experiment_data.id) end)
     end)
     {:noreply, state}
   end
