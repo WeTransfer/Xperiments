@@ -83,27 +83,33 @@ export default class EditExperimentPage extends React.Component {
           setSamplingRate={this.props.setSamplingRate}
           validationErrors={this.props.validationErrors}
         />
+        </Paper>
         <div className="spacing spacing--is-30"></div>
-        <Rules
-          list={this.props.experiment.data.rules}
-          title="Rules"
-          delete={this.props.deleteRule}
-        />
+        <Paper style={styling.paper} zDepth={1} rounded={false}>
+          <Rules
+            list={this.props.experiment.data.rules}
+            title="What users do you want to target?"
+            delete={this.props.deleteRule}
+          />
+        </Paper>
         <div className="spacing spacing--is-30"></div>
-        <Variants
-          title="What do you want to show to your users?"
-          list={this.props.experiment.data.variants}
-          experimentId={this.props.experiment.data.id}
-          selectedApplication={this.props.selectedApplication}
-          delete={this.props.deleteVariant}
-        />
+        <Paper style={styling.paper} zDepth={1} rounded={false}>
+          <Variants
+            title="What do you want to show to your users?"
+            list={this.props.experiment.data.variants}
+            experimentId={this.props.experiment.data.id}
+            selectedApplication={this.props.selectedApplication}
+            delete={this.props.deleteVariant}
+          />
+        </Paper>
         <div className="spacing spacing--is-30"></div>
-        <Exclusions
-          title="What experiments do you want to exclude?"
-          list={this.props.experiment.data.exclusions}
-          indexedExperimentsList={this.props.indexedExperimentsList}
-        />
-      </Paper>
+        <Paper style={styling.paper} zDepth={1} rounded={false}>
+          <Exclusions
+            title="What experiments do you want to exclude?"
+            list={this.props.experiment.data.exclusions}
+            indexedExperimentsList={this.props.indexedExperimentsList}
+          />
+        </Paper>
       <div className="spacing"></div>
       <div className="pull-right">
         <Link to="/experiments"><FlatButton label="cancel" style={styling.button.flat} /></Link>

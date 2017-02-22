@@ -49,6 +49,20 @@ export default function(state = {}, action) {
         data: newData
       };
 
+    case actions.UPDATE_EXPERIMENT_VARIANT:
+      newData = Object.assign({}, state.data);
+      let indexOfVariant = newData.variants.indexOf(action.variant);
+      if (indexOfVariant !== -1) {
+        if (typeof action.newData.payload === 'object')
+          action.newData.payload = JSON.stringify(action.newData.payload);
+        
+        newData.variants[indexOfVariant] = Object.assign({}, newData.variants[indexOfVariant], action.newData);
+      }
+      return {
+        ...state,
+        data: newData
+      };
+
     case actions.POP_EXPERIMENT_VARIANT:
       newData = Object.assign({}, state.data);
       if (newData.variants.indexOf(action.variant) !== -1)

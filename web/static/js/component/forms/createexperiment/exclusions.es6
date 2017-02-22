@@ -56,13 +56,13 @@ export default class Exclusions extends React.Component {
 
     if (!this.props.list.length) {
       renderedExperiments.push(<TableRow>
-        <TableRowColumn colSpan={3} style={styling.emptyTD}>No data</TableRowColumn>
+        <TableRowColumn colSpan={3} style={styling.emptyTD}>No exclusions</TableRowColumn>
       </TableRow>);
     }
 
     return <div className="form__experiment-exclusions">
       <div className="row">
-        <div className="col-md-6"><h5>{this.props.title}</h5></div>
+        <div className="col-md-6"><h4>{this.props.title}</h4></div>
         <div className="col-md-6">
           <RaisedButton label="select experiments" secondary={true} onTouchTap={this.showAddExclusion} className="pull-right" />
           <AddExclusionForm open={this.state.isAddExclusionVisible} onCancel={this.hideAddExclusion} onAdd={this.hideAddExclusion} />

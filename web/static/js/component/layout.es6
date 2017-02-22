@@ -9,6 +9,17 @@ import VisibleApplicationsMenu from 'containers/visibleapplicationsmenu.es6';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import Paper from 'material-ui/Paper';
+
+const styling = {
+  paper: {
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginTop: 0
+  }
+};
 
 export default class Layout extends React.Component {
   static propTypes = {
@@ -62,14 +73,15 @@ export default class Layout extends React.Component {
 
     return <div>
       <MuiThemeProvider>
-        <div className="row">
-          <div className="col-md-4">
-            <VisibleApplicationsMenu />
+        <Paper style={styling.paper} zDepth={1} rounded={false}>
+          <div className="row">
+            <div className="col-md-4">
+              <VisibleApplicationsMenu />
+            </div>
+            <div className="col-md-4">
+            </div>
           </div>
-          <div className="col-md-4">
-
-          </div>
-        </div>
+        </Paper>
       </MuiThemeProvider>
       {children}
       {notification}

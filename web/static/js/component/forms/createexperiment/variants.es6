@@ -6,7 +6,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 
-import AddVariantForm from 'containers/addvariantform.es6';
+import VariantFormContainer from 'containers/variantform.es6';
 
 const styling = {
   emptyTD: {
@@ -28,28 +28,34 @@ export default class Variants extends React.Component {
   }
 
   state = {
-    isCreateVariantVisible: false
+    isCreateVariantVisible: false,
+    editableVariant: {}
   }
 
-  showCreateVariant = () => {
+  showCreateVariant = (variant = {}) => {
     this.setState({
-      isCreateVariantVisible: true
+      isCreateVariantVisible: true,
+      editableVariant: variant
     });
   }
 
   hideCreateVariant = () => {
     this.setState({
-      isCreateVariantVisible: false
+      isCreateVariantVisible: false,
+      editableVariant: {}
     });
   }
 
-   getActions(variant) {
+  getActions(variant) {
     let actions = [];
 
     if (variant.id) {
       actions.push(<a target="_blank" href={`${this.props.selectedApplication.url}/?experiment_id=${this.props.experimentId}&variant_id=${variant.id}`}>Preview</a>);
       actions.push(" | ");
     }
+
+    actions.push(<a onClick={() => this.showCreateVariant(variant)}>Edit</a>);
+    actions.push(" | ");
 
     actions.push(<a onClick={e => this.props.delete(variant)}>Delete</a>);
     return actions;
@@ -77,16 +83,21 @@ export default class Variants extends React.Component {
 
     if (!renderedList.length) {
       renderedList.push(<TableRow>
-        <TableRowColumn style={styling.emptyTD} colSpan={5}>No data</TableRowColumn>
+        <TableRowColumn style={styling.emptyTD} colSpan={5}>No variants</TableRowColumn>
       </TableRow>);
     }
 
     return <div className="variants__manager">
       <div className="row">
-        <div className="col-md-6"><h5>{this.props.title}</h5></div>
+        <div className="col-md-6"><h4>{this.props.title}</h4></div>
         <div className="col-md-6">
           <RaisedButton label="add variant" secondary={true} onTouchTap={this.showCreateVariant} className="pull-right" />
-          <AddVariantForm open={this.state.isCreateVariantVisible} onCancel={this.hideCreateVariant} onAdd={this.hideCreateVariant} />
+          <VariantFormContainer
+            open={this.state.isCreateVariantVisible}
+            onCancel={this.hideCreateVariant}
+            onAdd={this.hideCreateVariant}
+            variant={this.state.editableVariant}
+          />
         </div>
       </div>
       <div className="row">

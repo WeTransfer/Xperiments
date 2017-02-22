@@ -132,6 +132,28 @@ const options = [
     }
   },
   {
+    name: 'Singup Form - Plan Selector Type',
+    key: 'signupFormPlanSelectorType',
+    defaults: {
+      type: null
+    },
+    schema: {
+      type: 'object',
+      properties: [
+        {
+          key: 'type',
+          type: 'string',
+          title: 'Type',
+          enum: [
+            {label: 'default', value: 'original'},
+            {label: 'full width', value: 'fullWidthBlock'},
+            {label: 'larger yearly block', value: 'largeYearlyBlock'}
+          ]
+        }
+      ]
+    }
+  },
+  {
     name: 'Custom',
     key: 'custom',
     defaults: {

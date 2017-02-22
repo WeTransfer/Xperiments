@@ -119,13 +119,13 @@ export default class Rules extends React.Component {
 
     if (!renderedList.length) {
       renderedList.push(<TableRow>
-        <TableRowColumn style={styling.emptyTD} colSpan={5}>No data</TableRowColumn>
+        <TableRowColumn style={styling.emptyTD} colSpan={5}>No rules</TableRowColumn>
       </TableRow>);
     }
 
     return <div className="form__rules">
       <div className="row">
-        <div className="col-md-6"><h5>{this.props.title}</h5></div>
+        <div className="col-md-6"><h4>{this.props.title}</h4></div>
         <div className="col-md-6">
           <RaisedButton label="add rule" secondary={true} onTouchTap={this.showAddRule} className="pull-right" />
           <AddRuleForm
