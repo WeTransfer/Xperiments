@@ -57,8 +57,10 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
   def get_experiment_pids_by_ids(ids) do
     List.wrap(ids)
     |> Enum.map(fn id ->
-      [{pid, _}] = Registry.lookup(:registry_experiments, id)
-      pid
+      case Registry.lookup(:registry_experiments, id) do
+        [{pid, _}] -> pid
+        _ -> nil
+      end
     end)
   end
 end
