@@ -67,7 +67,7 @@ defmodule Xperiments.ExperimentTest do
   end
 
   test "states changes" do
-    experiment = insert(:experiment, variants: [%{ Xperiments.Factory.variant() | control_group: true }])
+    experiment = insert(:experiment, variants: [%{ Xperiments.Factory.variant() | control_group: true }], start_date: Timex.now |> Timex.shift(days: 1))
     assert experiment.state == "draft"
     assert Experiment.can_run?(experiment) == true
     assert Experiment.can_terminate?(experiment) == false
@@ -96,14 +96,14 @@ defmodule Xperiments.ExperimentTest do
   end
 
   test "validation that at least one varian is a control group when running" do
-    bad_exp = build(:experiment) |> with_balanced_variants |> insert
+    bad_exp = build(:experiment, start_date: Timex.now |> Timex.shift(days: 1)) |> with_balanced_variants |> insert
     changeset = Experiment.change_state(bad_exp, "run")
     refute changeset.valid?
     variants = [
       Xperiments.Factory.variant(50),
       %{ Xperiments.Factory.variant(50) | control_group: true }
     ]
-    exp = insert(:experiment, variants: variants)
+    exp = insert(:experiment, variants: variants, start_date: Timex.now |> Timex.shift(days: 1))
     changeset = Experiment.run(exp)
     assert changeset.valid?
   end

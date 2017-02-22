@@ -101,7 +101,7 @@ defmodule Xperiments.ExperimentControllerTest do
   end
 
   test "/state changes state for a given experiemnt", context do
-    exp = insert(:experiment, application: context.app, variants: [%{ Xperiments.Factory.variant() | control_group: true }])
+    exp = insert(:experiment, application: context.app, variants: [%{ Xperiments.Factory.variant() | control_group: true }], start_date: Timex.now() |> Timex.shift(days: 1))
     assert exp.state == "draft"
     body =
       put(context[:conn], @api_path <> "/experiments/" <> exp.id <> "/state", %{event: "run"})
@@ -176,7 +176,7 @@ defmodule Xperiments.ExperimentControllerTest do
     alias Xperiments.Services.BroadcastService
 
     def insert_runnable_experiment(state \\ "draft") do
-      insert(:experiment, state: state, variants: [%{Xperiments.Factory.variant(100) | control_group: true}])
+      insert(:experiment, state: state, variants: [%{Xperiments.Factory.variant(100) | control_group: true}], start_date: Timex.now |> Timex.shift(days: 1))
     end
 
     test "broadcast correct messages when we run an experiment", context do

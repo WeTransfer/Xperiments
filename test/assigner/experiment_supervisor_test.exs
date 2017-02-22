@@ -13,10 +13,10 @@ defmodule Xperiments.Assigner.ExperimentSupervisorTest do
   end
 
   test "return an error when we try to start an experiment with a wrong state" do
-    exp = insert(:experiment, state: "draft") |> Repo.preload(:exclusions)
+    exp = insert(:experiment, state: "draft")
     assert capture_log(fn ->
       :error = ExperimentSupervisor.start_experiment(exp)
-      end) =~ "Given experiment"
+      end) =~ ":error"
   end
 
   test "start a new experiment", context do
