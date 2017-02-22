@@ -2,6 +2,8 @@ import React from 'react';
 
 import {Link} from 'react-router';
 
+import Helper from 'helper.es6';
+
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
@@ -118,6 +120,8 @@ export default class ExperimentsTable extends React.Component {
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-vre-${experiment.id}`}, `${experiment.rules.length} - ${experiment.variants.length} - ${experiment.exclusions.length}`),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-state-${experiment.id}`}, experiment.state),
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-start-date-${experiment.id}`}, Helper.formatDateTime(experiment.start_date)),
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-end-date-${experiment.id}`}, Helper.formatDateTime(experiment.end_date)),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-actions-${experiment.id}`}, this.getActions(experiment))
         ]));
       });
@@ -175,6 +179,8 @@ export default class ExperimentsTable extends React.Component {
             <TableHeaderColumn>Name</TableHeaderColumn>
             <TableHeaderColumn>Rules - Variants - Exclusions</TableHeaderColumn>
             <TableHeaderColumn>Status</TableHeaderColumn>
+            <TableHeaderColumn>Start Date</TableHeaderColumn>
+            <TableHeaderColumn>End Date</TableHeaderColumn>
             <TableHeaderColumn></TableHeaderColumn>
           </TableRow>
         </TableHeader>

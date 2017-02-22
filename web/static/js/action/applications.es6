@@ -17,7 +17,7 @@ export default ActionHelper.generate({
           {id: 1, name: 'Web'},
           {id: 2, name: 'iOS'},
           {id: 3, name: 'Android'},
-          {id: 4, name: 'Desktop App', variants: [], isActive: true, startDate: '', endDate: ''}
+          {id: 4, name: 'Desktop App'}
         ]
       });
     };

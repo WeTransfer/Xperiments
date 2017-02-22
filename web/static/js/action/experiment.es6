@@ -40,6 +40,7 @@ export const actions = ActionHelper.types([
   'UPDATED_EXPERIMENT',
   'SET_EXPERIMENT_VALUES',
   'SET_EXPERIMENT_VARIANT',
+  'UPDATE_EXPERIMENT_VARIANT',
   'POP_EXPERIMENT_VARIANT',
   'SET_EXPERIMENT_RULE',
   'POP_EXPERIMENT_RULE',
@@ -95,6 +96,32 @@ export default ActionHelper.generate({
       dispatch({
         type: actions.SET_EXPERIMENT_VARIANT,
         data
+      });
+    }
+  },
+
+  updateVariant(newData, variant, formName) {
+    return (dispatch, getState) => {
+      dispatch({
+        type: ValidationErrorsActions.RESET_VALIDATION_ERRORS,
+        form: formName
+      });
+
+      const validationErrors = validateVariant(newData, getState().experiment.data.variants);
+      if (Object.keys(validationErrors).length) {
+        dispatch({
+          type: ValidationErrorsActions.SET_VALIDATION_ERRORS,
+          form: formName,
+          errors: validationErrors
+        });
+
+        throw 'ValidationErrors';
+      }
+
+      dispatch({
+        type: actions.UPDATE_EXPERIMENT_VARIANT,
+        newData,
+        variant
       });
     }
   },

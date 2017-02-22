@@ -1,5 +1,14 @@
 const options = [
   {
+    name: 'None',
+    key: 'none',
+    defaults: {},
+    schema: {
+      type: 'object',
+      properties: []
+    }
+  },
+  {
     name: 'SplashPage Plus CTA link',
     key: 'splashpagePlusCTA',
     defaults: {
@@ -118,6 +127,28 @@ const options = [
             multiLine: true,
             rows: 2
           }
+        }
+      ]
+    }
+  },
+  {
+    name: 'Singup Form - Plan Selector Type',
+    key: 'signupFormPlanSelectorType',
+    defaults: {
+      type: null
+    },
+    schema: {
+      type: 'object',
+      properties: [
+        {
+          key: 'type',
+          type: 'string',
+          title: 'Type',
+          enum: [
+            {label: 'default', value: 'original'},
+            {label: 'full width', value: 'fullWidthBlock'},
+            {label: 'larger yearly block', value: 'largeYearlyBlock'}
+          ]
         }
       ]
     }

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Helper from 'helper.es6';
+
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
@@ -46,21 +48,21 @@ export default class Exclusions extends React.Component {
       if (experiment) {
         renderedExperiments.push(<TableRow>
           <TableRowColumn>{experiment.name}</TableRowColumn>
-          <TableRowColumn>{experiment.start_date}</TableRowColumn>
-          <TableRowColumn>{experiment.end_date}</TableRowColumn>
+          <TableRowColumn>{Helper.formatDateTime(experiment.start_date)}</TableRowColumn>
+          <TableRowColumn>{Helper.formatDateTime(experiment.end_date)}</TableRowColumn>
         </TableRow>);
       }
     });
 
     if (!this.props.list.length) {
       renderedExperiments.push(<TableRow>
-        <TableRowColumn colSpan={3} style={styling.emptyTD}>No data</TableRowColumn>
+        <TableRowColumn colSpan={3} style={styling.emptyTD}>No exclusions</TableRowColumn>
       </TableRow>);
     }
 
     return <div className="form__experiment-exclusions">
       <div className="row">
-        <div className="col-md-6"><h5>{this.props.title}</h5></div>
+        <div className="col-md-6"><h4>{this.props.title}</h4></div>
         <div className="col-md-6">
           <RaisedButton label="select experiments" secondary={true} onTouchTap={this.showAddExclusion} className="pull-right" />
           <AddExclusionForm open={this.state.isAddExclusionVisible} onCancel={this.hideAddExclusion} onAdd={this.hideAddExclusion} />

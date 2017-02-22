@@ -9,6 +9,17 @@ import VisibleApplicationsMenu from 'containers/visibleapplicationsmenu.es6';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import Paper from 'material-ui/Paper';
+
+const styling = {
+  paper: {
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginTop: 0
+  }
+};
 
 export default class Layout extends React.Component {
   static propTypes = {
@@ -33,6 +44,10 @@ export default class Layout extends React.Component {
   selectTab = (event, index, selectedTab) => this.setState({selectedTab});
 
   render() {
+    const {applications} = Store.getState();
+
+    if (applications.isFetching) return null;
+
     let notification = null;
     if (this.props.notification) {
       let actions = [
@@ -58,11 +73,15 @@ export default class Layout extends React.Component {
 
     return <div>
       <MuiThemeProvider>
-        <Toolbar>
-          <ToolbarGroup firstChild={true}>
-            <VisibleApplicationsMenu />
-          </ToolbarGroup>
-        </Toolbar>
+        <Paper style={styling.paper} zDepth={1} rounded={false}>
+          <div className="row">
+            <div className="col-md-4">
+              <VisibleApplicationsMenu />
+            </div>
+            <div className="col-md-4">
+            </div>
+          </div>
+        </Paper>
       </MuiThemeProvider>
       {children}
       {notification}

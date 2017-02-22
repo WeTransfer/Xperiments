@@ -12,7 +12,21 @@ export default class PayloadEditor extends React.Component {
 
   static propTypes = {
     types: React.PropTypes.array,
-    onChange: React.PropTypes.func
+    onChange: React.PropTypes.func,
+    value: React.PropTypes.string
+  }
+
+  componentDidMount() {
+    try {
+      if (this.props.value) {
+        let parsedValue = JSON.parse(this.props.value);
+
+        this.setState({
+          type: Object.keys(parsedValue)[0],
+          payload: parsedValue[Object.keys(parsedValue)[0]]
+        })
+      }
+    } catch(e) {}
   }
 
   get getPayload() {
@@ -50,6 +64,7 @@ export default class PayloadEditor extends React.Component {
           floatingLabelText={property.title}
           disabled={!!property.disabled}
           value={this.state.payload[property.key] || ''}
+          key={`textfield-${property.type}-${property.key}`}
           {...property.uiOptions}
         />
       </div>;
@@ -64,6 +79,7 @@ export default class PayloadEditor extends React.Component {
           floatingLabelText={property.title}
           value={this.state.payload[property.key] || null}
           onChange={(e, index, value) => {this.setPayload(property.key, value, property.type);}}
+          key={`selectfield-${property.type}-${property.key}`}
         >
           {options}
         </SelectField>
@@ -72,11 +88,11 @@ export default class PayloadEditor extends React.Component {
   }
 
   render() {
-    let typeOptions = [<MenuItem value='none' primaryText="N/A" />];
+    let typeOptions = [];
     let selectedType = null;
 
     this.props.types.forEach(type => {
-      if (type.key === this.state.type)
+      if ( type.key === this.state.type)
         selectedType = type;
       typeOptions.push(<MenuItem value={type.key} primaryText={type.name} />)
     });
@@ -103,6 +119,7 @@ export default class PayloadEditor extends React.Component {
             value={this.state.type}
             onChange={(e, index, value) => {this.setType(index, value);}}
             errorText={selectTypeValidation}
+            key="selectfield-payload-type"
           >
             {typeOptions}
           </SelectField>
