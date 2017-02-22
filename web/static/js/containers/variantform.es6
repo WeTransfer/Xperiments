@@ -3,6 +3,14 @@ import {connect} from 'react-redux';
 import Actions from 'action/index.es6';
 import VariantForm from 'component/forms/createexperiment/variantform.es6';
 
+const FORM_NAME = 'variantForm';
+
+const setValue = (key, value) => {
+  let data = {};
+  data[key] = value;
+  return Actions.NewVariant.setValues(data);
+}
+
 const _allowControlGroupSelection = (variants = []) => {
   let has = true;
   variants.forEach((element) => {
@@ -19,24 +27,36 @@ const mapStateToProps = (state, newProps) => {
     allowControlGroupSelection = true;
 
   return {
+    variant: state.newvariant,
     allowControlGroupSelection: allowControlGroupSelection,
-    validationErrors: state.validationerrors.variantForm
+    validationErrors: state.validationerrors[FORM_NAME]
   };
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    setName: value => {dispatch(setValue('name', value));},
+    setAllocation: value => {dispatch(setValue('allocation', value));},
+    setControlGroup: value => {dispatch(setValue('control_group', value));},
+    setPayload: value => {dispatch(setValue('payload', value));},
+    setDescription: value => {dispatch(setValue('description', value));},
     set: data => {
-      dispatch(Actions.Experiment.pushVariant(data, 'variantForm'))
+      dispatch(Actions.NewVariant.validate(data, FORM_NAME));
+      dispatch(Actions.Experiment.pushVariant(data));
+      dispatch(Actions.NewVariant.reset());
       ownProps.onAdd();
     },
     update: (data, variant) => {
-      dispatch(Actions.Experiment.updateVariant(data, variant, 'variantForm'));
+      // dispatch(Actions.Experiment.updateVariant(data, variant, FORM_NAME));
       ownProps.onAdd();
     },
     cancel: () => {
-      dispatch(Actions.ValidationErrors.reset('variantForm'));
+      dispatch(Actions.ValidationErrors.reset(FORM_NAME));
+      dispatch(Actions.NewVariant.reset());
       ownProps.onCancel();
+    },
+    unsetValidationError: fieldName => {
+      dispatch(Actions.ValidationErrors.unset(fieldName, FORM_NAME));
     }
   }
 }

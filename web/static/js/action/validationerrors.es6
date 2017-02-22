@@ -2,7 +2,8 @@ import ActionHelper from 'modules/redux-actions/index.es6';
 
 export const actions = ActionHelper.types([
   'SET_VALIDATION_ERRORS',
-  'RESET_VALIDATION_ERRORS'
+  'RESET_VALIDATION_ERRORS',
+  'UNSET_VALIDATION_ERROR'
 ]);
 
 export default ActionHelper.generate({
@@ -11,6 +12,16 @@ export default ActionHelper.generate({
       dispatch({
         type: 'SET_VALIDATION_ERRORS',
         errors,
+        form
+      });
+    };
+  },
+
+  unset(key, form) {
+    return dispatch => {
+      dispatch({
+        type: 'UNSET_VALIDATION_ERROR',
+        key,
         form
       });
     };

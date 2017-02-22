@@ -6,33 +6,6 @@ import API from 'modules/api/index.es6';
 
 import config from 'config.es6';
 
-const validateVariant = (data, variants = []) => {
-  let errors = {};
-  let totalAllocation = 0;
-  try {
-    totalAllocation = variants.reduce((a, b) => {
-      return a.allocation + b.allocation;
-    });
-  } catch(e) {}
-  let allocationLeft = 100 - totalAllocation;
-
-  if (!data.name)
-    errors.name = ['This field is required'];
-  
-  if (!data.allocation)
-    errors.allocation = ['This field is required'];
-  else if (isNaN(data.allocation))
-    errors.allocation = ['Provide a valid number'];
-  else if (data.allocation > allocationLeft)
-    errors.allocation = [`Allocation can not be greater than 100% (${allocationLeft}% left)`];
-  
-  if (!data.payload) {
-    errors.payload = ['This field is required'];
-  }
-
-  return errors;
-};
-
 export const actions = ActionHelper.types([
   'FETCH_EXPERIMENT',
   'FETCHED_EXPERIMENT',
@@ -75,29 +48,13 @@ export default ActionHelper.generate({
     };
   },
 
-  pushVariant(data, formName) {
-    return (dispatch, getState) => {
-      dispatch({
-        type: ValidationErrorsActions.RESET_VALIDATION_ERRORS,
-        form: formName
-      });
-
-      const validationErrors = validateVariant(data, getState().experiment.data.variants);
-      if (Object.keys(validationErrors).length) {
-        dispatch({
-          type: ValidationErrorsActions.SET_VALIDATION_ERRORS,
-          form: formName,
-          errors: validationErrors
-        });
-
-        throw 'ValidationErrors';
-      }
-
+  pushVariant(data) {
+    return dispatch => {
       dispatch({
         type: actions.SET_EXPERIMENT_VARIANT,
         data
       });
-    }
+    };
   },
 
   updateVariant(newData, variant, formName) {

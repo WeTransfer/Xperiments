@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Form from 'component/form.es6';
+
 import RuleParameters from 'ruleparameters.es6';
 import RuleOperators from 'ruleoperators.es6';
 import Countries from 'countries.es6';
@@ -33,7 +35,7 @@ const dataSource = {
   country: Countries
 };
 
-export default class AddRule extends React.Component {
+export default class AddRule extends Form {
   static propTypes = {
     rule: React.PropTypes.object,
     currentRules: React.PropTypes.array,
@@ -44,7 +46,12 @@ export default class AddRule extends React.Component {
     setOperator: React.PropTypes.func,
     setValue: React.PropTypes.func,
     open: React.PropTypes.bool,
-    validationErrors: React.PropTypes.object
+    validationErrors: React.PropTypes.object,
+    unsetValidationError: React.PropTypes.func
+  }
+
+  constructor(props) {
+    super(props);
   }
 
   handleAdd = () => {
@@ -93,8 +100,11 @@ export default class AddRule extends React.Component {
         dataSource={dataSource[this.props.rule.parameter]}
         openOnFocus={true}
         ref="value"
-        onNewRequest={(request) => {this.props.setValue(request.id);}}
-        errorText={this.props.validationErrors.value || null}
+        onNewRequest={(request) => {
+          this.props.setValue(request.id);
+          this.unsetError('value');
+        }}
+        errorText={this.getError('value')}
         dataSourceConfig={{text: 'label', value: 'id'}}
         maxSearchResults={5}
       />;
@@ -104,8 +114,11 @@ export default class AddRule extends React.Component {
         defaultValue={this.props.value}
         floatingLabelText="Value"
         ref="value"
-        errorText={this.props.validationErrors.value || null}
-        onChange={(e, value) => {this.props.setValue(value);}}
+        errorText={this.getError('value')}
+        onChange={(e, value) => {
+          this.props.setValue(value);
+          this.unsetError('value');
+        }}
       />;
       operatorFieldIsDisabled = false;
     }
@@ -118,9 +131,12 @@ export default class AddRule extends React.Component {
               fullWidth={true}
               floatingLabelText="Parameter"
               value={this.props.rule.parameter}
-              onChange={(e, value, payload) => {this.props.setParameter(payload);}}
+              onChange={(e, value, payload) => {
+                this.props.setParameter(payload);
+                this.unsetError('parameter');
+              }}
               ref="parameter"
-              errorText={this.props.validationErrors.parameter || null}
+              errorText={this.getError('parameter')}
             >
               {this.getRuleParameters()}
             </SelectField>
@@ -130,9 +146,12 @@ export default class AddRule extends React.Component {
               fullWidth={true}
               floatingLabelText="Operator"
               value={this.props.rule.operator}
-              onChange={(e, key, payload) => {this.props.setOperator(payload);}}
+              onChange={(e, key, payload) => {
+                this.props.setOperator(payload);
+                this.unsetError('operator');
+              }}
               ref="operator"
-              errorText={this.props.validationErrors.operator || null}
+              errorText={this.getError('operator')}
               fullWidth={true}
               disabled={operatorFieldIsDisabled}
             >

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Form from 'component/form.es6';
+
 import VariantPayloadOptions from 'variantpayloadoptions.es6';
 import PayloadEditor from './payloadeditor.es6';
 
@@ -20,30 +22,33 @@ const styling = {
   }
 };
 
-export default class VariantForm extends React.Component {
+export default class VariantForm extends Form {
   static propTypes = {
+    variant: React.PropTypes.object,
     set: React.PropTypes.func,
-    update: React.PropTypes.func,
+    setName: React.PropTypes.func,
+    setAllocation: React.PropTypes.func,
+    setControlGroup: React.PropTypes.func,
+    setPayload: React.PropTypes.func,
+    setDescription: React.PropTypes.func,
     cancel: React.PropTypes.func,
     onAdd: React.PropTypes.func,
-    allowControlGroupSelection: React.PropTypes.props,
+    allowControlGroupSelection: React.PropTypes.bool,
     validationErrors: React.PropTypes.object,
-    variant: React.PropTypes.object
+    unsetValidationError: React.PropTypes.func
+  }
+
+  constructor(props) {
+    super(props);
   }
 
   handleAdd = () => {
-    let newData = {
-      name: this.refs.name.getValue(),
-      allocation: this.refs.allocation.getValue(),
-      control_group: this.refs.controlGroup.isChecked(),
-      description: this.refs.description.getValue(),
-      payload: this.refs.payloadeditor.getPayload
-    };
+    this.props.set(this.props.variant);
+  }
 
-    if (Object.keys(this.props.variant).length)
-      this.props.update(newData, this.props.variant);
-    else
-      this.props.set(newData);
+  handleChangeInPayloadEditor= value => {
+    this.props.setPayload(value);
+    this.unsetError('payload');
   }
 
   render() {
@@ -55,7 +60,7 @@ export default class VariantForm extends React.Component {
         style={styling.flatButton}
       />,
       <RaisedButton
-        label={Object.keys(this.props.variant).length ? 'Update' : 'Add'}
+        label="Add"
         primary={true}
         disabled={false}
         onTouchTap={this.handleAdd}
@@ -67,20 +72,26 @@ export default class VariantForm extends React.Component {
         <div className="row">
           <div className="col-md-12">
             <TextField
-              defaultValue={this.props.variant.name || ""}
+              defaultValue={this.props.variant.name}
               floatingLabelText="Name"
-              ref="name"
-              errorText={this.props.validationErrors.name || null}
+              errorText={this.getError('name')}
+              onChange={(e, value) => {
+                this.props.setName(value);
+                this.unsetError('name');
+              }}
             />
           </div>
         </div>
         <div className="row">
           <div className="col-md-5">
             <TextField
-              defaultValue={this.props.variant.allocation || ""}
+              defaultValue={this.props.variant.allocation}
               floatingLabelText="Allocation (%)"
-              ref="allocation"
-              errorText={this.props.validationErrors.allocation || null}
+              errorText={this.getError('allocation')}
+              onChange={(e, value) => {
+                this.props.setAllocation(value);
+                this.unsetError('allocation');
+              }}
             />
           </div>
           <div className="col-md-7">
@@ -89,30 +100,20 @@ export default class VariantForm extends React.Component {
               label="Control Group"
               style={styling.checkbox}
               disabled={!this.props.allowControlGroupSelection}
-              ref="controlGroup"
+              onCheck={(e, value) => {
+                this.props.setControlGroup(value);
+              }}
             />
           </div>
         </div>
         <PayloadEditor
           types={VariantPayloadOptions.web}
-          ref="payloadeditor"
-          errors={this.props.validationErrors.payload || null}
-          value={this.props.variant.payload || null}
+          validationErrors={this.props.validationErrors}
+          unsetValidationError={this.props.unsetValidationError}
+          value={this.props.variant.payload}
+          onChange={this.handleChangeInPayloadEditor}
           key="payloadeditor"
         />
-        <div className="row">
-          <div className="col-md-12">
-            <TextField
-              defaultValue={this.props.variant.description || ""}
-              floatingLabelText="Description"
-              multiLine={true}
-              rows={3}
-              fullWidth={true}
-              ref="description"
-              errorText={this.props.validationErrors.description || null}
-            />
-          </div>
-        </div>
       </Dialog>
     </div>;
   }

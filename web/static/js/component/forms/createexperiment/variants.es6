@@ -32,14 +32,22 @@ export default class Variants extends React.Component {
     editableVariant: {}
   }
 
-  showCreateVariant = (variant = {}) => {
+  showVariantForm = (variant = {}) => {
     this.setState({
       isCreateVariantVisible: true,
       editableVariant: variant
     });
   }
 
-  hideCreateVariant = () => {
+  showEditVariant = (variant) => {
+    this.showVariantForm(variant);
+  }
+
+  showCreateVariant = () => {
+    this.showVariantForm();
+  }
+
+  hideVariantForm = () => {
     this.setState({
       isCreateVariantVisible: false,
       editableVariant: {}
@@ -54,7 +62,7 @@ export default class Variants extends React.Component {
       actions.push(" | ");
     }
 
-    actions.push(<a onClick={() => this.showCreateVariant(variant)}>Edit</a>);
+    actions.push(<a onClick={e => this.showEditVariant(variant)}>Edit</a>);
     actions.push(" | ");
 
     actions.push(<a onClick={e => this.props.delete(variant)}>Delete</a>);
@@ -94,8 +102,8 @@ export default class Variants extends React.Component {
           <RaisedButton label="add variant" secondary={true} onTouchTap={this.showCreateVariant} className="pull-right" />
           <VariantFormContainer
             open={this.state.isCreateVariantVisible}
-            onCancel={this.hideCreateVariant}
-            onAdd={this.hideCreateVariant}
+            onCancel={this.hideVariantForm}
+            onAdd={this.hideVariantForm}
             variant={this.state.editableVariant}
           />
         </div>

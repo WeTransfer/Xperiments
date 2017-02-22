@@ -8,7 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
-import AddExperiment from 'component/forms/createexperiment/addexperiment.es6';
+import ExperimentForm from 'component/forms/createexperiment/experimentform.es6';
 import Rules from 'component/forms/createexperiment/rules.es6';
 import Variants from 'component/forms/createexperiment/variants.es6';
 import Exclusions from 'component/forms/createexperiment/exclusions.es6';
@@ -71,7 +71,7 @@ export default class EditExperimentPage extends React.Component {
       <Paper style={styling.paper} zDepth={1} rounded={false}>
         <h4>Edit Experiment</h4>
         <div className="spacing"></div>
-        <AddExperiment
+        <ExperimentForm
           experiment={this.props.experiment.data}
           setName={this.props.setName}
           setStartDate={this.props.setStartDate}

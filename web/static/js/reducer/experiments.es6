@@ -65,6 +65,12 @@ export default function(state = {}, action) {
         list: newList
       };
 
+    case actions.UPDATE_EXPERIMENT_STATE_FAILED:
+      return {
+        ...state,
+        isUpdatingState: false
+      };
+
     case actions.DELETE_EXPERIMENT:
       return {
         ...state,

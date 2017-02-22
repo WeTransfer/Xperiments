@@ -9,6 +9,7 @@ import newexperiment from './helper/newexperiment.es6';
 import experiment from './helper/experiment.es6';
 import experiments from './helper/experiments.es6';
 import excludableexperiments from './helper/excludableexperiments.es6';
+import newvariant from './helper/newvariant.es6';
 import newrule from './helper/newrule.es6';
 import validationerrors from './helper/validationerrors.es6';
 
@@ -22,6 +23,7 @@ const initialState = {
   experiment,
   experiments,
   excludableexperiments,
+  newvariant,
   newrule,
   validationerrors
 };

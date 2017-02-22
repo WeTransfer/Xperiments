@@ -57,9 +57,30 @@ export default class Layout extends React.Component {
           onTouchTap={this.props.resetNotification}
         />
       ];
+
+      let dialogOptions = {};
+      if (this.props.notification.title)
+        dialogOptions.title = this.props.notification.title;
+      
+      let dialogChildren = [];
+      this.props.notification.message.forEach(el => {
+        el.forEach(subEl => {
+          if (typeof subEl === 'string') {
+            dialogChildren.push(<h4>{el[0]}</h4>);
+          } else if (typeof subEl === 'object') {
+            dialogChildren.push(<ul>{subEl.map(subSubEl => {return <li>{subSubEl}</li>;})}</ul>);
+          }
+        })
+      });
+
       notification = <MuiThemeProvider>
-        <Dialog actions={actions} modal={false} open={true}>
-          {this.props.notification && this.props.notification.message ? this.props.notification.message : ''}
+        <Dialog
+          actions={actions}
+          modal={false}
+          open={true}
+          {...dialogOptions}
+        >
+          {dialogChildren}
         </Dialog>
       </MuiThemeProvider>;
     }

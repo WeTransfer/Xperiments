@@ -1,8 +1,10 @@
 import Store from 'store/index.es6';
 import ActionHelper from 'modules/redux-actions/index.es6';
 import API from 'modules/api/index.es6';
+import {actions as AppActions} from 'action/app.es6';
 
 import config from 'config.es6';
+import Helper from 'helper.es6';
 
 export const actions = ActionHelper.types([
   'FETCH_EXPERIMENTS',
@@ -11,6 +13,7 @@ export const actions = ActionHelper.types([
   'FILTER_EXPERIMENTS_BY_STATE',
   'UPDATE_EXPERIMENT_STATE',
   'UPDATED_EXPERIMENT_STATE',
+  'UPDATE_EXPERIMENT_STATE_FAILED',
   'DELETE_EXPERIMENT',
   'DELETED_EXPERIMENT'
 ]);
@@ -97,15 +100,21 @@ export default ActionHelper.generate({
               }
             });
           });
-        } else {
-          dispatch({
-            type: AppActions.SET_APP_NOTIFICATION,
-            notificationData: {
-              type: 'error',
-              message: 'There was an error updating the experiment state, please try again'
-            }
-          });
+          return;
         }
+
+        let message = await Helper.makeErrorMessage(response);
+        dispatch({
+          type: AppActions.SET_APP_NOTIFICATION,
+          notificationData: {
+            type: 'error',
+            title: 'Errors',
+            message: message || 'There was an error updating the experiment state, please try again'
+          }
+        });
+        dispatch({type: actions.UPDATE_EXPERIMENT_STATE_FAILED});
+
+        throw 'ValidationErrors';
       } catch(e) {
         throw 'APIPutFailed';
       }

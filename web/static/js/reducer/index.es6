@@ -6,6 +6,7 @@ import newexperiment from './newexperiment.es6';
 import experiment from './experiment.es6';
 import experiments from './experiments.es6';
 import excludableexperiments from './excludableexperiments.es6';
+import newvariant from './newvariant.es6';
 import newrule from './newrule.es6';
 import validationerrors from './validationerrors.es6';
 
@@ -17,6 +18,7 @@ export default Redux.combineReducers({
   experiment,
   experiments,
   excludableexperiments,
+  newvariant,
   newrule,
   validationerrors
 });

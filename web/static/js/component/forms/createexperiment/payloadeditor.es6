@@ -1,69 +1,69 @@
 import React from 'react';
 
+import Form from 'component/form.es6';
+
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
-export default class PayloadEditor extends React.Component {
-  state = {
-    type: 'none',
-    payload: {}
-  };
-
+export default class PayloadEditor extends Form {
   static propTypes = {
     types: React.PropTypes.array,
+    errors: React.PropTypes.object,
     onChange: React.PropTypes.func,
-    value: React.PropTypes.string
+    value: React.PropTypes.string,
+    validationErrors: React.PropTypes.object,
+    unsetValidationError: React.PropTypes.func
   }
 
-  componentDidMount() {
-    try {
-      if (this.props.value) {
-        let parsedValue = JSON.parse(this.props.value);
-
-        this.setState({
-          type: Object.keys(parsedValue)[0],
-          payload: parsedValue[Object.keys(parsedValue)[0]]
-        })
-      }
-    } catch(e) {}
-  }
-
-  get getPayload() {
-    let payload = {};
-    payload[this.state.type] = this.state.payload;
-    return payload;
+  constructor(props) {
+    super(props);
   }
 
   setPayload(key, value, type) {
-    let payload = Object.assign({}, this.state.payload);
-    payload[key] = value;
+    let payloadType = Object.keys(this.props.value)[0];
+    let payload = {};
+    payload[payloadType] = Object.assign({}, this.props.value[payloadType]);
+    
     if (type === 'number')
-      payload[key] = parseInt(value);
-    this.setState({payload});
+      payload[payloadType][key] = parseInt(value);
+    else
+      payload[payloadType][key] = value;
+
+    this.props.onChange(payload);
   }
 
   setType(index, type) {
     let payload = {};
 
     try {
-      payload = this.props.types[index-1].defaults;
+      payload[type] = this.props.types[index-1].defaults;
     } catch(e) {
       // throw
     }
 
-    this.setState({type, payload});
+    this.props.onChange(payload);
+  }
+
+  handlePropertyChange = (key, value, type) => {
+    this.setPayload(key, value, type);
+    this.props.unsetValidationError(`payload_${key}`);
   }
 
   makePropertyField(property) {
+    let payloadType = Object.keys(this.props.value)[0];
+    let propertyValue = this.props.value[payloadType][property.key];
+    let errorText = this.getError(`payload_${property.key}`);
+    
     if ((property.type === 'string' && !property.enum) || property.type == 'number') {
       return <div className="col-md-6">
         <TextField
+          errorText={errorText}
           fullWidth={true}
-          onChange={(e, value) => {this.setPayload(property.key, value, property.type);}}
+          onChange={(e, value) => this.handlePropertyChange(property.key, value, property.type)}
           floatingLabelText={property.title}
           disabled={!!property.disabled}
-          value={this.state.payload[property.key] || ''}
+          value={propertyValue || ''}
           key={`textfield-${property.type}-${property.key}`}
           {...property.uiOptions}
         />
@@ -75,10 +75,11 @@ export default class PayloadEditor extends React.Component {
       })
       return <div className="col-md-6">
         <SelectField
+          errorText={errorText}
           fullWidth={true}
           floatingLabelText={property.title}
-          value={this.state.payload[property.key] || null}
-          onChange={(e, index, value) => {this.setPayload(property.key, value, property.type);}}
+          value={propertyValue || null}
+          onChange={(e, index, value) => this.handlePropertyChange(property.key, value, property.type)}
           key={`selectfield-${property.type}-${property.key}`}
         >
           {options}
@@ -88,11 +89,12 @@ export default class PayloadEditor extends React.Component {
   }
 
   render() {
+    let payloadType = Object.keys(this.props.value)[0];
     let typeOptions = [];
     let selectedType = null;
 
     this.props.types.forEach(type => {
-      if ( type.key === this.state.type)
+      if ( type.key === payloadType)
         selectedType = type;
       typeOptions.push(<MenuItem value={type.key} primaryText={type.name} />)
     });
@@ -106,19 +108,18 @@ export default class PayloadEditor extends React.Component {
       })
     }
 
-    let selectTypeValidation = null;
-    if (this.props.errors && typeof this.props.errors === 'string')
-      selectTypeValidation = this.props.errors;
-
     return <div className="form__payload-editor">
       <div className="row">
         <div className="col-md-12">
           <SelectField
             fullWidth={true}
             floatingLabelText="Experiment Type"
-            value={this.state.type}
-            onChange={(e, index, value) => {this.setType(index, value);}}
-            errorText={selectTypeValidation}
+            value={payloadType}
+            onChange={(e, index, value) => {
+              this.setType(index, value);
+              this.props.unsetValidationError('payload_type');
+            }}
+            errorText={this.getError('payload_type')}
             key="selectfield-payload-type"
           >
             {typeOptions}

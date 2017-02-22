@@ -8,16 +8,16 @@ const validate = data => {
   let errors = {};
 
   if (!data.parameter)
-    errors.parameter = 'This field is required';
+    errors.parameter = ['This field is required'];
 
   if (!data.type)
-    errors.type = 'This field is required';
+    errors.type = ['This field is required'];
 
   if (!data.operator)
-    errors.operator = 'This field is required';
+    errors.operator = ['This field is required'];
 
   if (!data.value)
-    errors.value = 'This field is required';
+    errors.value = ['This field is required'];
 
   return errors;
 }
