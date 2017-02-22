@@ -19,7 +19,7 @@ defmodule Xperiments.Services.BroadcastService do
     Xperiments.Endpoint.broadcast(@channel, "stop_experiment", %{id: id})
   end
   def broadcast_state_changes("stopped", "terminated", %{id: id}) do
-    Xperiments.Endpoint.broadcast(@channel, "stop_experiment", %{id: id})
+    Xperiments.Endpoint.broadcast(@channel, "terminate_experiment", %{id: id})
   end
   def broadcast_state_changes(_, _), do: :ok # handle any other state changes
 end
