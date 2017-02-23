@@ -52,6 +52,11 @@ defmodule Xperiments.Experiment do
     embeds_many :variants, Variant, on_replace: :delete
     embeds_many :rules, Rule, on_replace: :delete
 
+    embeds_one :statistics, Statistics, primary_key: false, on_replace: :update do
+      field :common_impression, :integer, default: 0
+      field :variants_impression, :map, default: %{}
+    end
+
     timestamps()
   end
 
@@ -185,21 +190,23 @@ defmodule Xperiments.Experiment do
     end
   end
 
+  def update_statistics(id, stat) do
+    Ecto.Changeset.change(%__MODULE__{id: id})
+    |> Ecto.Changeset.put_embed(:statistics, stat)
+    |> Xperiments.Repo.update!
+  end
+
+  def set_terminated_state(id) do
+    __MODULE__.terminate(%__MODULE__{id: id, state: "stopped"})
+    |> Xperiments.Repo.update!
+  end
+
   ## Queries
 
   def ready_to_run(query) do
     from e in query,
       where: e.state in ["running", "stopped"]
   end
-
-  # def with_exclusions(query) do
-  #   exclusions_query =
-  #     from(ex in query,
-  #       where: not(ex.state in ["terminated", "deleted"]),
-  #       select: map(ex, [:id, :name]))
-  #   from(e in query,
-  #     preload: [exclusions: ^exclusions_query, other_exclusions: ^exclusions_query])
-  # end
 
   def all_for_application(app) do
     from(e in __MODULE__,

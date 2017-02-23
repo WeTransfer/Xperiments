@@ -84,4 +84,45 @@ defmodule Xperiments.Assigner.ExperimentTest do
     Experiment.remove_exclusion(context.exp.id, context.excluded_exp.id)
     assert length(Experiment.get_exclusions_list(context.exp.id)) == 0
   end
+
+  test "making a default statistics if it is not set", context do
+    {:ok, state} = Experiment.init(context.exp)
+    assert state.statistics == %{common_impression: 0, variants_impression: %{}}
+  end
+
+  test "incrementing of impression", context do
+    {:ok, state} = Experiment.init(context.exp)
+    {:noreply, new_state} = Experiment.handle_cast({:inc_impression, "any_var_id"}, state)
+    assert new_state.statistics == %{common_impression: 1,
+                                     variants_impression: %{"any_var_id" => 1}}
+    {:noreply, new_state} = Experiment.handle_cast({:inc_impression, "other_var"}, new_state)
+    assert new_state.statistics == %{common_impression: 2,
+                                     variants_impression: %{"any_var_id" => 1, "other_var" => 1}}
+  end
+
+  test "statistics saves to DB after 50(treshhold) impressions", context do
+    {:ok, state} = Experiment.init(context.exp)
+    db_exp = Xperiments.Repo.get!(Xperiments.Experiment, context.exp.id)
+    assert db_exp.statistics == nil
+    Enum.scan(0..51, state, fn _, state ->
+      {:noreply, new_state} = Experiment.handle_cast({:inc_impression, "any_var_id"}, state)
+      new_state
+    end)
+    :timer.sleep(100) # wait for an async db query
+    db_exp = Xperiments.Repo.get!(Xperiments.Experiment, context.exp.id)
+    assert db_exp.statistics ==
+      %Xperiments.Experiment.Statistics{
+        common_impression: 50,
+        variants_impression: %{"any_var_id" => 50}
+      }
+  end
+
+  test "termination of an expeiment if reached 'max_users' limit", context do
+    {:ok, state} = Experiment.init(context.exp)
+    Enum.scan(0..101, state, fn _, state ->
+      {:noreply, new_state} = Experiment.handle_cast({:inc_impression, "any_var_id"}, state)
+      new_state
+    end)
+    assert_receive :end_experiment
+  end
 end

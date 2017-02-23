@@ -8,6 +8,12 @@ defmodule Xperiments.AssignerController do
     render conn, "experiments.json", experiments: experiments
   end
 
+  def events(conn, %{"event" => "impression", "payload" => payload}) do
+    Xperiments.BroadcastService.broadcast_impression(payload["experiment_id"], payload["variant_id"])
+    put_status(conn, 200)
+    |> json(%{})
+  end
+
   # This one only for testing purpose
   # TODO: don't forget to chech auth
   def example(conn, %{"id" => id, "variant_id" => var_id}) do
