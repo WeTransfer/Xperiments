@@ -38,7 +38,7 @@ defmodule Xperiments.Assigner.Experiment do
   end
 
   defp prepare_state(experiment) do
-    Map.take(experiment, [:id, :name, :rules, :start_date, :end_date, :inserted_at, :state, :exclusions, :statistics])
+    Map.take(experiment, [:id, :name, :rules, :start_date, :end_date, :inserted_at, :state, :exclusions, :statistics, :max_users])
     |> Map.merge(%{variants: do_build_segmented_variants(experiment.variants)})
     |> prepare_statistics
   end
@@ -183,6 +183,7 @@ defmodule Xperiments.Assigner.Experiment do
         Map.update(m, var_id, 1, fn v_imp -> v_imp + 1 end)
       end)
       |> do_sync_stat_to_db(state.id)
+      |> do_terminate_if_reach_users_limit(state)
     {:noreply, Map.merge(state, %{statistics: statistics})}
   end
 
@@ -274,13 +275,23 @@ defmodule Xperiments.Assigner.Experiment do
     |> Map.drop([:segment_range])
   end
 
-  defp do_sync_stat_to_db(%{common_impression: imp} = stat, eid) when imp != 0 do
-    if rem(stat.common_impression, @stat_treshhold) == 0 do
+  defp do_sync_stat_to_db(stat, eid, force \\ false)
+  defp do_sync_stat_to_db(%{common_impression: imp} = stat, eid, force) when imp != 0 do
+    if force or rem(stat.common_impression, @stat_treshhold) == 0 do
       spawn fn ->
         Xperiments.Experiment.update_statistics(eid, stat)
       end
     end
     stat
   end
-  defp do_sync_stat_to_db(stat, _), do: stat
+  defp do_sync_stat_to_db(stat, _, _), do: stat
+
+  defp do_terminate_if_reach_users_limit(%{common_impression: imp} = stat, %{max_users: limit, id: id})
+  when not is_nil(limit) and limit > 0 and imp >= limit do
+    do_sync_stat_to_db(stat, id, true)
+    send self(), :end_experiment
+    stat
+  end
+  defp do_terminate_if_reach_users_limit(stat, _), do: stat
+
 end

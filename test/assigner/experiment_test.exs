@@ -116,4 +116,13 @@ defmodule Xperiments.Assigner.ExperimentTest do
         variants_impression: %{"any_var_id" => 50}
       }
   end
+
+  test "termination of an expeiment if reached 'max_users' limit", context do
+    {:ok, state} = Experiment.init(context.exp)
+    Enum.scan(0..101, state, fn _, state ->
+      {:noreply, new_state} = Experiment.handle_cast({:inc_impression, "any_var_id"}, state)
+      new_state
+    end)
+    assert_receive :end_experiment
+  end
 end
