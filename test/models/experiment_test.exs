@@ -132,4 +132,12 @@ defmodule Xperiments.ExperimentTest do
     changeset = Experiment.changeset_update(exp_2, %{name: "New super name"})
     refute changeset.valid?
   end
+
+  test "update statistics" do
+    exp = insert(:experiment, start_date: Timex.now |> Timex.shift(days: 1))
+    assert is_nil(exp.statistics)
+    stat = %{common_impression: 10, variants_impression: %{}}
+    exp = Experiment.update_statistics(exp.id, stat)
+    assert Map.from_struct(exp.statistics) == stat
+  end
 end

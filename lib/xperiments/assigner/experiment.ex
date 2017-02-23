@@ -6,6 +6,8 @@ defmodule Xperiments.Assigner.Experiment do
   use GenServer
   require Logger
 
+  @stat_treshhold 50 # defines how often save statistic data to DB
+
   def start_link(%{id: id} = experiment) do
     GenServer.start_link(__MODULE__, experiment, name: via_tuple(id))
   end
@@ -36,9 +38,16 @@ defmodule Xperiments.Assigner.Experiment do
   end
 
   defp prepare_state(experiment) do
-    Map.take(experiment, [:id, :name, :rules, :start_date, :end_date, :inserted_at, :state, :exclusions])
+    Map.take(experiment, [:id, :name, :rules, :start_date, :end_date, :inserted_at, :state, :exclusions, :statistics])
     |> Map.merge(%{variants: do_build_segmented_variants(experiment.variants)})
+    |> prepare_statistics
   end
+
+  defp prepare_statistics(%{statistics: nil} = exp) do
+    Map.update!(exp, :statistics, fn _ -> Map.from_struct(%Xperiments.Experiment.Statistics{}) end)
+  end
+  defp prepare_statistics(exp), do: exp
+
 
   defp validate_experiment(experiment) do
     with :gt <- DateTime.compare(experiment.end_date, DateTime.utc_now()),
@@ -83,6 +92,13 @@ defmodule Xperiments.Assigner.Experiment do
   end
   def remove_exclusion(id, caller_id) do
     GenServer.cast(via_tuple(id), {:remove_exclusion, caller_id})
+  end
+
+  @doc """
+  Increment an impression for an experiment
+  """
+  def inc_impression(id, var_id) do
+    GenServer.cast(via_tuple(id), {:inc_impression, var_id})
   end
 
   @doc """
@@ -159,6 +175,17 @@ defmodule Xperiments.Assigner.Experiment do
     {:noreply, new_state}
   end
 
+  def handle_cast({:inc_impression, var_id}, state) do
+    statistics =
+      state.statistics
+      |> Map.update!(:common_impression, & &1 + 1)
+      |> Map.update!(:variants_impression, fn m ->
+        Map.update(m, var_id, 1, fn v_imp -> v_imp + 1 end)
+      end)
+      |> do_sync_stat_to_db(state.id)
+    {:noreply, Map.merge(state, %{statistics: statistics})}
+  end
+
   def handle_call({:register_priority}, _caller, state) do
     {:ok, _} = Registry.register(:registry_priorities, self(), state.inserted_at)
     {:reply, :ok, state}
@@ -226,7 +253,6 @@ defmodule Xperiments.Assigner.Experiment do
   end
 
   # Create segment ranges for each variant based on their allocations
-  @doc false
   defp do_build_segmented_variants(variants) do
     {segmented_variants, _} =
       variants
@@ -247,4 +273,14 @@ defmodule Xperiments.Assigner.Experiment do
     |> List.first
     |> Map.drop([:segment_range])
   end
+
+  defp do_sync_stat_to_db(%{common_impression: imp} = stat, eid) when imp != 0 do
+    if rem(stat.common_impression, @stat_treshhold) == 0 do
+      spawn fn ->
+        Xperiments.Experiment.update_statistics(eid, stat)
+      end
+    end
+    stat
+  end
+  defp do_sync_stat_to_db(stat, _), do: stat
 end

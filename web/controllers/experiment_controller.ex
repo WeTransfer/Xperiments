@@ -1,7 +1,7 @@
 defmodule Xperiments.ExperimentController do
   use Xperiments.Web, :controller
   alias Xperiments.{Experiment, Exclusion, Application}
-  alias Xperiments.Services.BroadcastService
+  alias Xperiments.BroadcastService
 
   plug :scrub_params, "experiment" when action in [:create, :update]
   plug :get_application when action in [:index, :create, :update]

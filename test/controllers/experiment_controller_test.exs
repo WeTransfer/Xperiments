@@ -173,7 +173,7 @@ defmodule Xperiments.ExperimentControllerTest do
 
   describe "Pub/Sub broadcaster" do
     import Mock
-    alias Xperiments.Services.BroadcastService
+    alias Xperiments.BroadcastService
 
     def insert_runnable_experiment(state \\ "draft") do
       insert(:experiment, state: state, variants: [%{Xperiments.Factory.variant(100) | control_group: true}], start_date: Timex.now |> Timex.shift(days: 1))

@@ -13,33 +13,38 @@ defmodule Xperiments.Assigner.EventSubscriber do
   end
 
   def handle_info(%{event: "stop_experiment", payload: payload}, state) do
-    Task.async(fn ->
+    spawn fn ->
       Experiment.stop(payload.id)
-    end)
+    end
     {:noreply, state}
   end
 
   def handle_info(%{event: "run_experiment", payload: payload}, state) do
-    Task.async(fn ->
+    spawn fn ->
       Experiment.restart(payload.id)
-    end)
+    end
     {:noreply, state}
   end
 
   def handle_info(%{event: "terminate_experiment", payload: payload}, state) do
-    Task.async(fn ->
+    spawn fn ->
       ExperimentSupervisor.terminate_experiment(payload.id)
       ExperimentSupervisor.experiment_pids
       |> Enum.each(fn epid -> Experiment.remove_exclusion(epid, payload.id) end)
-    end)
+    end
     {:noreply, state}
   end
 
   def handle_info(%{event: "start_experiment", payload: %{experiment_data: experiment_data}}, state) do
-    Task.async(fn ->
+    spawn fn ->
       {:ok, _pid} = ExperimentSupervisor.start_experiment(experiment_data)
       Enum.each(experiment_data.exclusions, fn e -> Experiment.add_exclusion(e, experiment_data.id) end)
-    end)
+    end
+    {:noreply, state}
+  end
+
+  def handle_info(%{event: "event:impression", payload: payload}, state) do
+    Experiment.inc_impression(payload.eid, payload.var_id)
     {:noreply, state}
   end
 

@@ -1,5 +1,6 @@
 defmodule Xperiments.AssignerControllerTest do
   use Xperiments.ConnCase, async: false
+  import Mock
   alias Xperiments.Assigner.ExperimentSupervisor
 
   setup do
@@ -19,7 +20,6 @@ defmodule Xperiments.AssignerControllerTest do
       build(:experiment, opts)
       |> Xperiments.Factory.with_balanced_variants
       |> insert
-      |> Xperiments.Repo.preload(:exclusions)
       |> Xperiments.Assigner.ExperimentSupervisor.start_experiment
     end
   end
@@ -43,13 +43,43 @@ defmodule Xperiments.AssignerControllerTest do
     assert Enum.sort(returned_ids) == Enum.sort(ids)
   end
 
-  test "returning of a specific variant as to check how it looks like", context do
+  test "returning of a specific variant", context do
     exp = insert(:experiment)
-    var = List.first(exp.variants)
+    var = hd(exp.variants)
     body =
       get(context.conn, "#{@api_path}/experiments/#{exp.id}/variants/#{var.id}")
       |> json_response(200)
-    assert List.first(body["assign"])["id"] == exp.id
+    assert hd(body["assign"])["id"] == exp.id
+  end
+
+  describe "Impreassions" do
+    setup context do
+      exp = hd(Xperiments.Repo.all(Xperiments.Experiment))
+      [
+        conn: context.conn,
+        exp: exp,
+        call_payload: %{experiment_id: exp.id, variant_id: hd(exp.variants).id}
+      ]
+    end
+
+    test "impressions call", context do
+      with_mock Xperiments.BroadcastService, [broadcast_impression: fn(_, _) -> :ok end] do
+        post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
+        |> json_response(200)
+
+        assert called Xperiments.BroadcastService.broadcast_impression(context.exp.id, hd(context.exp.variants).id)
+      end
+    end
+
+    test "saving statistics data to DB after we reach a trashhold", context do
+      for _i <- 0..51 do
+        post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
+        |> json_response(200)
+      end
+      db_exp = Xperiments.Repo.get!(Xperiments.Experiment, context.exp.id)
+      assert db_exp.statistics.common_impression == 50
+      assert db_exp.statistics.variants_impression == %{hd(context.exp.variants).id => 50}
+    end
   end
 
   describe "Rules/Segments logic" do
