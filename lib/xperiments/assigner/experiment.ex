@@ -24,6 +24,7 @@ defmodule Xperiments.Assigner.Experiment do
   end
 
   def terminate(_reason, state) do
+    do_sync_stat_to_db(state.statistics, state.id, true)
     Logger.info "Shutting down the experiment '#{state.name}' with id #{state.id}"
     :normal
   end
@@ -286,9 +287,8 @@ defmodule Xperiments.Assigner.Experiment do
   end
   defp do_sync_stat_to_db(stat, _, _), do: stat
 
-  defp do_terminate_if_reach_users_limit(%{common_impression: imp} = stat, %{max_users: limit, id: id})
+  defp do_terminate_if_reach_users_limit(%{common_impression: imp} = stat, %{max_users: limit})
   when not is_nil(limit) and limit > 0 and imp >= limit do
-    do_sync_stat_to_db(stat, id, true)
     send self(), :end_experiment
     stat
   end
