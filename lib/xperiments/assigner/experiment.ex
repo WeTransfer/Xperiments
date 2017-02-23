@@ -23,9 +23,12 @@ defmodule Xperiments.Assigner.Experiment do
     end
   end
 
-  def terminate(_reason, state) do
+  def terminate(reason, state) do
     do_sync_stat_to_db(state.statistics, state.id, true)
-    Logger.info "Shutting down the experiment '#{state.name}' with id #{state.id}"
+    spawn fn ->
+      Xperiments.Experiment.set_terminated_state(state.id)
+    end
+    Logger.info "Shutting down the experiment '#{state.name}' with id #{state.id} with reason: #{reason}"
     :normal
   end
 

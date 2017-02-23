@@ -196,6 +196,11 @@ defmodule Xperiments.Experiment do
     |> Xperiments.Repo.update!
   end
 
+  def set_terminated_state(id) do
+    __MODULE__.terminate(%__MODULE__{id: id, state: "stopped"})
+    |> Xperiments.Repo.update!
+  end
+
   ## Queries
 
   def ready_to_run(query) do
