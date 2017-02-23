@@ -54,31 +54,38 @@ export default class PayloadEditor extends Form {
     let payloadType = Object.keys(this.props.value)[0];
     let propertyValue = this.props.value[payloadType][property.key];
     let errorText = this.getError(`payload_${property.key}`);
+
+    if (propertyValue === undefined || propertyValue === null) {
+      if (property.type === 'string')
+        propertyValue = '';
+      else
+        propertyValue = null;
+    }
     
-    if ((property.type === 'string' && !property.enum) || property.type == 'number') {
-      return <div className="col-md-6">
+    if ((property.type === 'string' || property.type == 'number') && !property.enum) {
+      return <div className="col-md-12">
         <TextField
           errorText={errorText}
           fullWidth={true}
           onChange={(e, value) => this.handlePropertyChange(property.key, value, property.type)}
           floatingLabelText={property.title}
           disabled={!!property.disabled}
-          value={propertyValue || ''}
+          value={propertyValue}
           key={`textfield-${property.type}-${property.key}`}
           {...property.uiOptions}
         />
       </div>;
-    } else if (property.type === 'string' && property.enum) {
+    } else {
       let options = [];
       property.enum.forEach(option => {
         options.push(<MenuItem value={option.value} primaryText={option.label} />);
       })
-      return <div className="col-md-6">
+      return <div className="col-md-12">
         <SelectField
           errorText={errorText}
           fullWidth={true}
           floatingLabelText={property.title}
-          value={propertyValue || null}
+          value={propertyValue}
           onChange={(e, index, value) => this.handlePropertyChange(property.key, value, property.type)}
           key={`selectfield-${property.type}-${property.key}`}
         >

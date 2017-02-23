@@ -37,11 +37,11 @@ const options = [
     defaults: {
       text: 'ExperimentTooltip',
       align: '.transfer__window',
-      timeout: null,
-      delay: null,
+      timeout: 0,
+      delay: 1000,
       buttonText: null,
       buttonAction: null,
-      when: 'transferInProgress'
+      when: null
     },
     schema: {
       type: 'object',
@@ -49,27 +49,49 @@ const options = [
         {
           key: 'delay',
           type: 'number',
-          title: 'Show after (in milliseconds)'
+          title: 'Show after (seconds)',
+          enum: [
+            {label: '0', value: 0},
+            {label: '1', value: 1000},
+            {label: '2', value: 2000},
+            {label: '3', value: 3000},
+            {label: '4', value: 4000},
+            {label: '5', value: 5000},
+            {label: '10', value: 10000},
+            {label: '15', value: 15000},
+            {label: '20', value: 20000}
+          ]
         },
         {
           key: 'timeout',
           type: 'number',
-          title: 'For a period of (in milliseconds)'
+          title: 'For a period of (seconds)*',
+          enum: [
+            {label: '0', value: 0},
+            {label: '1', value: 1000},
+            {label: '2', value: 2000},
+            {label: '3', value: 3000},
+            {label: '4', value: 4000},
+            {label: '5', value: 5000},
+            {label: '10', value: 10000},
+            {label: '15', value: 15000},
+            {label: '20', value: 20000}
+          ]
         },
         {
           key: 'when',
           type: 'string',
           enum: [
-            {label: 'upload is in progress', value: 'transferInProgress'},
-            {label: 'transfer upload is complete', value: 'transferComplete'},
-            {label: 'transfer download has started', value: 'transferDownloadStarted'},
+            {label: 'transfer is uploading', value: 'transferInProgress'},
+            {label: 'transfer has uploaded', value: 'transferComplete'},
+            {label: 'transfer is downloading', value: 'transferDownloadStarted'},
           ],
-          title: 'When'
+          title: 'Show tooltip when'
         },
         {
           key: 'textContent',
           type: 'string',
-          title: 'what',
+          title: 'Tooltip Text',
           uiOptions: {
             multiLine: true,
             rows: 3
@@ -125,7 +147,7 @@ const options = [
           title: 'Text',
           uiOptions: {
             multiLine: true,
-            rows: 2
+            rows: 3
           }
         }
       ]

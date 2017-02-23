@@ -36,25 +36,31 @@ const validate = (data, variants = []) => {
         
         if (!data.payload[payloadType].pathname)
           errors.payload_search = ['This field is required'];
+      break;
       case 'transferBubble':
-        if (!data.payload[payloadType].delay)
+        if (data.payload[payloadType].delay === null)
           errors.payload_delay = ['This field is required'];
         else if (isNaN(data.payload[payloadType].delay))
           errors.payload_delay = ['Provide a valid number'];
         
-        if (!data.payload[payloadType].timeout)
+        if (data.payload[payloadType].timeout === null)
           errors.payload_timeout = ['This field is required'];
         else if (isNaN(data.payload[payloadType].timeout))
           errors.payload_timeout = ['Provide a valid number'];
 
         if (!data.payload[payloadType].textContent)
           errors.payload_textContent = ['This field is required'];
+
+        if (!data.payload[payloadType].when)
+          errors.payload_when = ['This field is required'];
+      break;
       case 'mobileHeader':
         if (!data.payload[payloadType].pathname)
           errors.payload_pathname = ['This field is required'];
 
         if (!data.payload[payloadType].text)
           errors.payload_text = ['This field is required'];
+      break;
       case 'custom':
         if (!data.payload[payloadType].content) {
           errors.payload_content = ['This field is required'];
@@ -65,6 +71,7 @@ const validate = (data, variants = []) => {
             errors.payload_content = ['Provide a valid JSON'];
           }
         }
+      break;
     }
   }
 
@@ -78,6 +85,7 @@ export const actions = ActionHelper.types([
 
 export default ActionHelper.generate({
   setValues(data) {
+    console.log(data);
     return dispatch => {
       dispatch({
         type: actions.SET_NEW_VARIANT_VALUES,

@@ -68,7 +68,14 @@ export default class VariantForm extends Form {
     ];
 
     return <div className="form__variant">
-      <Dialog title="Add Variant" actions={actions} modal={true} open={this.props.open} repositionOnUpdate={true}>
+      <Dialog
+        title="Add Variant"
+        actions={actions}
+        modal={true}
+        open={this.props.open}
+        repositionOnUpdate={true}
+        autoScrollBodyContent={true}
+      >
         <div className="row">
           <div className="col-md-12">
             <TextField
