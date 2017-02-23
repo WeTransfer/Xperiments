@@ -76,6 +76,7 @@ defmodule Xperiments.AssignerControllerTest do
         post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
         |> json_response(200)
       end
+      :timer.sleep 100 # yep, async tests are hard
       db_exp = Xperiments.Repo.get!(Xperiments.Experiment, context.exp.id)
       assert db_exp.statistics.common_impression == 50
       assert db_exp.statistics.variants_impression == %{hd(context.exp.variants).id => 50}
