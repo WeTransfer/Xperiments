@@ -100,6 +100,14 @@ export default ActionHelper.generate({
               }
             });
           });
+
+          dispatch({
+            type: AppActions.SET_APP_NOTIFICATION,
+            notificationData: {
+              type: 'info',
+              message: `experiment was updated`
+            }
+          });
           return;
         }
 
