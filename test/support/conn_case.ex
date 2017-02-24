@@ -33,6 +33,16 @@ defmodule Xperiments.ConnCase do
     end
   end
 
+  @default_opts [
+    store: :cookie,
+    key: "foobar",
+    encryption_salt: "encrypted cookie salt",
+    signing_salt: "signing salt",
+    log: false
+  ]
+
+  @signing_opts Plug.Session.init(Keyword.put(@default_opts, :encrypt, false))
+
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Xperiments.Repo)
 
@@ -40,6 +50,9 @@ defmodule Xperiments.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(Xperiments.Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    conn =
+      Phoenix.ConnTest.build_conn()
+
+    {:ok, conn: conn}
   end
 end

@@ -3,8 +3,15 @@ defmodule Xperiments.ApplicationControllerTest do
   alias Xperiments.Application
 
   setup do
+    user = insert(:user)
+
     conn =
       build_conn()
+      |> bypass_through(Xperiments.Router, [:api, :browser])
+      |> get("/")
+      |> Guardian.Plug.sign_in(user, :token, [])
+      |> send_resp(200, "Flush the session yo")
+      |> recycle()
       |> put_req_header("accept", "application/json")
 
     insert(:application)
