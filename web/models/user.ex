@@ -7,6 +7,7 @@ defmodule Xperiments.User do
     field :email, :string
     field :name, :string
     field :role, :string, default: "user"
+    field :avatar_uri, :string
 
     timestamps()
   end
@@ -23,14 +24,22 @@ defmodule Xperiments.User do
   ## Auth
 
   def find_or_create(%Auth{} = auth) do
+    IO.inspect prepare_user_struct(auth.info)
     case Repo.get_by(__MODULE__, email: auth.info.email) do
       nil ->
         user =
-          changeset(%__MODULE__{}, Map.from_struct(auth.info))
+          changeset(%__MODULE__{}, prepare_user_struct(auth.info))
           |> Repo.insert!
         {:ok, user}
       user -> {:ok, user}
     end
+  end
+
+  defp prepare_user_struct(auth_info) do
+    auth_info
+    |> Map.from_struct
+    |> Map.take([:name, :email])
+    |> Map.merge(%{avatar_uri: auth_info.image})
   end
 
   ## Serializer
@@ -39,7 +48,7 @@ defmodule Xperiments.User do
     def encode(model, _opts) do
       model
       |> Map.from_struct
-      |> Map.take([:name, :email, :role])
+      |> Map.take([:name, :email, :role, :id, :avatar_uri])
       |> Poison.encode!
     end
   end
