@@ -19,8 +19,8 @@ const validate = (data, variants = []) => {
     errors.allocation = ['This field is required'];
   else if (isNaN(data.allocation))
     errors.allocation = ['Provide a valid number'];
-  else if (totalAllocation + data.allocation > 100)
-    errors.allocation = [`Allocation can not be greater than 100% (currently allocated: ${totalAllocation}%)`];
+  // else if (totalAllocation + data.allocation > 100)
+  //   errors.allocation = [`Allocation can not be greater than 100% (currently allocated: ${totalAllocation}%)`];
   
   if (!data.payload) {
     errors.payload_type = ['This field is required'];

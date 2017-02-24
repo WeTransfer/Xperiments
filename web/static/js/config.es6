@@ -7,14 +7,17 @@
 // });
 
 let currentAppName = 'web';
-const BASE_PATH = `/api/v1/applications/${currentAppName}`;
+const BASE_PATH = `/api/v1`;
 
 export default {
   api: {
     resources: {
+      applications: {
+        GET: `${BASE_PATH}/applications`
+      },
       experiments: {
-        GET: `${BASE_PATH}/experiments`,
-        POST: `${BASE_PATH}/experiments`
+        GET: `${BASE_PATH}/applications/${currentAppName}/experiments`,
+        POST: `${BASE_PATH}/applications/${currentAppName}/experiments`
       }
     }
   },
