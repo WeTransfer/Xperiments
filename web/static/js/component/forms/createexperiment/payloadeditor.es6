@@ -37,7 +37,7 @@ export default class PayloadEditor extends Form {
     let payload = {};
 
     try {
-      payload[type] = this.props.types[index-1].defaults;
+      payload[type] = this.props.types[index].defaults;
     } catch(e) {
       // throw
     }
@@ -45,9 +45,15 @@ export default class PayloadEditor extends Form {
     this.props.onChange(payload);
   }
 
-  handlePropertyChange = (key, value, type) => {
-    this.setPayload(key, value, type);
-    this.props.unsetValidationError(`payload_${key}`);
+  handlePropertyChange = (property, value) => {
+    this.setPayload(property.key, value, property.type);
+    this.props.unsetValidationError(`payload_${property.key}`);
+
+    if (property.requires) {
+      property.requires.forEach(propertyName => {
+        this.props.unsetValidationError(`payload_${propertyName}`);
+      })
+    }
   }
 
   makePropertyField(property) {
@@ -67,7 +73,7 @@ export default class PayloadEditor extends Form {
         <TextField
           errorText={errorText}
           fullWidth={true}
-          onChange={(e, value) => this.handlePropertyChange(property.key, value, property.type)}
+          onChange={(e, value) => this.handlePropertyChange(property, value)}
           floatingLabelText={property.title}
           disabled={!!property.disabled}
           value={propertyValue}
@@ -86,7 +92,7 @@ export default class PayloadEditor extends Form {
           fullWidth={true}
           floatingLabelText={property.title}
           value={propertyValue}
-          onChange={(e, index, value) => this.handlePropertyChange(property.key, value, property.type)}
+          onChange={(e, index, value) => this.handlePropertyChange(property, value)}
           key={`selectfield-${property.type}-${property.key}`}
         >
           {options}

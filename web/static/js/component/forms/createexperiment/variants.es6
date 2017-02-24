@@ -6,7 +6,8 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 
-import VariantFormContainer from 'containers/variantform.es6';
+import CreateVariantFormContainer from 'containers/createvariantform.es6';
+import EditVariantFormContainer from 'containers/editvariantform.es6';
 
 const styling = {
   emptyTD: {
@@ -29,29 +30,31 @@ export default class Variants extends React.Component {
 
   state = {
     isCreateVariantVisible: false,
-    editableVariant: {}
+    editableVariant: null
   }
 
-  showVariantForm = (variant = {}) => {
+  showEditVariant = (variant) => {
     this.setState({
-      isCreateVariantVisible: true,
       editableVariant: variant
     });
   }
 
-  showEditVariant = (variant) => {
-    this.showVariantForm(variant);
+  hideEditVariant = (variant) => {
+    this.setState({
+      editableVariant: null
+    });
   }
 
   showCreateVariant = () => {
-    this.showVariantForm();
+    this.setState({
+      isCreateVariantVisible: true 
+    });
   }
 
-  hideVariantForm = () => {
+  hideCreateVariant = () => {
     this.setState({
-      isCreateVariantVisible: false,
-      editableVariant: {}
-    });
+      isCreateVariantVisible: false 
+    }); 
   }
 
   getActions(variant) {
@@ -95,16 +98,25 @@ export default class Variants extends React.Component {
       </TableRow>);
     }
 
+    let editVariantForm = null;
+    if (this.state.editableVariant) {
+      editVariantForm = <EditVariantFormContainer
+        open={true}
+        onCancel={this.hideEditVariant}
+        onAdd={this.hideEditVariant}
+        variant={this.state.editableVariant}
+      />;
+    }
+
     return <div className="variants__manager">
       <div className="row">
         <div className="col-md-6"><h4>{this.props.title}</h4></div>
         <div className="col-md-6">
           <RaisedButton label="add variant" secondary={true} onTouchTap={this.showCreateVariant} className="pull-right" />
-          <VariantFormContainer
+          <CreateVariantFormContainer
             open={this.state.isCreateVariantVisible}
-            onCancel={this.hideVariantForm}
-            onAdd={this.hideVariantForm}
-            variant={this.state.editableVariant}
+            onCancel={this.hideCreateVariant}
+            onAdd={this.hideCreateVariant}
           />
         </div>
       </div>
@@ -124,6 +136,7 @@ export default class Variants extends React.Component {
           </Table>
         </div>
       </div>
+      {editVariantForm}
     </div>;
   }
 }

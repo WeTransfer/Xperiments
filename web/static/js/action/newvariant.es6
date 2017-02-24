@@ -10,10 +10,13 @@ const validate = (data, variants = []) => {
   let totalAllocation = 0;
   try {
     totalAllocation = variants.reduce((a, b) => {
+      console.log(a.allocation, b.allocation);
       return a.allocation + b.allocation;
     });
   } catch(e) {}
   let allocationLeft = 100 - totalAllocation;
+
+  console.log(totalAllocation);
 
   if (!data.name)
     errors.name = ['This field is required'];
@@ -34,7 +37,7 @@ const validate = (data, variants = []) => {
         if (!data.payload[payloadType].pathname)
           errors.payload_pathname = ['This field is required'];
         
-        if (!data.payload[payloadType].pathname)
+        if (!data.payload[payloadType].search)
           errors.payload_search = ['This field is required'];
       break;
       case 'transferBubble':
@@ -53,6 +56,9 @@ const validate = (data, variants = []) => {
 
         if (!data.payload[payloadType].when)
           errors.payload_when = ['This field is required'];
+
+        if (data.payload[payloadType].buttonText && !data.payload[payloadType].buttonAction)
+          errors.payload_buttonAction = ['This field is required'];
       break;
       case 'mobileHeader':
         if (!data.payload[payloadType].pathname)
@@ -85,7 +91,6 @@ export const actions = ActionHelper.types([
 
 export default ActionHelper.generate({
   setValues(data) {
-    console.log(data);
     return dispatch => {
       dispatch({
         type: actions.SET_NEW_VARIANT_VALUES,
@@ -105,7 +110,7 @@ export default ActionHelper.generate({
   validate(data, formName) {
     return (dispatch, getState) => {
       const {experiment} = getState();
-      const validationErrors = validate(data, experiment.variants);
+      const validationErrors = validate(data, experiment.data.variants);
       if (Object.keys(validationErrors).length) {
         dispatch({
           type: ValidationErrorsActions.SET_VALIDATION_ERRORS,

@@ -21,12 +21,12 @@ const options = [
         {
           key: 'pathname',
           type: 'string',
-          title: 'Link'
+          title: 'Link*'
         },
         {
           key: 'search',
           type: 'string',
-          title: 'Tracking ID'
+          title: 'Tracking ID*'
         }
       ]
     }
@@ -37,8 +37,8 @@ const options = [
     defaults: {
       text: 'ExperimentTooltip',
       align: '.transfer__window',
-      timeout: 0,
-      delay: 1000,
+      delay: 0,
+      timeout: 5000,
       buttonText: null,
       buttonAction: null,
       when: null
@@ -49,7 +49,7 @@ const options = [
         {
           key: 'delay',
           type: 'number',
-          title: 'Show after (seconds)',
+          title: 'Show after (seconds)*',
           enum: [
             {label: '0', value: 0},
             {label: '1', value: 1000},
@@ -82,16 +82,17 @@ const options = [
           key: 'when',
           type: 'string',
           enum: [
+            {label: '', value: null},
             {label: 'transfer is uploading', value: 'transferInProgress'},
             {label: 'transfer has uploaded', value: 'transferComplete'},
             {label: 'transfer is downloading', value: 'transferDownloadStarted'},
           ],
-          title: 'Show tooltip when'
+          title: 'Show tooltip when*'
         },
         {
           key: 'textContent',
           type: 'string',
-          title: 'Tooltip Text',
+          title: 'Tooltip Text*',
           uiOptions: {
             multiLine: true,
             rows: 3
@@ -100,7 +101,8 @@ const options = [
         {
           key: 'buttonText',
           type: 'string',
-          title: 'Button Text'
+          title: 'Button Text',
+          requires: ['buttonAction']
         },
         {
           key: 'buttonAction',
@@ -139,12 +141,12 @@ const options = [
         {
           key: 'pathname',
           type: 'string',
-          title: 'Pathname'
+          title: 'Pathname*'
         },
         {
           key: 'text',
           type: 'string',
-          title: 'Text',
+          title: 'Text*',
           uiOptions: {
             multiLine: true,
             rows: 3
@@ -157,7 +159,7 @@ const options = [
     name: 'Singup Form - Plan Selector Type',
     key: 'signupFormPlanSelectorType',
     defaults: {
-      type: null
+      type: 'original'
     },
     schema: {
       type: 'object',
@@ -165,7 +167,7 @@ const options = [
         {
           key: 'type',
           type: 'string',
-          title: 'Type',
+          title: 'Type*',
           enum: [
             {label: 'default', value: 'original'},
             {label: 'full width', value: 'fullWidthBlock'},

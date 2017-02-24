@@ -60,7 +60,7 @@ export default class VariantForm extends Form {
         style={styling.flatButton}
       />,
       <RaisedButton
-        label="Add"
+        label={this.props.editing ? 'Update' : 'Add'}
         primary={true}
         disabled={false}
         onTouchTap={this.handleAdd}
@@ -69,7 +69,7 @@ export default class VariantForm extends Form {
 
     return <div className="form__variant">
       <Dialog
-        title="Add Variant"
+        title={`${this.props.editing ? 'Edit' : 'Add'} Variant`}
         actions={actions}
         modal={true}
         open={this.props.open}
