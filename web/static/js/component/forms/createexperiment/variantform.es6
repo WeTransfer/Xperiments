@@ -96,7 +96,7 @@ export default class VariantForm extends Form {
               floatingLabelText="Allocation (%)"
               errorText={this.getError('allocation')}
               onChange={(e, value) => {
-                this.props.setAllocation(value);
+                this.props.setAllocation(parseFloat(value));
                 this.unsetError('allocation');
               }}
             />
