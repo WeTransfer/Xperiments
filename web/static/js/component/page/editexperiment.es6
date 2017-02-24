@@ -82,6 +82,7 @@ export default class EditExperimentPage extends React.Component {
           setMaxUsers={this.props.setMaxUsers}
           setSamplingRate={this.props.setSamplingRate}
           validationErrors={this.props.validationErrors}
+          unsetValidationError={this.props.unsetValidationError}
         />
         </Paper>
         <div className="spacing spacing--is-30"></div>
