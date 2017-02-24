@@ -4,7 +4,9 @@ const DEFAULT_OPTIONS = {
 
 export default {
   get: (...args) => {
-    return window.fetch(args);
+    return window.fetch(args, {
+      credentials: 'include'
+    });
   },
 
   post: (url, data) => {

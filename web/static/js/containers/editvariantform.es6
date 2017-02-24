@@ -9,7 +9,6 @@ let setValuesFromProperty = true;
 const setValue = (key, value) => {
   let data = {};
   data[key] = value;
-  console.log(data);
   return Actions.NewVariant.setValues(data);
 }
 
@@ -25,7 +24,6 @@ const _allowControlGroupSelection = (variants = []) => {
 const mapStateToProps = (state, ownProps) => {
   let allowControlGroupSelection = _allowControlGroupSelection(state.experiment.data.variants);
 
-  console.log(setValuesFromProperty);
   if (setValuesFromProperty) {
     state.newvariant = Object.assign(state.newvariant, ownProps.variant);
     state.newvariant.payload = JSON.parse(ownProps.variant.payload);
