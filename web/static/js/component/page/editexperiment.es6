@@ -47,6 +47,12 @@ export default class EditExperimentPage extends React.Component {
   componentWillMount() {
     Store.dispatch(Actions.Experiment.get(this.props.params.experimentId));
     Store.dispatch(Actions.Experiments.list());
+    Store.dispatch(Actions.ExcludableExperiments.list());
+  }
+
+  componentDidUpdate() {
+    if (Object.keys(this.props.validationErrors).length)
+      scroll(0, 0);
   }
 
   handleClickOnSave = () => {
@@ -67,6 +73,15 @@ export default class EditExperimentPage extends React.Component {
       </div>;
     }
 
+    let saveButtonOptions = {
+      label: "update"
+    };
+
+    if (this.props.experiment.isUpdating){
+      saveButtonOptions.disabled = true;
+      saveButtonOptions.label = "updating";
+    }
+
     return <div className="page__edit-experiment">
       <Paper style={styling.paper} zDepth={1} rounded={false}>
         <h4>Edit Experiment</h4>
@@ -82,6 +97,7 @@ export default class EditExperimentPage extends React.Component {
           setMaxUsers={this.props.setMaxUsers}
           setSamplingRate={this.props.setSamplingRate}
           validationErrors={this.props.validationErrors}
+          unsetValidationError={this.props.unsetValidationError}
         />
         </Paper>
         <div className="spacing spacing--is-30"></div>
@@ -113,7 +129,7 @@ export default class EditExperimentPage extends React.Component {
       <div className="spacing"></div>
       <div className="pull-right">
         <Link to="/experiments"><FlatButton label="cancel" style={styling.button.flat} /></Link>
-        <RaisedButton label="save" primary={true} onTouchTap={this.handleClickOnSave} />
+        <RaisedButton primary={true} onTouchTap={this.handleClickOnSave} {...saveButtonOptions} />
       </div>
     </div>;
   }
