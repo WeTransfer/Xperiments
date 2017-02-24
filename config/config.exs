@@ -29,6 +29,26 @@ config :phoenix, :generators,
 config :xperiments, :cors,
   origin: "*"
 
+config :ueberauth, Ueberauth,
+  providers: [
+    google: {Ueberauth.Strategy.Google, [default_scope: "email profile"]}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+  client_id: System.get_env("GOOGLE_CLIENT_ID"),
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
+  redirect_uri: "http://lvh.me:5000"
+
+config :guardian, Guardian,
+  allowed_algos: ["HS512"], # optional
+  verify_module: Guardian.JWT,  # optional
+  issuer: "Xperiments",
+  ttl: { 30, :minutes },
+  allowed_drift: 2000,
+  verify_issuer: true, # optional,
+  secret_key: "VUAEd0LDnbMzsVl391tovxEoZ46UJAJBZRl2ZN5xfHt0wDXaMCohlERy/IP8SZvZ",
+  serializer: Xperiments.GuardianSerializer
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

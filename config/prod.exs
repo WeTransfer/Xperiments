@@ -1,6 +1,6 @@
 use Mix.Config
 
-For production, we configure the host to read the PORT
+# For production, we configure the host to read the PORT
 # from the system environment. Therefore, you will need
 # to set PORT=80 before running your server.
 #
@@ -22,6 +22,8 @@ config :xperiments, :cors,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+  redirect_uri: "https://xperiments.wetransfer.net"
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

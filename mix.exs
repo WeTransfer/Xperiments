@@ -19,7 +19,7 @@ defmodule Xperiments.Mixfile do
   def application do
     [mod: {Xperiments, []},
      applications: [:phoenix, :phoenix_pubsub, :cowboy, :logger,
-                    :phoenix_ecto, :postgrex, :timex]]
+                    :phoenix_ecto, :postgrex, :timex, :ueberauth, :ueberauth_google]]
   end
 
   # Specifies which paths to compile per environment.
@@ -39,6 +39,9 @@ defmodule Xperiments.Mixfile do
      {:ecto_state_machine, "~> 0.3.0"},
      {:timex, "~> 3.0"},
      {:cors_plug, "~> 1.2"},
+     {:ueberauth, "~> 0.4"},
+     {:ueberauth_google, "~> 0.5"},
+     {:guardian, "~> 0.14"},
      {:ex_machina, "~> 1.0", only: :test},
      {:mock, "~> 0.2.0", only: :test}]
   end

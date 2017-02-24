@@ -7,14 +7,42 @@ defmodule Xperiments.Router do
 
   pipeline :browser do
     plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+  end
+
+  pipeline :browser_auth do
+    plug Guardian.Plug.VerifySession
+    plug Guardian.Plug.EnsureAuthenticated, handler: Xperiments.SessionController
   end
 
   pipeline :external do
     plug CORSPlug, origin: Application.get_env(:xperiments, :cors)[:origin]
   end
 
+  pipeline :api_auth do
+    plug :fetch_session
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+    plug Guardian.Plug.VerifySession
+    plug Guardian.Plug.EnsureAuthenticated
+    plug Xperiments.Plug.RefreshJwtToken
+  end
+
+  scope "/auth", Xperiments do
+    pipe_through :browser
+
+    get "/login", SessionController, :new, as: :login
+    get "/logout", SessionController, :delete
+
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+  end
+
   scope "/api/v1", Xperiments do
-    pipe_through :api
+    pipe_through [:api, :api_auth]
 
     resources "/applications", ApplicationController, only: [:index], param: :name do
       resources "/experiments", ExperimentController, except: [:delete, :new] do
@@ -39,9 +67,8 @@ defmodule Xperiments.Router do
 
   # should be last, because scope is too wide
   scope "/", Xperiments do
-    pipe_through :browser
+    pipe_through [:browser, :browser_auth]
 
     forward "/", HomeController, :index
   end
-
 end
