@@ -8,12 +8,9 @@ const validate = (data, variants = []) => {
   let errors = {};
 
   let totalAllocation = 0;
-  try {
-    totalAllocation = variants.forEach(variant => {
-      totalAllocation += variant.allocation;
-    });
-  } catch(e) {}
-  let allocationLeft = 100 - totalAllocation;
+  variants.forEach(variant => {
+    totalAllocation += variant.allocation;
+  });
 
   if (!data.name)
     errors.name = ['This field is required'];
@@ -22,8 +19,8 @@ const validate = (data, variants = []) => {
     errors.allocation = ['This field is required'];
   else if (isNaN(data.allocation))
     errors.allocation = ['Provide a valid number'];
-  else if (allocationLeft < 0 || allocationLeft === 0 || data.allocation > allocationLeft)
-    errors.allocation = [`Allocation can not be greater than 100% (${allocationLeft}% left)`];
+  else if (totalAllocation + data.allocation > 100)
+    errors.allocation = [`Allocation can not be greater than 100% (currently allocated: ${totalAllocation}%)`];
   
   if (!data.payload) {
     errors.payload_type = ['This field is required'];

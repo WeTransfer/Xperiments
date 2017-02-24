@@ -17,5 +17,10 @@ export default {
         POST: `${BASE_PATH}/experiments`
       }
     }
+  },
+  notification: {
+    info: {
+      autohide: 5000
+    }
   }
 };

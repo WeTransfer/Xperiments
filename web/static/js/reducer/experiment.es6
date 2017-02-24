@@ -24,6 +24,12 @@ export default function(state = {}, action) {
         isUpdating: true
       };
 
+    case actions.UPDATE_EXPERIMENT_FAILED:
+      return {
+        ...state,
+        isUpdating: false
+      };
+
     case actions.UPDATED_EXPERIMENT:
       return {
         ...state,

@@ -4,12 +4,14 @@ import Actions from 'action/index.es6';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Link} from 'react-router';
 
+import config from 'config.es6';
 import VisibleApplicationsMenu from 'containers/visibleapplicationsmenu.es6';
 
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
+import Snackbar from 'material-ui/Snackbar';
 
 const styling = {
   paper: {
@@ -43,46 +45,58 @@ export default class Layout extends React.Component {
 
   selectTab = (event, index, selectedTab) => this.setState({selectedTab});
 
+  getErrorNotification() {
+    let actions = [
+      <FlatButton
+        label="Okay"
+        primary={true}
+        onTouchTap={this.props.resetNotification}
+      />
+    ];
+
+    let dialogOptions = {};
+    if (this.props.notification.title)
+      dialogOptions.title = this.props.notification.title;
+    
+    let dialogChildren = [];
+    this.props.notification.message.forEach(el => {
+      el.forEach(subEl => {
+        if (typeof subEl === 'string') {
+          dialogChildren.push(<h4>{el[0]}</h4>);
+        } else if (typeof subEl === 'object') {
+          dialogChildren.push(<ul>{subEl.map(subSubEl => {return <li>{subSubEl}</li>;})}</ul>);
+        }
+      })
+    });
+
+    return <Dialog
+      actions={actions}
+      modal={false}
+      open={true}
+      {...dialogOptions}
+    >
+      {dialogChildren}
+    </Dialog>;
+  }
+
   render() {
     const {applications} = Store.getState();
 
     if (applications.isFetching) return null;
 
     let notification = null;
+    let snackbar = {
+      show: false,
+      message: ''
+    };
     if (this.props.notification) {
-      let actions = [
-        <FlatButton
-          label="Okay"
-          primary={true}
-          onTouchTap={this.props.resetNotification}
-        />
-      ];
-
-      let dialogOptions = {};
-      if (this.props.notification.title)
-        dialogOptions.title = this.props.notification.title;
-      
-      let dialogChildren = [];
-      this.props.notification.message.forEach(el => {
-        el.forEach(subEl => {
-          if (typeof subEl === 'string') {
-            dialogChildren.push(<h4>{el[0]}</h4>);
-          } else if (typeof subEl === 'object') {
-            dialogChildren.push(<ul>{subEl.map(subSubEl => {return <li>{subSubEl}</li>;})}</ul>);
-          }
-        })
-      });
-
-      notification = <MuiThemeProvider>
-        <Dialog
-          actions={actions}
-          modal={false}
-          open={true}
-          {...dialogOptions}
-        >
-          {dialogChildren}
-        </Dialog>
-      </MuiThemeProvider>;
+      if (this.props.notification.type === 'error') {
+        notification = <MuiThemeProvider>{this.getErrorNotification()}</MuiThemeProvider>;
+      } else if (this.props.notification.type === 'info') {
+        snackbar.show = true;
+        snackbar.message = this.props.notification.message
+        snackbar.onClose = () => Store.dispatch(Actions.App.resetNotification());
+      }
     }
 
     let children = null;
@@ -106,6 +120,14 @@ export default class Layout extends React.Component {
       </MuiThemeProvider>
       {children}
       {notification}
+      <MuiThemeProvider>
+        <Snackbar
+          open={snackbar.show}
+          message={snackbar.message}
+          autoHideDuration={config.notification.info.autohide}
+          onRequestClose={snackbar.onClose}
+        />
+      </MuiThemeProvider>
     </div>;
   }
 }

@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import Paper from 'material-ui/Paper';
 
-import CreateExperimentStepOne from 'containers/createexperiment.es6';
+import CreateExperimentForm from 'containers/createexperiment.es6';
 import VisibleExperimentsList from 'containers/visibleexperimentslist.es6';
 
 const styling = {
@@ -55,7 +55,11 @@ export default class ExperimentsDashboardPage extends React.Component {
           </Paper>
         </div>
       </div>
-      <CreateExperimentStepOne isVisible={this.state.isCreateExperimentVisible} onClose={this.hideCreateExperiment} onSave={this.hideCreateExperiment} />
+      <CreateExperimentForm
+        isVisible={this.state.isCreateExperimentVisible}
+        onClose={this.hideCreateExperiment}
+        onSave={this.hideCreateExperiment}
+      />
     </div>
   }
 }

@@ -11,6 +11,7 @@ export const actions = ActionHelper.types([
   'FETCHED_EXPERIMENT',
   'UPDATE_EXPERIMENT',
   'UPDATED_EXPERIMENT',
+  'UPDATE_EXPERIMENT_FAILED',
   'SET_EXPERIMENT_VALUES',
   'SET_EXPERIMENT_VARIANT',
   'UPDATE_EXPERIMENT_VARIANT',
@@ -120,11 +121,20 @@ export default ActionHelper.generate({
               data: json.experiment
             });
 
+            // dispatch({
+            //   type: AppActions.SET_APP_REDIRECT,
+            //   path: '/experiments/'
+            // });
+
             dispatch({
-              type: AppActions.SET_APP_REDIRECT,
-              path: '/experiments/'
+              type: AppActions.SET_APP_NOTIFICATION,
+              notificationData: {
+                type: 'info',
+                message: `${json.experiment.name} was updated`
+              }
             });
           });
+          return;
         } else if(response.status === 422) {
           response.json().then(json => {
             const validationErrors = json.errors;
@@ -146,6 +156,8 @@ export default ActionHelper.generate({
             }
           });
         }
+
+        dispatch({type: actions.UPDATE_EXPERIMENT_FAILED});
       } catch(e) {
         throw 'APIPutFailed';
       }
