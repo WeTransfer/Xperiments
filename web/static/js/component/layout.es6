@@ -14,6 +14,9 @@ import Paper from 'material-ui/Paper';
 import Snackbar from 'material-ui/Snackbar';
 
 const styling = {
+  h3: {
+    fontWeight: 300
+  },
   paper: {
     paddingLeft: 20,
     paddingRight: 20,
@@ -138,10 +141,13 @@ export default class Layout extends React.Component {
       <MuiThemeProvider>
         <Paper style={styling.paper} zDepth={1} rounded={false}>
           <div className="row">
-            <div className="col-md-4">
+            <div className="col-xs-12 col-md-2">
+              <h3 style={styling.h3}>Xperiments</h3>
+            </div>
+            <div className="col-xs-4 col-md-3">
               <VisibleApplicationsMenu />
             </div>
-            <div className="col-md-8">
+            <div className="col-xs-8 col-md-7">
               <div className="pull-right">
                 <div className="user__block" style={styling.userBlock.main}>
                   <div className="user__block-avatar" style={styling.userBlock.avatar}>

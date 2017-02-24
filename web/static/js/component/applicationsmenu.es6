@@ -30,7 +30,7 @@ export default class ApplicationsMenu extends React.Component {
       value={this.props.selectedApplication}
       onChange={this.handleChange}
       fullWidth={true}
-      floatingLabelText="Application"
+      floatingLabelText="Selected application"
     >
       {renderedApplications}
     </SelectField>;
