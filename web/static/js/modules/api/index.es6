@@ -1,3 +1,5 @@
+import fetch from 'whatwg-fetch';
+
 const DEFAULT_OPTIONS = {
   credentials: 'include'
 };
