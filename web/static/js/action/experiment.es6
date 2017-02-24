@@ -60,22 +60,6 @@ export default ActionHelper.generate({
   updateVariant(newData, variant, formName) {
     return (dispatch, getState) => {
       dispatch({
-        type: ValidationErrorsActions.RESET_VALIDATION_ERRORS,
-        form: formName
-      });
-
-      const validationErrors = validateVariant(newData, getState().experiment.data.variants);
-      if (Object.keys(validationErrors).length) {
-        dispatch({
-          type: ValidationErrorsActions.SET_VALIDATION_ERRORS,
-          form: formName,
-          errors: validationErrors
-        });
-
-        throw 'ValidationErrors';
-      }
-
-      dispatch({
         type: actions.UPDATE_EXPERIMENT_VARIANT,
         newData,
         variant

@@ -4,10 +4,12 @@ import Actions from 'action/index.es6';
 import VariantForm from 'component/forms/createexperiment/variantform.es6';
 
 const FORM_NAME = 'variantForm';
+let setValuesFromProperty = true;
 
 const setValue = (key, value) => {
   let data = {};
   data[key] = value;
+  console.log(data);
   return Actions.NewVariant.setValues(data);
 }
 
@@ -20,12 +22,19 @@ const _allowControlGroupSelection = (variants = []) => {
   return has;
 }
 
-const mapStateToProps = (state, newProps) => {
+const mapStateToProps = (state, ownProps) => {
   let allowControlGroupSelection = _allowControlGroupSelection(state.experiment.data.variants);
-  
-  if (Object.keys(newProps.variant).length && newProps.variant.control_group)
-    allowControlGroupSelection = true;
 
+  console.log(setValuesFromProperty);
+  if (setValuesFromProperty) {
+    state.newvariant = Object.assign(state.newvariant, ownProps.variant);
+    state.newvariant.payload = JSON.parse(ownProps.variant.payload);
+    setValuesFromProperty = false;
+
+    if (ownProps.variant.control_group)
+      allowControlGroupSelection = true;
+  }
+  
   return {
     variant: state.newvariant,
     allowControlGroupSelection: allowControlGroupSelection,
@@ -35,25 +44,25 @@ const mapStateToProps = (state, newProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    editing: true,
     setName: value => {dispatch(setValue('name', value));},
     setAllocation: value => {dispatch(setValue('allocation', value));},
     setControlGroup: value => {dispatch(setValue('control_group', value));},
     setPayload: value => {dispatch(setValue('payload', value));},
     setDescription: value => {dispatch(setValue('description', value));},
-    set: data => {
-      dispatch(Actions.NewVariant.validate(data, FORM_NAME));
-      dispatch(Actions.Experiment.pushVariant(data));
+    set: newData => {
+      dispatch(Actions.NewVariant.validate(newData, FORM_NAME));
+      dispatch(Actions.Experiment.updateVariant(newData, ownProps.variant));
       dispatch(Actions.NewVariant.reset());
-      ownProps.onAdd();
-    },
-    update: (data, variant) => {
-      // dispatch(Actions.Experiment.updateVariant(data, variant, FORM_NAME));
+      setValuesFromProperty = true;
       ownProps.onAdd();
     },
     cancel: () => {
       dispatch(Actions.ValidationErrors.reset(FORM_NAME));
       dispatch(Actions.NewVariant.reset());
       ownProps.onCancel();
+
+      setValuesFromProperty = true;
     },
     unsetValidationError: fieldName => {
       dispatch(Actions.ValidationErrors.unset(fieldName, FORM_NAME));
@@ -61,9 +70,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-const VariantFormContainer = connect(
+const EditVariantFormContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(VariantForm);
 
-export default VariantFormContainer;
+export default EditVariantFormContainer;
