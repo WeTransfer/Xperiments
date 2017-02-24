@@ -37,7 +37,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       ownProps.onCancel();
     },
     unsetValidationError: fieldName => {
-      console.log(fieldName, FORM_NAME);
       dispatch(Actions.ValidationErrors.unset(fieldName, FORM_NAME));
     }
   }

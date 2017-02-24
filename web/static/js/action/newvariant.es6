@@ -9,14 +9,11 @@ const validate = (data, variants = []) => {
 
   let totalAllocation = 0;
   try {
-    totalAllocation = variants.reduce((a, b) => {
-      console.log(a.allocation, b.allocation);
-      return a.allocation + b.allocation;
+    totalAllocation = variants.forEach(variant => {
+      totalAllocation += variant.allocation;
     });
   } catch(e) {}
   let allocationLeft = 100 - totalAllocation;
-
-  console.log(totalAllocation);
 
   if (!data.name)
     errors.name = ['This field is required'];
@@ -25,7 +22,7 @@ const validate = (data, variants = []) => {
     errors.allocation = ['This field is required'];
   else if (isNaN(data.allocation))
     errors.allocation = ['Provide a valid number'];
-  else if (data.allocation > allocationLeft)
+  else if (allocationLeft < 0 || allocationLeft === 0 || data.allocation > allocationLeft)
     errors.allocation = [`Allocation can not be greater than 100% (${allocationLeft}% left)`];
   
   if (!data.payload) {
