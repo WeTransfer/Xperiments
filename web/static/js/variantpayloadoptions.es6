@@ -178,6 +178,27 @@ const options = [
     }
   },
   {
+    name: 'Help Page Type',
+    key: 'helpPageType',
+    defaults: {
+      type: 'original'
+    },
+    schema: {
+      type: 'object',
+      properties: [
+        {
+          key: 'type',
+          type: 'string',
+          title: 'Type*',
+          enum: [
+            {label: 'default', value: 'original'},
+            {label: 'Action - More Answers', value: 'actionToMoreAnswers'}
+          ]
+        }
+      ]
+    }
+  },
+  {
     name: 'Custom',
     key: 'custom',
     defaults: {
