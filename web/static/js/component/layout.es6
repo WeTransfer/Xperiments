@@ -142,7 +142,7 @@ export default class Layout extends React.Component {
         <Paper style={styling.paper} zDepth={1} rounded={false}>
           <div className="row">
             <div className="col-xs-12 col-md-2">
-              <h3 style={styling.h3}>Xperiments</h3>
+              <Link to="/"><h3 style={styling.h3}>Xperiments</h3></Link>
             </div>
             <div className="col-xs-4 col-md-3">
               <VisibleApplicationsMenu />

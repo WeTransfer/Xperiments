@@ -59,6 +59,7 @@ export default class PayloadEditor extends Form {
   makePropertyField(property) {
     let payloadType = Object.keys(this.props.value)[0];
     let propertyValue = this.props.value[payloadType][property.key];
+
     let errorText = this.getError(`payload_${property.key}`);
 
     if (propertyValue === undefined || propertyValue === null) {
@@ -94,6 +95,8 @@ export default class PayloadEditor extends Form {
           value={propertyValue}
           onChange={(e, index, value) => this.handlePropertyChange(property, value)}
           key={`selectfield-${property.type}-${property.key}`}
+          disabled={!!property.disabled}
+          {...property.uiOptions}
         >
           {options}
         </SelectField>
@@ -107,7 +110,9 @@ export default class PayloadEditor extends Form {
     let selectedType = null;
 
     this.props.types.forEach(type => {
-      if ( type.key === payloadType)
+      if (type.disabled) return;
+      
+      if (type.key === payloadType)
         selectedType = type;
       typeOptions.push(<MenuItem value={type.key} primaryText={type.name} />)
     });
@@ -126,7 +131,7 @@ export default class PayloadEditor extends Form {
         <div className="col-md-12">
           <SelectField
             fullWidth={true}
-            floatingLabelText="Experiment Type"
+            floatingLabelText="Type*"
             value={payloadType}
             onChange={(e, index, value) => {
               this.setType(index, value);

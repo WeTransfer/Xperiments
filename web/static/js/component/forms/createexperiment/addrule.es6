@@ -95,7 +95,7 @@ export default class AddRule extends Form {
     if (dataSource[this.props.rule.parameter]) {
       valueField = <AutoComplete
         fullWidth={true}
-        floatingLabelText="Value"
+        floatingLabelText="Value*"
         filter={AutoComplete.caseInsensitiveFilter}
         dataSource={dataSource[this.props.rule.parameter]}
         openOnFocus={true}
@@ -112,7 +112,7 @@ export default class AddRule extends Form {
       valueField = <TextField
         fullWidth={true}
         defaultValue={this.props.value}
-        floatingLabelText="Value"
+        floatingLabelText="Value*"
         ref="value"
         errorText={this.getError('value')}
         onChange={(e, value) => {
@@ -129,7 +129,7 @@ export default class AddRule extends Form {
           <div className="col-md-4">
             <SelectField
               fullWidth={true}
-              floatingLabelText="Parameter"
+              floatingLabelText="Parameter*"
               value={this.props.rule.parameter}
               onChange={(e, value, payload) => {
                 this.props.setParameter(payload);
@@ -144,7 +144,7 @@ export default class AddRule extends Form {
           <div className="col-md-4">
             <SelectField
               fullWidth={true}
-              floatingLabelText="Operator"
+              floatingLabelText="Operator*"
               value={this.props.rule.operator}
               onChange={(e, key, payload) => {
                 this.props.setOperator(payload);

@@ -129,7 +129,7 @@ export default class ExperimentsTable extends React.Component {
 
     if (!renderedExperiments.length) {
       renderedExperiments.push(<TableRow>
-        <TableRowColumn style={styling.emptyTD} colSpan={5}>{this.props.isFetching ? 'Getting your data, hang on...' : 'No data'}</TableRowColumn>
+        <TableRowColumn style={styling.emptyTD} colSpan={5}>{this.props.isFetching ? 'Getting your data, hang on...' : 'No experiments'}</TableRowColumn>
       </TableRow>);
     }
 
