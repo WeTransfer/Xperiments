@@ -29,6 +29,8 @@ defmodule Xperiments.Router do
     plug Xperiments.Plug.RefreshJwtToken
   end
 
+  get "/healthcheck", HealthCheckPlug, []
+
   scope "/auth", Xperiments do
     pipe_through :browser
 
