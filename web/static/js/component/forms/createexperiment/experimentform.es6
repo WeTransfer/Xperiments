@@ -8,10 +8,10 @@ import TimePicker from 'material-ui/TimePicker';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 
+import globalStyling from 'globalstyling.es6';
+
 const styling = {
-  flatButton: {
-    marginRight: 10
-  }
+  ...globalStyling
 };
 
 export default class AddExperiment extends Form {

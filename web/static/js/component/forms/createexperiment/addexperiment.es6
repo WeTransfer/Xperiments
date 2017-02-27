@@ -6,10 +6,10 @@ import Dialog from 'material-ui/Dialog';
 
 import ExperimentForm from './experimentform.es6';
 
+import globalStyling from 'globalstyling.es6';
+
 const styling = {
-  flatButton: {
-    marginRight: 10
-  }
+  ...globalStyling
 };
 
 export default class AddExperiment extends React.Component {

@@ -7,6 +7,7 @@ import RuleOperators from 'ruleoperators.es6';
 import Countries from 'countries.es6';
 import Languages from 'languages.es6';
 import Devices from 'devices.es6';
+import UserAccountTypes from 'useraccounttypes.es6';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -17,6 +18,8 @@ import MenuItem from 'material-ui/MenuItem';
 import AutoComplete from 'material-ui/AutoComplete';
 import SelectField from 'material-ui/SelectField';
 
+import globalStyling from 'globalstyling.es6';
+
 const styling = {
   checkbox: {
     marginTop: 30
@@ -24,15 +27,14 @@ const styling = {
   dialog: {
     width: '100%'
   },
-  flatButton: {
-    marginRight: 10
-  }
+  ...globalStyling
 };
 
 const dataSource = {
   device: Devices,
   language: Languages,
-  country: Countries
+  country: Countries,
+  user_account_type: UserAccountTypes
 };
 
 export default class AddRule extends Form {

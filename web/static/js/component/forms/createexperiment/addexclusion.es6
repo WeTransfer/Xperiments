@@ -7,13 +7,13 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
+import globalStyling from 'globalstyling.es6';
+
 const styling = {
   checkbox: {
     marginTop: 30
   },
-  flatButton: {
-    marginRight: 10
-  }
+  ...globalStyling
 };
 
 export default class AddExclusion extends React.Component {
@@ -86,7 +86,13 @@ export default class AddExclusion extends React.Component {
                   <TableHeaderColumn>End Date</TableHeaderColumn>
                 </TableRow>
               </TableHeader>
-              <TableBody ref="tableBody" deselectOnClickaway={false}>{renderedExcludedExperiments}</TableBody>
+              <TableBody
+                ref="tableBody"
+                deselectOnClickaway={false}
+                displayRowCheckbox={this.props.list.length ? true : false}
+              >
+                {renderedExcludedExperiments}
+              </TableBody>
             </Table>
           </div>
         </div>

@@ -13,13 +13,13 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/SelectField';
 import Checkbox from 'material-ui/Checkbox';
 
+import globalStyling from 'globalstyling.es6';
+
 const styling = {
   checkbox: {
     marginTop: 30
   },
-  flatButton: {
-    marginRight: 10
-  }
+  ...globalStyling
 };
 
 export default class VariantForm extends Form {
