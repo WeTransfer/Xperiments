@@ -22,6 +22,6 @@ install:
 before_script:
   - mix deps.get --only test
   - psql -c 'create database xperiments_test;' -U postgres
-  - yarn run build --silent > /dev/null
+  - yarn run deploy --silent > /dev/null
 script:
   - mix test
