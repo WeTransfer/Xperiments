@@ -8,10 +8,10 @@ import Dialog from 'material-ui/Dialog';
 
 import AddExclusionForm from 'containers/addexclusionform.es6';
 
+import globalStyling from 'globalstyling.es6';
+
 const styling = {
-  emptyTD: {
-    textAlign: 'center'
-  }
+  ...globalStyling
 };
 
 export default class Exclusions extends React.Component {

@@ -47,6 +47,25 @@ const options = [
       type: 'object',
       properties: [
         {
+          key: 'when',
+          type: 'string',
+          enum: [
+            {label: '', value: null},
+            {label: 'transfer is uploading', value: 'transferInProgress'},
+            {label: 'transfer is downloading', value: 'transferDownloadStarted'}
+          ],
+          title: 'Show tooltip when*'
+        },
+        {
+          key: 'textContent',
+          type: 'string',
+          title: 'Tooltip Text*',
+          uiOptions: {
+            multiLine: true,
+            rows: 3
+          }
+        },
+        {
           key: 'delay',
           type: 'number',
           title: 'Show after (seconds)*',
@@ -77,26 +96,6 @@ const options = [
             {label: '15', value: 15000},
             {label: '20', value: 20000}
           ]
-        },
-        {
-          key: 'when',
-          type: 'string',
-          enum: [
-            {label: '', value: null},
-            {label: 'transfer is uploading', value: 'transferInProgress'},
-            {label: 'transfer has uploaded', value: 'transferComplete'},
-            {label: 'transfer is downloading', value: 'transferDownloadStarted'},
-          ],
-          title: 'Show tooltip when*'
-        },
-        {
-          key: 'textContent',
-          type: 'string',
-          title: 'Tooltip Text*',
-          uiOptions: {
-            multiLine: true,
-            rows: 3
-          }
         },
         {
           key: 'buttonText',
@@ -132,7 +131,7 @@ const options = [
     name: 'Mobile Header',
     key: 'mobileHeader',
     defaults: {
-      pathname: null,
+      pathname: 'downloads',
       text: null
     },
     schema: {
@@ -141,7 +140,11 @@ const options = [
         {
           key: 'pathname',
           type: 'string',
-          title: 'Pathname*'
+          title: 'Page*',
+          disabled: true,
+          enum: [
+            {label: 'download page', value: 'downloads'}
+          ]
         },
         {
           key: 'text',
@@ -192,7 +195,7 @@ const options = [
           title: 'Type*',
           enum: [
             {label: 'default', value: 'original'},
-            {label: 'Action - More Answers', value: 'actionToMoreAnswers'}
+            {label: 'New Footer - CTA - More Answers', value: 'actionToMoreAnswers'}
           ]
         }
       ]
@@ -201,6 +204,7 @@ const options = [
   {
     name: 'Custom',
     key: 'custom',
+    disabled: true,
     defaults: {
       content: null
     },

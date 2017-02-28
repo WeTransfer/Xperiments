@@ -11,10 +11,10 @@ import Countries from 'countries.es6';
 import Languages from 'languages.es6';
 import Devices from 'devices.es6';
 
+import globalStyling from 'globalstyling.es6';
+
 const styling = {
-  emptyTD: {
-    textAlign: 'center'
-  }
+  ...globalStyling
 };
 
 export default class Rules extends React.Component {

@@ -13,13 +13,13 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/SelectField';
 import Checkbox from 'material-ui/Checkbox';
 
+import globalStyling from 'globalstyling.es6';
+
 const styling = {
   checkbox: {
     marginTop: 30
   },
-  flatButton: {
-    marginRight: 10
-  }
+  ...globalStyling
 };
 
 export default class VariantForm extends Form {
@@ -80,7 +80,7 @@ export default class VariantForm extends Form {
           <div className="col-md-12">
             <TextField
               defaultValue={this.props.variant.name}
-              floatingLabelText="Name"
+              floatingLabelText="Name*"
               errorText={this.getError('name')}
               onChange={(e, value) => {
                 this.props.setName(value);
@@ -93,7 +93,7 @@ export default class VariantForm extends Form {
           <div className="col-md-5">
             <TextField
               defaultValue={this.props.variant.allocation}
-              floatingLabelText="Allocation (%)"
+              floatingLabelText="Allocation (%)*"
               errorText={this.getError('allocation')}
               onChange={(e, value) => {
                 this.props.setAllocation(parseFloat(value));

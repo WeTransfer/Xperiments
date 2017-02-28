@@ -7,6 +7,7 @@ import RuleOperators from 'ruleoperators.es6';
 import Countries from 'countries.es6';
 import Languages from 'languages.es6';
 import Devices from 'devices.es6';
+import UserAccountTypes from 'useraccounttypes.es6';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -17,6 +18,8 @@ import MenuItem from 'material-ui/MenuItem';
 import AutoComplete from 'material-ui/AutoComplete';
 import SelectField from 'material-ui/SelectField';
 
+import globalStyling from 'globalstyling.es6';
+
 const styling = {
   checkbox: {
     marginTop: 30
@@ -24,15 +27,14 @@ const styling = {
   dialog: {
     width: '100%'
   },
-  flatButton: {
-    marginRight: 10
-  }
+  ...globalStyling
 };
 
 const dataSource = {
   device: Devices,
   language: Languages,
-  country: Countries
+  country: Countries,
+  userAccountType: UserAccountTypes
 };
 
 export default class AddRule extends Form {
@@ -95,7 +97,7 @@ export default class AddRule extends Form {
     if (dataSource[this.props.rule.parameter]) {
       valueField = <AutoComplete
         fullWidth={true}
-        floatingLabelText="Value"
+        floatingLabelText="Value*"
         filter={AutoComplete.caseInsensitiveFilter}
         dataSource={dataSource[this.props.rule.parameter]}
         openOnFocus={true}
@@ -112,7 +114,7 @@ export default class AddRule extends Form {
       valueField = <TextField
         fullWidth={true}
         defaultValue={this.props.value}
-        floatingLabelText="Value"
+        floatingLabelText="Value*"
         ref="value"
         errorText={this.getError('value')}
         onChange={(e, value) => {
@@ -129,7 +131,7 @@ export default class AddRule extends Form {
           <div className="col-md-4">
             <SelectField
               fullWidth={true}
-              floatingLabelText="Parameter"
+              floatingLabelText="Parameter*"
               value={this.props.rule.parameter}
               onChange={(e, value, payload) => {
                 this.props.setParameter(payload);
@@ -144,7 +146,7 @@ export default class AddRule extends Form {
           <div className="col-md-4">
             <SelectField
               fullWidth={true}
-              floatingLabelText="Operator"
+              floatingLabelText="Operator*"
               value={this.props.rule.operator}
               onChange={(e, key, payload) => {
                 this.props.setOperator(payload);

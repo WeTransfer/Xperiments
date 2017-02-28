@@ -11,10 +11,10 @@ import FlatButton from 'material-ui/FlatButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
+import globalStyling from 'globalstyling.es6';
+
 const styling = {
-  emptyTD: {
-    textAlign: 'center'
-  }
+  ...globalStyling
 };
 
 const filters = [
@@ -91,6 +91,7 @@ export default class ExperimentsTable extends React.Component {
     let startAction = <a onClick={() => this.startExperiment(experiment.id)}>{`Start${ingPostfix}`}</a>;
     let terminateAction = <a onClick={() => this.terminateExperiment(experiment.id)}>{`Kill${ingPostfix}`}</a>;
     let stopAction = <a onClick={() => this.stopExperiment(experiment.id)}>{`Stop${ingPostfix}`}</a>;
+    let reportAction = <a target="_blank" href="https://analytics.google.com/analytics/web/?authuser=1#my-reports/5IyMQAn0Tcqdu2Va8V9BIg/a69714416w130256140p134086343/%3F_u.date00%3D20170227%26_u.date01%3D20170227%26_u.sampleOption%3Dmoreprecision%26_u.sampleSize%3D500000/">Report</a>;
     
     if (experiment.state === 'draft') {
       actions.push(" | ");
@@ -100,9 +101,13 @@ export default class ExperimentsTable extends React.Component {
       actions.push(startAction);
       actions.push(" | ");
       actions.push(terminateAction);
+      actions.push(" | ");
+      actions.push(reportAction);
     } else if (experiment.state === 'running') {
       actions.push(" | ");
       actions.push(stopAction);
+      actions.push(" | ");
+      actions.push(reportAction);
     }
 
     // Delete
@@ -129,7 +134,7 @@ export default class ExperimentsTable extends React.Component {
 
     if (!renderedExperiments.length) {
       renderedExperiments.push(<TableRow>
-        <TableRowColumn style={styling.emptyTD} colSpan={5}>{this.props.isFetching ? 'Getting your data, hang on...' : 'No data'}</TableRowColumn>
+        <TableRowColumn style={styling.emptyTD} colSpan={5}>{this.props.isFetching ? 'Getting your data, hang on...' : 'No experiments'}</TableRowColumn>
       </TableRow>);
     }
 

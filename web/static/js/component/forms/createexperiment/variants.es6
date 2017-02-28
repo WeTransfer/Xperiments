@@ -9,10 +9,10 @@ import Dialog from 'material-ui/Dialog';
 import CreateVariantFormContainer from 'containers/createvariantform.es6';
 import EditVariantFormContainer from 'containers/editvariantform.es6';
 
+import globalStyling from 'globalstyling.es6';
+
 const styling = {
-  emptyTD: {
-    textAlign: 'center'
-  }
+  ...globalStyling
 };
 
 export default class Variants extends React.Component {
