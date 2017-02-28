@@ -1,4 +1,4 @@
-import fetch from 'whatwg-fetch';
+import 'whatwg-fetch'
 
 const DEFAULT_OPTIONS = {
   credentials: 'include'
@@ -15,13 +15,13 @@ const checkStatus = response => {
 
 export default {
   get: (...args) => {
-    return window.fetch(args, {
+    return fetch(args, {
       credentials: 'include'
     }).then(checkStatus);
   },
 
   post: (url, data) => {
-    return window.fetch(new Request(url, {
+    return fetch(new Request(url, {
       method: 'POST', 
       headers: new Headers({
         'Content-Type': 'application/json'
@@ -32,7 +32,7 @@ export default {
   },
 
   put: (url, data) => {
-    return window.fetch(new Request(url, {
+    return fetch(new Request(url, {
       method: 'PUT',
       headers: new Headers({
         'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ export default {
   },
 
   delete: (url, data) => {
-    return window.fetch(new Request(url, {
+    return fetch(new Request(url, {
       method: 'DELETE',
       headers: new Headers({
         'Content-Type': 'application/json'
