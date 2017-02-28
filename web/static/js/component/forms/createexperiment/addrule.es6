@@ -34,7 +34,7 @@ const dataSource = {
   device: Devices,
   language: Languages,
   country: Countries,
-  user_account_type: UserAccountTypes
+  userAccountType: UserAccountTypes
 };
 
 export default class AddRule extends Form {

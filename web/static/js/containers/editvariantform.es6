@@ -51,7 +51,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     set: newData => {
       dispatch(Actions.NewVariant.validate(newData, FORM_NAME));
       dispatch(Actions.Experiment.updateVariant(newData, ownProps.variant));
-      dispatch(Actions.NewVariant.reset());
+      dispatch(Actions.NewVariant.reset()); 
       setValuesFromProperty = true;
       ownProps.onAdd();
     },
