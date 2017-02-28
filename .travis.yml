@@ -11,9 +11,17 @@ cache:
   directories:
     - _build
     - deps
+    - node_modules
 sudo: required
+before_install:
+  - nvm install 4.2.6
+  - curl -o- -L https://yarnpkg.com/install.sh | bash
+  - export PATH=$HOME/.yarn/bin:$PATH
+install:
+  - yarn install --silent > /dev/null
 before_script:
   - mix deps.get --only test
   - psql -c 'create database xperiments_test;' -U postgres
+  - yarn run build --silent > /dev/null
 script:
   - mix test
