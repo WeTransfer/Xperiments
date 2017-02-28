@@ -16,7 +16,7 @@ defmodule Xperiments.ExperimentControllerTest do
       |> put_req_header("accept", "application/json")
 
     app = insert(:application, name: "frontend")
-    {:ok, conn: conn, app: app}
+    {:ok, conn: conn, app: app, user: user}
   end
 
   def insert_experiment(context) do
@@ -40,6 +40,7 @@ defmodule Xperiments.ExperimentControllerTest do
     experiment = Repo.get_by!(Experiment, name: draft_experiment.name)
 
     assert body["experiment"]["id"] == experiment.id
+    assert is_map(body["experiment"]["user"])
   end
 
   test "/show an experiment", context do

@@ -23,9 +23,11 @@ defmodule Xperiments.ExperimentController do
   end
 
   def create(conn, %{"experiment" => experiment_data}) do
+    current_user = Guardian.Plug.current_resource(conn, :default)
     changeset =
       Experiment.changeset(%Experiment{}, experiment_data)
       |> Ecto.Changeset.put_assoc(:application, conn.assigns.application)
+      |> Ecto.Changeset.put_assoc(:user, current_user)
 
     case Repo.insert(changeset) do
       {:ok, exp} ->

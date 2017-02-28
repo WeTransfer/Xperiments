@@ -8,7 +8,7 @@ defmodule Xperiments.Experiment do
   *Variants* and *rules* are stored in JSONB fields.
   """
   use Xperiments.Web, :model
-  alias Xperiments.{Application, Variant, Rule}
+  alias Xperiments.{Application, Variant, Rule, User}
 
   use EctoStateMachine,
     states: [:draft, :running, :stopped, :terminated, :deleted],
@@ -44,6 +44,7 @@ defmodule Xperiments.Experiment do
     field :state, :string, default: "draft"
 
     belongs_to :application, Application
+    belongs_to :user, User
 
     # used only for tests now, delete it after tests refactoring
     many_to_many :exclusions, __MODULE__, join_through: Xperiments.Exclusion,
@@ -226,6 +227,7 @@ defmodule Xperiments.Experiment do
   defimpl Poison.Encoder, for: __MODULE__ do
     def encode(model, _opts) do
       model
+      |> Xperiments.Repo.preload(:user)
       |> Map.from_struct
       |> Map.drop([:__meta__, :__struct__, :application])
       |> Poison.encode!
