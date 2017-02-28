@@ -4,11 +4,20 @@ const DEFAULT_OPTIONS = {
   credentials: 'include'
 };
 
+const checkStatus = response => {
+  if (response.status === 401) {
+    window.location.reload();
+    return;
+  }
+
+  return Promise.resolve(response);
+}
+
 export default {
   get: (...args) => {
     return window.fetch(args, {
       credentials: 'include'
-    });
+    }).then(checkStatus);
   },
 
   post: (url, data) => {
@@ -19,7 +28,7 @@ export default {
       }),
       body: JSON.stringify(data),
       ...DEFAULT_OPTIONS
-    }));
+    })).then(checkStatus);
   },
 
   put: (url, data) => {
@@ -30,7 +39,7 @@ export default {
       }),
       body: JSON.stringify(data),
       ...DEFAULT_OPTIONS
-    }));
+    })).then(checkStatus);
   },
 
   delete: (url, data) => {
@@ -40,6 +49,6 @@ export default {
         'Content-Type': 'application/json'
       }),
       ...DEFAULT_OPTIONS
-    }));
+    })).then(checkStatus);
   }
 };
