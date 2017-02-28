@@ -34,6 +34,7 @@ defmodule Xperiments.Web do
       alias Xperiments.Repo
       import Ecto
       import Ecto.Query
+      import Bodyguard.Controller
 
       # import Xperiments.Router.Helpers
     end
@@ -45,6 +46,7 @@ defmodule Xperiments.Web do
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_csrf_token: 0, get_flash: 2, view_module: 1]
+      import Bodyguard.Controller
 
       # import Xperiments.Router.Helpers
     end
