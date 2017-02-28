@@ -11,7 +11,8 @@ defmodule Xperiments.Factory do
 
   def application_factory do
     %Xperiments.Application{
-      name: sequence("frontend")
+      name: sequence("frontend"),
+      settings: %{url: "http://wetest.com"}
     }
   end
 

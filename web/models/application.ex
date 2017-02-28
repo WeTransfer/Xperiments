@@ -6,6 +6,10 @@ defmodule Xperiments.Application do
     field :name, :string
     has_many :experiments, Experiment
 
+    embeds_one :settings, Settings, on_replace: :update, primary_key: false do
+      field :url
+    end
+
     timestamps()
   end
 
@@ -26,7 +30,7 @@ defmodule Xperiments.Application do
     def encode(model, _opts) do
       model
       |> Map.from_struct
-      |> Map.take([:name, :id])
+      |> Map.take([:name, :id, :settings])
       |> Poison.encode!
     end
   end
