@@ -42,6 +42,7 @@ defmodule Xperiments.Mixfile do
      {:ueberauth, "~> 0.4"},
      {:ueberauth_google, "~> 0.5"},
      {:guardian, "~> 0.14"},
+     {:bodyguard, "~> 0.6.1"},
      {:ex_machina, "~> 1.0", only: :test},
      {:mock, "~> 0.2.0", only: :test}]
   end

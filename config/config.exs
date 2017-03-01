@@ -49,6 +49,8 @@ config :guardian, Guardian,
   secret_key: "VUAEd0LDnbMzsVl391tovxEoZ46UJAJBZRl2ZN5xfHt0wDXaMCohlERy/IP8SZvZ",
   serializer: Xperiments.GuardianSerializer
 
+config :bodyguard, current_user: {Guardian.Plug, :current_resource}
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

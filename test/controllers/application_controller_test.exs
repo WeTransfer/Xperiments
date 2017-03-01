@@ -25,5 +25,6 @@ defmodule Xperiments.ApplicationControllerTest do
     body = json_response(response, 200)
 
     assert body["applications"] == apps
+    assert is_map(hd(body["applications"])["settings"])
   end
 end

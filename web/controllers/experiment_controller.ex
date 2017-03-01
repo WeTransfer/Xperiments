@@ -23,9 +23,11 @@ defmodule Xperiments.ExperimentController do
   end
 
   def create(conn, %{"experiment" => experiment_data}) do
+    current_user = Guardian.Plug.current_resource(conn, :default)
     changeset =
       Experiment.changeset(%Experiment{}, experiment_data)
       |> Ecto.Changeset.put_assoc(:application, conn.assigns.application)
+      |> Ecto.Changeset.put_assoc(:user, current_user)
 
     case Repo.insert(changeset) do
       {:ok, exp} ->
@@ -42,6 +44,7 @@ defmodule Xperiments.ExperimentController do
 
   def update(conn, %{"id" => id, "experiment" => updates}) do
     exp = Repo.get!(Experiment, id)
+    conn = authorize!(conn, exp)
 
     {exclusions, updates} = Map.pop(updates, "exclusions", [])
     # NOTE: Maybe unnecessary step now
@@ -66,6 +69,8 @@ defmodule Xperiments.ExperimentController do
 
   def change_state(conn, %{"experiment_id" => id, "event" => event}) do
     experiment = Repo.get!(Experiment, id)
+    conn = authorize!(conn, experiment)
+
     if String.to_atom(event) in Experiment.events do
       changeset = Experiment.change_state(experiment, event)
       case Repo.update(changeset) do

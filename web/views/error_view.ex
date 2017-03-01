@@ -5,6 +5,10 @@ defmodule Xperiments.ErrorView do
     %{errors: %{detail: "Page not found"}}
   end
 
+  def render("403.json", _assigns) do
+    %{errors: %{message: "Forbidden"}}
+  end
+
   def render("500.json", _assigns) do
     %{errors: %{detail: "Internal server error"}}
   end

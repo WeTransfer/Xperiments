@@ -9,6 +9,8 @@ defmodule Xperiments.User do
     field :role, :string, default: "user"
     field :avatar_uri, :string
 
+    has_many :experiments, Xperiments.Experiment
+
     timestamps()
   end
 
