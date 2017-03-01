@@ -4,6 +4,7 @@ import Actions from 'action/index.es6';
 import EditExperimentPage from 'component/page/editexperiment.es6';
 
 const FORM_NAME = 'editExperimentForm';
+let cachedSelectedApplication = null;
 
 const setValue = (key, value) => {
   let data = {};
@@ -11,9 +12,18 @@ const setValue = (key, value) => {
   return Actions.Experiment.setValues(data);
 }
 
+const getSelectedApplication = (applications, user) => {
+  if (cachedSelectedApplication) return cachedSelectedApplication;
+  applications.forEach(application => {
+    if (application.id === user.selectedApplication)
+      cachedSelectedApplication = application;
+  })
+  return cachedSelectedApplication;
+}
+
 const mapStateToProps = (state) => {
   return {
-    selectedApplication: {url: 'http://lvh.me:4000'},
+    selectedApplication: getSelectedApplication(state.applications.list, state.user),
     experiment: state.experiment,
     indexedExperimentsList: state.experiments.indexedList,
     validationErrors: state.validationerrors[FORM_NAME]

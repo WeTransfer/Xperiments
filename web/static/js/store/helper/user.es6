@@ -9,7 +9,7 @@ const user = Object.assign({}, {
   role: null,
   avatar: avatar,
   avatar_uri: null,
-  selectedApplication: 2
+  selectedApplication: null
 }, window['__user__']);
 
 export default user;

@@ -4,6 +4,8 @@ import Actions from 'action/index.es6';
 
 const mapStateToProps = (state) => {
   return {
+    user: state.user,
+    applications: state.applications,
     notification: state.app.notificationData
   }
 }
