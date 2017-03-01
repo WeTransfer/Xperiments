@@ -56,25 +56,14 @@ const styling = {
 
 export default class Layout extends React.Component {
   static propTypes = {
+    applications: React.PropTypes.object,
     notifications: React.PropTypes.object,
     resetNotification: React.PropTypes.func
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedApp: 1,
-      selectedTab: 'experiments'
-    };
-  }
-
-  componentDidMount() {
+  componentWillMount() {
     Store.dispatch(Actions.Applications.list());
   }
-
-  selectApp = (event, index, selectedApp) => this.setState({selectedApp});
-
-  selectTab = (event, index, selectedTab) => this.setState({selectedTab});
 
   getErrorNotification() {
     let actions = [
@@ -111,9 +100,7 @@ export default class Layout extends React.Component {
   }
 
   render() {
-    const {applications, user} = Store.getState();
-
-    if (applications.isFetching) return null;
+    if (this.props.applications.isFetching) return null;
 
     let notification = null;
     let snackbar = {
@@ -151,11 +138,11 @@ export default class Layout extends React.Component {
               <div className="pull-right">
                 <div className="user__block" style={styling.userBlock.main}>
                   <div className="user__block-avatar" style={styling.userBlock.avatar}>
-                    <img src={user.avatar} style={styling.userBlock.avatarImage} />
+                    <img src={this.props.user.avatar} style={styling.userBlock.avatarImage} />
                   </div>
                   <div className="user__block-info" style={styling.userBlock.info}>
-                    <div className="user__block-name">{user.name}</div>
-                    <div className="user__block-email" style={styling.userBlock.infoEmail}>{user.email}</div>
+                    <div className="user__block-name">{this.props.user.name}</div>
+                    <div className="user__block-email" style={styling.userBlock.infoEmail}>{this.props.user.email}</div>
                     <div className="user__block-links" style={styling.userBlock.infoLinks}>
                       <a href="/auth/logout">Logout</a>
                     </div>

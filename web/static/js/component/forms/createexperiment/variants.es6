@@ -60,8 +60,8 @@ export default class Variants extends React.Component {
   getActions(variant) {
     let actions = [];
 
-    if (variant.id) {
-      actions.push(<a target="_blank" href={`${this.props.selectedApplication.url}/?experiment_id=${this.props.experimentId}&variant_id=${variant.id}`}>Preview</a>);
+    if (variant.id && this.props.selectedApplication) {
+      actions.push(<a target="_blank" href={`${this.props.selectedApplication.settings.url}/?experiment_id=${this.props.experimentId}&variant_id=${variant.id}`}>Preview</a>);
       actions.push(" | ");
     }
 

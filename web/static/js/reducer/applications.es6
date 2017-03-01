@@ -13,8 +13,8 @@ export default function(state = {}, action) {
     case actions.FETCHED_APPLICATIONS:
       return {
         ...state,
-        list: action.list,
-        isFetching: false
+        isFetching: false,
+        list: action.list
       };
   }
 
