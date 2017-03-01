@@ -1,4 +1,5 @@
 import React from 'react';
+import Store from 'store/index.es6';
 
 import {Link} from 'react-router';
 
@@ -13,6 +14,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Chip from 'material-ui/Chip';
 
 import globalStyling from 'globalstyling.es6';
+import config from 'config.es6';
 
 const styling = {
   ...globalStyling
@@ -77,6 +79,8 @@ export default class ExperimentsTable extends React.Component {
   }
 
   getActions (experiment) {
+    const {user} = Store.getState();
+
     let actions = [];
     // Edit
     if (experiment.state === 'draft') {
@@ -94,21 +98,23 @@ export default class ExperimentsTable extends React.Component {
     let stopAction = <a onClick={() => this.stopExperiment(experiment.id)}>{`Stop${ingPostfix}`}</a>;
     let reportAction = <a target="_blank" href="https://analytics.google.com/analytics/web/?authuser=1#my-reports/5IyMQAn0Tcqdu2Va8V9BIg/a69714416w130256140p134086343/%3F_u.date00%3D20170227%26_u.date01%3D20170227%26_u.sampleOption%3Dmoreprecision%26_u.sampleSize%3D500000/">Report</a>;
     
-    if (experiment.state === 'draft') {
-      actions.push(" | ");
-      actions.push(startAction);
-    } else if (experiment.state === 'stopped') {
-      actions.push(" | ");
-      actions.push(startAction);
-      actions.push(" | ");
-      actions.push(terminateAction);
-      actions.push(" | ");
-      actions.push(reportAction);
-    } else if (experiment.state === 'running') {
-      actions.push(" | ");
-      actions.push(stopAction);
-      actions.push(" | ");
-      actions.push(reportAction);
+    if (config.users[user.email] && config.users[user.email].rights && config.users[user.email].rights.indexOf('CHANGE_STATE') > -1) {
+      if (experiment.state === 'draft') {
+        actions.push(" | ");
+        actions.push(startAction);
+      } else if (experiment.state === 'stopped') {
+        actions.push(" | ");
+        actions.push(startAction);
+        actions.push(" | ");
+        actions.push(terminateAction);
+        actions.push(" | ");
+        actions.push(reportAction);
+      } else if (experiment.state === 'running') {
+        actions.push(" | ");
+        actions.push(stopAction);
+        actions.push(" | ");
+        actions.push(reportAction);
+      }
     }
 
     // Delete
