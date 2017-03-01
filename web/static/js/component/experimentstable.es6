@@ -10,6 +10,7 @@ import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import Chip from 'material-ui/Chip';
 
 import globalStyling from 'globalstyling.es6';
 
@@ -124,7 +125,7 @@ export default class ExperimentsTable extends React.Component {
         renderedExperiments.push(React.createElement(TableRow, {key: `experiment__table-row-${experiment.id}`}, [
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-vre-${experiment.id}`}, `${experiment.rules.length} - ${experiment.variants.length} - ${experiment.exclusions.length}`),
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-state-${experiment.id}`}, experiment.state),
+          React.createElement(TableRowColumn, {key: `experiment__table-row-column-state-${experiment.id}`}, <Chip labelStyle={globalStyling.chipLabel} backgroundColor={globalStyling.stateColors[experiment.state]}>{experiment.state}</Chip>),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-start-date-${experiment.id}`}, Helper.formatDateTime(experiment.start_date)),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-end-date-${experiment.id}`}, Helper.formatDateTime(experiment.end_date)),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-actions-${experiment.id}`}, this.getActions(experiment))
