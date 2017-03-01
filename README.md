@@ -13,7 +13,9 @@ To start Xperiments application:
   * Clone the repository with `git clone git@github.com:WeTransfer/Xperiments.git`
   * Install dependencies with `cd Xperiments; mix deps.get`
   * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Install Node.js dependencies with `npm install`
+  * Install Node.js dependencies
+  * Install Yarn with `npm install yarn`
+  * Install dependencies with `yarn install`
   * Start Phoenix endpoint with `mix phoenix.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
