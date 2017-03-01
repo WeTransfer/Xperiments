@@ -20,7 +20,8 @@ defmodule Xperiments.Mixfile do
     [mod: {Xperiments, []},
      applications: [:phoenix, :phoenix_pubsub, :cowboy, :logger, :phoenix_html,
                     :phoenix_ecto, :postgrex, :timex, :ueberauth, :ueberauth_google],
-     included_applications: [:cors_plug, :distillery, :ecto_state_machine, :guardian]]
+     included_applications: [:cors_plug, :distillery, :ecto_state_machine, :guardian,
+                             :bodyguard]]
   end
 
   # Specifies which paths to compile per environment.
