@@ -1,8 +1,5 @@
-import Store from 'store/index.es6';
 import ActionHelper from 'modules/redux-actions/index.es6';
 import {actions as ValidationErrorsActions} from 'action/validationerrors.es6';
-import API from 'modules/api/index.es6';
-import config from 'config.es6';
 
 const validate = data => {
   let errors = {};
@@ -20,7 +17,7 @@ const validate = data => {
     errors.value = ['This field is required'];
 
   return errors;
-}
+};
 
 export const actions = ActionHelper.types([
   'SET_NEW_RULE_VALUES',

@@ -1,4 +1,3 @@
-import Store from 'store/index.es6';
 import {connect} from 'react-redux';
 import Actions from 'action/index.es6';
 import AddExclusion from 'component/forms/createexperiment/addexclusion.es6';
@@ -18,16 +17,16 @@ const mapStateToProps = (state) => {
     list: list(state.experiments.list, [state.experiment.data.id]),
     currentlyExcluded: state.experiment.data.exclusions
   };
-}
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     set: exclusions => {
-      dispatch(Actions.Experiment.setValues({exclusions}))
+      dispatch(Actions.Experiment.setValues({exclusions}));
       ownProps.onAdd();
     }
-  }
-}
+  };
+};
 
 const AddExclusionForm = connect(
   mapStateToProps,

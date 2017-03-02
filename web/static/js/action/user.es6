@@ -1,4 +1,3 @@
-import Store from 'store/index.es6';
 import ActionHelper from 'modules/redux-actions/index.es6';
 
 export const actions = ActionHelper.types([
@@ -7,7 +6,7 @@ export const actions = ActionHelper.types([
 
 export default ActionHelper.generate({
   setApplication(id) {
-    return async (dispatch, getState) => {
+    return async dispatch => {
       dispatch({
         type: actions.SET_APPLICATION,
         applicationId: id

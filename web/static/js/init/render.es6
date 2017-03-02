@@ -5,7 +5,6 @@ import Store from 'store/index.es6';
 import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 
 import LayoutContainer from 'containers/layout.es6';
-import NoMatch from 'component/page/nomatch.es6';
 import EditExperimentPageContainer from 'containers/editexperimentpage.es6';
 import ExperimentsDashboardPage from 'component/page/experimentsdashboard.es6';
 

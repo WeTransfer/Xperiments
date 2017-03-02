@@ -7,7 +7,6 @@ import {Link} from 'react-router';
 import config from 'config.es6';
 import VisibleApplicationsMenu from 'containers/visibleapplicationsmenu.es6';
 
-import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
@@ -26,30 +25,30 @@ const styling = {
   },
   userBlock: {
     main: {
-      padding: "10px 0px"
+      padding: '10px 0px'
     },
     avatar: {
-      display: "inline-block",
-      verticalAlign: "top",
-      width: "40px",
-      height: "40px",
-      border: "solid 0px",
-      borderRadius: "20px",
-      overflow: "hidden"
+      display: 'inline-block',
+      verticalAlign: 'top',
+      width: '40px',
+      height: '40px',
+      border: 'solid 0px',
+      borderRadius: '20px',
+      overflow: 'hidden'
     },
     avatarImage: {
-      width: "100%"
+      width: '100%'
     },
     info: {
-      display: "inline-block",
-      marginLeft: "10px"
+      display: 'inline-block',
+      marginLeft: '10px'
     },
     infoEmail: {
-      fontSize: "12px",
-      color: "#868686"
+      fontSize: '12px',
+      color: '#868686'
     },
     infoLinks: {
-      fontSize: "12px",
+      fontSize: '12px'
     }
   }
 };
@@ -58,7 +57,10 @@ export default class Layout extends React.Component {
   static propTypes = {
     applications: React.PropTypes.object,
     notifications: React.PropTypes.object,
-    resetNotification: React.PropTypes.func
+    resetNotification: React.PropTypes.func,
+    notification: React.PropTypes.object,
+    children: React.PropTypes.object,
+    user: React.PropTypes.object
   };
 
   componentWillMount() {
@@ -84,9 +86,11 @@ export default class Layout extends React.Component {
         if (typeof subEl === 'string') {
           dialogChildren.push(<h4>{el[0]}</h4>);
         } else if (typeof subEl === 'object') {
-          dialogChildren.push(<ul>{subEl.map(subSubEl => {return <li>{subSubEl}</li>;})}</ul>);
+          dialogChildren.push(<ul>{subEl.map(subSubEl => {
+            return <li>{subSubEl}</li>;
+          })}</ul>);
         }
-      })
+      });
     });
 
     return <Dialog
@@ -112,7 +116,7 @@ export default class Layout extends React.Component {
         notification = <MuiThemeProvider>{this.getErrorNotification()}</MuiThemeProvider>;
       } else if (this.props.notification.type === 'info') {
         snackbar.show = true;
-        snackbar.message = this.props.notification.message
+        snackbar.message = this.props.notification.message;
         snackbar.onClose = () => Store.dispatch(Actions.App.resetNotification());
       }
     }

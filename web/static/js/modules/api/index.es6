@@ -1,4 +1,4 @@
-import 'whatwg-fetch'
+import 'whatwg-fetch';
 
 const DEFAULT_OPTIONS = {
   credentials: 'include'
@@ -11,7 +11,7 @@ const checkStatus = response => {
   }
 
   return Promise.resolve(response);
-}
+};
 
 export default {
   get: (...args) => {
@@ -42,7 +42,7 @@ export default {
     })).then(checkStatus);
   },
 
-  delete: (url, data) => {
+  delete: url => {
     return fetch(new Request(url, {
       method: 'DELETE',
       headers: new Headers({

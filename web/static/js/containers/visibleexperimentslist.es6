@@ -9,7 +9,7 @@ const getVisibleExperiments = (experiments, filter = 'all') => {
     default:
       return experiments.filter(t => t.state === filter);
   }
-}
+};
 
 const mapStateToProps = (state) => {
   return {
@@ -18,8 +18,8 @@ const mapStateToProps = (state) => {
     isDeleting: state.experiments.isDeleting,
     isUpdatingState: state.experiments.isUpdatingState,
     currentFilter: state.experiments.filter
-  }
-}
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -28,12 +28,12 @@ const mapDispatchToProps = (dispatch) => {
     terminate: experimentId => dispatch(Actions.Experiments.terminateExperiment(experimentId)),
     delete: experimentId => dispatch(Actions.Experiments.deleteExperiment(experimentId)),
     filter: state => dispatch(Actions.Experiments.filter(state))
-  }
-}
+  };
+};
 
 const VisibleExperimentsList = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ExperimentsTable)
+)(ExperimentsTable);
 
-export default VisibleExperimentsList
+export default VisibleExperimentsList;

@@ -26,7 +26,8 @@ export default class AddExperiment extends React.Component {
     save: React.PropTypes.func,
     cancel: React.PropTypes.func,
     isVisible: React.PropTypes.bool,
-    validationErrors: React.PropTypes.object
+    validationErrors: React.PropTypes.object,
+    unsetValidationError: React.PropTypes.func
   };
 
   save = () => {
