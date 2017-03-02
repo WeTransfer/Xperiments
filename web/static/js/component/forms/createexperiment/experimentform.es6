@@ -1,4 +1,4 @@
-import React from 'React';
+import React from 'react';
 
 import Form from 'component/form.es6';
 
@@ -75,6 +75,7 @@ export default class AddExperiment extends Form {
               this.unsetError('start_date');
             }}
             errorText={this.getError('start_date')}
+            format="24hr"
           />
         </div>
       </div>
@@ -100,31 +101,21 @@ export default class AddExperiment extends Form {
               this.unsetError('end_date');
             }}
             errorText={this.getError('end_date')}
+            format="24hr"
           />
         </div>
       </div>
       <div className="row">
-        <div className="col-md-5">
+        <div className="col-md-12">
           <TextField
+            fullWidth={true}
             defaultValue={this.props.experiment.max_users !== null ? this.props.experiment.max_users : ''}
-            floatingLabelText="Maximum Participants (optional)"
+            floatingLabelText="Total Number of Participants (optional)"
             onChange={(e, value) => {
               this.props.setMaxUsers(value);
               this.unsetError('max_users');
             }}
             errorText={this.getError('max_users')}
-          />
-        </div>
-        <div className="col-md-5">
-          <TextField
-            defaultValue={this.props.experiment.sampling_rate}
-            disabled={true}
-            floatingLabelText="Sampling Rate (%)"
-            onChange={(e, value) => {
-              this.props.setSamplingRate(value);
-              this.unsetError('sampling_rate');
-            }}
-            errorText={this.getError('sampling_rate')}
           />
         </div>
       </div>

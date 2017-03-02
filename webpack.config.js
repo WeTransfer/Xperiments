@@ -1,15 +1,17 @@
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var CopyWebpackPlugin = require("copy-webpack-plugin");
 
+var path = require('path');
+
 module.exports = {
   entry: ['whatwg-fetch', "./web/static/js/application.es6"],
   output: {
-    path: "./priv/static",
+    path: path.resolve(__dirname, "./priv/static"),
     filename: "js/app.js"
   },
 
   resolve: {
-    modulesDirectories: [ "node_modules", __dirname + "/web/static/js" ]
+    modulesDirectories: ["node_modules", path.resolve(__dirname, "./web/static/js")]
   },
 
   module: {
