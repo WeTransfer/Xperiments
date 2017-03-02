@@ -30,7 +30,10 @@ environment :prod do
   set include_src: false
   set cookie: :"RhyL.eD&).Y^D5]7a.BD{]*9>[w|A~Sqk4<rR3sx44&fNcF$$o1OTt^8Gym6=kD@"
 
-  set post_start_hook: "rel/hooks/post_start"
+  set commands: [
+    "migrate": "rel/commands/migrate.sh",
+    "seed": "rel/commands/seed.sh"
+  ]
 end
 
 # You may define one or more releases in this file.
