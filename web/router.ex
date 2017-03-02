@@ -29,6 +29,8 @@ defmodule Xperiments.Router do
     plug Xperiments.Plug.RefreshJwtToken
   end
 
+  get "/healthcheck", HealthCheckPlug, []
+
   scope "/auth", Xperiments do
     pipe_through :browser
 
@@ -57,7 +59,7 @@ defmodule Xperiments.Router do
     options "/application/:app_name/experiments", AssignerController, :options
 
     post "/application/:app_name/experiments/events", AssignerController, :events
-    options "/applications/:app_name/experiments/events", AssignerController, :events
+    options "/application/:app_name/experiments/events", AssignerController, :events
 
     get "/application/:app_name/experiments/:id/variants/:variant_id", AssignerController, :example
     options "/application/:app_name/experiments/:id/variants/:variant_id", AssignerController, :example

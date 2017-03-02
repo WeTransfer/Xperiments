@@ -43,6 +43,6 @@
   </div>
 
   <script> var __user__ = <%= @user %> </script>
-  <script type="text/javascript" src="/js/app.js" ></script>
+  <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>" ></script>
 </body>
 </html>
