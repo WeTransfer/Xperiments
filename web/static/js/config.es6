@@ -1,5 +1,5 @@
 let currentAppName = 'web';
-const BASE_PATH = `/api/v1`;
+const BASE_PATH = '/api/v1';
 
 export default {
   api: {

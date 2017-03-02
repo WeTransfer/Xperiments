@@ -64,10 +64,14 @@ export default class Variants extends React.Component {
       actions.push(' | ');
     }
 
-    actions.push(<a onClick={e => this.showEditVariant(variant)}>Edit</a>);
+    actions.push(<a onClick={() => {
+      this.showEditVariant(variant);
+    }}>Edit</a>);
     actions.push(' | ');
 
-    actions.push(<a onClick={e => this.props.delete(variant)}>Delete</a>);
+    actions.push(<a onClick={() => {
+      this.props.delete(variant);
+    }}>Delete</a>);
     return actions;
   }
 

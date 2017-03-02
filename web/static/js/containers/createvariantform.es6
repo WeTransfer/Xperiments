@@ -15,7 +15,7 @@ const _allowControlGroupSelection = (variants = []) => {
   variants.forEach((element) => {
     if (element.control_group === true)
       has = false;
-  })
+  });
   return has;
 };
 
