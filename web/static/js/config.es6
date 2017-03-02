@@ -1,11 +1,3 @@
-// import Store from 'store/index.es6';
-
-// const {user, applications} = Store.getState();
-
-// let currentAppName = applications.find((app) => {
-//   return app.id = user.selectedApplication;
-// });
-
 let currentAppName = 'web';
 const BASE_PATH = `/api/v1`;
 
@@ -27,40 +19,40 @@ export default {
     }
   },
   users: {
-    "manpreet@wetransfer.com" : {
+    'manpreet@wetransfer.com' : {
       rights: ['CHANGE_STATE']
     },
-    "dmitry@wetransfer.com": {
+    'dmitry@wetransfer.com': {
       rights: ['CHANGE_STATE']
     },
-    "max@wetransfer.com": {
+    'max@wetransfer.com': {
       rights: ['CHANGE_STATE']
     },
-    "sebaas@wetransfer.com": {
+    'sebaas@wetransfer.com': {
       rights: ['CHANGE_STATE']
     },
-    "vermaat@wetransfer.com": {
+    'vermaat@wetransfer.com': {
       rights: ['CHANGE_STATE']
     },
-    "khalil@wetransfer.com": {
+    'khalil@wetransfer.com': {
       rights: ['CHANGE_STATE']
     },
-    "julik@wetransfer.com": {
+    'julik@wetransfer.com': {
       rights: ['CHANGE_STATE']
     },
-    "bastiaan@wetransfer.com": {
+    'bastiaan@wetransfer.com': {
       rights: ['CHANGE_STATE']
     },
-    "jochem@wetransfer.com": {
+    'jochem@wetransfer.com': {
       rights: ['CHANGE_STATE']
     },
-    "palma@wetransfer.com": {
+    'palma@wetransfer.com': {
       rights: []
     },
-    "brian@wetransfer.com": {
+    'brian@wetransfer.com': {
       rights: []
     },
-    "stefan@wetransfer.com": {
+    'stefan@wetransfer.com': {
       rights: []
     }
   }

@@ -6,20 +6,20 @@ const mapStateToProps = (state) => {
   return {
     applications: state.applications,
     selectedApplication: state.user.selectedApplication
-  }
-}
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
     selectApplication: (applicationId) => {
       dispatch(Actions.User.setApplication(applicationId));
     }
-  }
-}
+  };
+};
 
 const VisibleApplicationsMenu = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ApplicationsMenu)
+)(ApplicationsMenu);
 
-export default VisibleApplicationsMenu
+export default VisibleApplicationsMenu;

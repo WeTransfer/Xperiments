@@ -64,9 +64,11 @@ export default class PayloadEditor extends Form {
       else
         propertyValue = null;
     }
+
+    let propertyField = null;
     
     if ((property.type === 'string' || property.type === 'number') && !property.enum) {
-      return <div className="col-md-12">
+      propertyField = <div className="col-md-12">
         <TextField
           errorText={errorText}
           fullWidth={true}
@@ -84,7 +86,7 @@ export default class PayloadEditor extends Form {
         options.push(<MenuItem value={option.value} primaryText={option.label} />);
       });
 
-      return <div className="col-md-12">
+      propertyField = <div className="col-md-12">
         <SelectField
           errorText={errorText}
           fullWidth={true}
@@ -99,6 +101,8 @@ export default class PayloadEditor extends Form {
         </SelectField>
       </div>;
     }
+
+    return propertyField;
   }
 
   render() {

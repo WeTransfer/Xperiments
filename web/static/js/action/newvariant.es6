@@ -1,7 +1,7 @@
 import ActionHelper from 'modules/redux-actions/index.es6';
 import {actions as ValidationErrorsActions} from 'action/validationerrors.es6';
 
-const validate = (data, variants = []) => {
+const validate = data => {
   let errors = {};
 
   // let totalAllocation = 0;
