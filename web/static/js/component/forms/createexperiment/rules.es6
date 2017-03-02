@@ -107,7 +107,9 @@ export default class Rules extends React.Component {
 
   getActions(rule) {
     let actions = [];
-    actions.push(<a onClick={e => this.props.delete(rule)}>Delete</a>);
+    actions.push(<a onClick={() => {
+      this.props.delete(rule);
+    }}>Delete</a>);
     return actions;
   }
 
