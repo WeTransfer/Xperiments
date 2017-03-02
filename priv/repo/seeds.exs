@@ -1,11 +1,7 @@
-# Script for populating the database. You can run it as:
-#
-#     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     Xperiments.Repo.insert!(%Xperiments.SomeModel{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
+Enum.each Application.get_env(:xperiments, :seed)[:applications], fn {app_name, app_settings} ->
+  case Xperiments.Repo.insert(%Xperiments.Application{name: app_name, settings: app_settings}, on_conflict: :nothing) do
+    {:ok, struct} ->
+      IO.puts "New record is inserted (or did nothing, if it exists): #{inspect struct}"
+    {:error, _} -> :ok
+  end
+end
