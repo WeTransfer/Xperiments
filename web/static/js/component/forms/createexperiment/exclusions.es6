@@ -4,7 +4,6 @@ import Helper from 'helper.es6';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
-import Dialog from 'material-ui/Dialog';
 
 import AddExclusionForm from 'containers/addexclusionform.es6';
 
@@ -82,6 +81,6 @@ export default class Exclusions extends React.Component {
           </Table>
         </div>
       </div>
-    </div>
+    </div>;
   }
 }

@@ -6,7 +6,6 @@ import {Link} from 'react-router';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
-import TextField from 'material-ui/TextField';
 
 import ExperimentForm from 'component/forms/createexperiment/experimentform.es6';
 import Rules from 'component/forms/createexperiment/rules.es6';
@@ -41,7 +40,9 @@ export default class EditExperimentPage extends React.Component {
     setDescription: React.PropTypes.func,
     setMaxUsers: React.PropTypes.func,
     setSamplingRate: React.PropTypes.func,
-    validationErrors: React.PropTypes.object
+    validationErrors: React.PropTypes.object,
+    params: React.PropTypes.object,
+    unsetValidationError: React.PropTypes.func
   };
 
   componentWillMount() {
@@ -74,12 +75,12 @@ export default class EditExperimentPage extends React.Component {
     }
 
     let saveButtonOptions = {
-      label: "update"
+      label: 'update'
     };
 
     if (this.props.experiment.isUpdating){
       saveButtonOptions.disabled = true;
-      saveButtonOptions.label = "updating";
+      saveButtonOptions.label = 'updating';
     }
 
     return <div className="page__edit-experiment">

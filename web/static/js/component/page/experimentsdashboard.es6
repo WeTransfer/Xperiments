@@ -1,10 +1,8 @@
 import React from 'react';
 import Store from 'store/index.es6';
 import Actions from 'action/index.es6';
-import {Link} from 'react-router';
 
 import RaisedButton from 'material-ui/RaisedButton';
-import Dialog from 'material-ui/Dialog';
 import Paper from 'material-ui/Paper';
 
 import CreateExperimentForm from 'containers/createexperiment.es6';
@@ -18,7 +16,7 @@ const styling = {
   button: {
     marginTop: 20
   }
-}
+};
 
 export default class ExperimentsDashboardPage extends React.Component {
   state = {
@@ -60,6 +58,6 @@ export default class ExperimentsDashboardPage extends React.Component {
         onClose={this.hideCreateExperiment}
         onSave={this.hideCreateExperiment}
       />
-    </div>
+    </div>;
   }
 }

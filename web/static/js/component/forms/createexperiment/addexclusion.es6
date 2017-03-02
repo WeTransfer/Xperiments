@@ -22,14 +22,15 @@ export default class AddExclusion extends React.Component {
     onCancel: React.PropTypes.func,
     onAdd: React.PropTypes.func,
     list: React.PropTypes.array,
-    currentlyExcluded: React.PropTypes.array
+    currentlyExcluded: React.PropTypes.array,
+    open: React.PropTypes.func
   }
 
   handleAdd = () => {
     let exclusions = [];
     this.refs.tableBody.state.selectedRows.forEach(rowNumber => {
       exclusions.push(this.props.list[rowNumber].id);
-    })
+    });
     this.props.set(exclusions);
   }
 
@@ -46,7 +47,7 @@ export default class AddExclusion extends React.Component {
         primary={true}
         disabled={false}
         onTouchTap={this.handleAdd}
-      />,
+      />
     ];
 
     let renderedExcludedExperiments = [];

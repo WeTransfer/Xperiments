@@ -43,7 +43,7 @@ export default function(state = {}, action) {
         data: Object.assign({}, state.data, action.data)
       };
 
-    case actions.SET_EXPERIMENT_VARIANT:
+    case actions.SET_EXPERIMENT_VARIANT: {
       let variant = action.data;
       if (typeof variant.payload === 'object')
         variant.payload = JSON.stringify(variant.payload);
@@ -54,8 +54,9 @@ export default function(state = {}, action) {
         ...state,
         data: newData
       };
+    }
 
-    case actions.UPDATE_EXPERIMENT_VARIANT:
+    case actions.UPDATE_EXPERIMENT_VARIANT: {
       newData = Object.assign({}, state.data);
       let indexOfVariant = newData.variants.indexOf(action.variant);
       if (indexOfVariant !== -1) {
@@ -68,6 +69,7 @@ export default function(state = {}, action) {
         ...state,
         data: newData
       };
+    }
 
     case actions.POP_EXPERIMENT_VARIANT:
       newData = Object.assign({}, state.data);

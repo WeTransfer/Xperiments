@@ -1,16 +1,13 @@
-import Store from 'store/index.es6';
 import ActionHelper from 'modules/redux-actions/index.es6';
 import {actions as ValidationErrorsActions} from 'action/validationerrors.es6';
-import API from 'modules/api/index.es6';
-import config from 'config.es6';
 
-const validate = (data, variants = []) => {
+const validate = data => {
   let errors = {};
 
-  let totalAllocation = 0;
-  variants.forEach(variant => {
-    totalAllocation += variant.allocation;
-  });
+  // let totalAllocation = 0;
+  // variants.forEach(variant => {
+  //   totalAllocation += variant.allocation;
+  // });
 
   if (!data.name)
     errors.name = ['This field is required'];
@@ -26,14 +23,14 @@ const validate = (data, variants = []) => {
     errors.payload_type = ['This field is required'];
   } else {
     let payloadType = Object.keys(data.payload)[0];
-    switch(payloadType) {
+    switch (payloadType) {
       case 'splashpagePlusCTA':
         if (!data.payload[payloadType].pathname)
           errors.payload_pathname = ['This field is required'];
         
         if (!data.payload[payloadType].search)
           errors.payload_search = ['This field is required'];
-      break;
+        break;
       case 'transferBubble':
         if (data.payload[payloadType].delay === null)
           errors.payload_delay = ['This field is required'];
@@ -53,30 +50,30 @@ const validate = (data, variants = []) => {
 
         if (data.payload[payloadType].buttonText && !data.payload[payloadType].buttonAction)
           errors.payload_buttonAction = ['This field is required'];
-      break;
+        break;
       case 'mobileHeader':
         if (!data.payload[payloadType].pathname)
           errors.payload_pathname = ['This field is required'];
 
         if (!data.payload[payloadType].text)
           errors.payload_text = ['This field is required'];
-      break;
+        break;
       case 'custom':
         if (!data.payload[payloadType].content) {
           errors.payload_content = ['This field is required'];
         } else {
           try {
             JSON.stringify(data.payload[payloadType].content);
-          } catch(e) {
+          } catch (e) {
             errors.payload_content = ['Provide a valid JSON'];
           }
         }
-      break;
+        break;
     }
   }
 
   return errors;
-}
+};
 
 export const actions = ActionHelper.types([
   'SET_NEW_VARIANT_VALUES',

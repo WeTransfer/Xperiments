@@ -9,8 +9,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/SelectField';
 import Checkbox from 'material-ui/Checkbox';
 
 import globalStyling from 'globalstyling.es6';
@@ -36,10 +34,6 @@ export default class VariantForm extends Form {
     allowControlGroupSelection: React.PropTypes.bool,
     validationErrors: React.PropTypes.object,
     unsetValidationError: React.PropTypes.func
-  }
-
-  constructor(props) {
-    super(props);
   }
 
   handleAdd = () => {

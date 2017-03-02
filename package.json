@@ -3,11 +3,15 @@
   "license": "MIT",
   "scripts": {
     "deploy": "webpack -p",
-    "watch": "webpack --watch-stdin --progress --color"
+    "watch": "webpack --watch-stdin --progress --color",
+    "lint": "eslint . --ext .es6"
   },
   "dependencies": {
     "ContentEdit": "^1.2.1",
+    "babel-eslint": "^7.1.1",
     "bootstrap": "^3.3.7",
+    "eslint": "^3.16.1",
+    "eslint-plugin-react": "^6.10.0",
     "fast-async": "6.0.31",
     "material-ui": "^0.16.7",
     "phoenix": "file:deps/phoenix",

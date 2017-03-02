@@ -12,7 +12,7 @@ export default function(state = {}, action) {
         isFetching: true
       };
 
-    case actions.FETCHED_EXPERIMENTS:
+    case actions.FETCHED_EXPERIMENTS: {
       const indexedList = {};
       action.list.forEach(experiment => {
         indexedList[experiment.id] = experiment;
@@ -24,6 +24,7 @@ export default function(state = {}, action) {
         indexedList,
         isFetching: false
       };
+    }
 
     case actions.FILTER_EXPERIMENTS_BY_STATE:
       return {

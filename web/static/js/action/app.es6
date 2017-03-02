@@ -9,7 +9,7 @@ export const actions = ActionHelper.types([
 
 export default ActionHelper.generate({
   setRedirectPath(path) {
-    return (dispatch, getState) => {
+    return dispatch => {
       dispatch({
         type: actions.SET_APP_REDIRECT,
         path
@@ -24,7 +24,7 @@ export default ActionHelper.generate({
   },
 
   resetNotification() {
-    return (dispatch, getState) => {
+    return dispatch => {
       dispatch({type: actions.RESET_APP_NOTIFICATION});
     };
   }

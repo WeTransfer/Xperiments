@@ -5,14 +5,6 @@ import Form from 'component/form.es6';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-
-import globalStyling from 'globalstyling.es6';
-
-const styling = {
-  ...globalStyling
-};
 
 export default class AddExperiment extends Form {
   static propTypes = {
@@ -29,17 +21,13 @@ export default class AddExperiment extends Form {
     unsetValidationError: React.PropTypes.func
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return <div className="form__create-experiment form__create-experiment--is-step-one">
       <div className="row">
         <div className="col-md-12">
           <TextField
             fullWidth={true}
-            defaultValue={this.props.experiment.name || ""}
+            defaultValue={this.props.experiment.name || ''}
             floatingLabelText="Name"
             onChange={(e, value) => {
               this.props.setName(value);
@@ -52,7 +40,7 @@ export default class AddExperiment extends Form {
       <div className="row">
         <div className="col-md-12">
           <TextField
-            value={this.props.experiment.description || ""}
+            value={this.props.experiment.description || ''}
             floatingLabelText="Hypothesis/Description"
             multiLine={true}
             rows={2}
