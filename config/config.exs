@@ -29,6 +29,9 @@ config :phoenix, :generators,
 config :xperiments, :cors,
   origin: "*"
 
+config :xperiments, :seed,
+  applications: [{"web", %{url: "http://lvh.me:5000"}}]
+
 config :ueberauth, Ueberauth,
   providers: [
     google: {Ueberauth.Strategy.Google, [default_scope: "email profile"]}
