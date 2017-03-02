@@ -4,7 +4,7 @@ defmodule Xperiments.Mixfile do
   def project do
     [app: :xperiments,
      version: "0.0.1",
-     elixir: "~> 1.2",
+     elixir: "~> 1.4",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
@@ -18,8 +18,10 @@ defmodule Xperiments.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Xperiments, []},
-     applications: [:phoenix, :phoenix_pubsub, :cowboy, :logger,
-                    :phoenix_ecto, :postgrex, :timex, :ueberauth, :ueberauth_google]]
+     applications: [:phoenix, :phoenix_pubsub, :cowboy, :logger, :phoenix_html,
+                    :phoenix_ecto, :postgrex, :timex, :ueberauth, :ueberauth_google],
+     included_applications: [:cors_plug, :distillery, :ecto_state_machine, :guardian,
+                             :bodyguard]]
   end
 
   # Specifies which paths to compile per environment.
@@ -33,6 +35,7 @@ defmodule Xperiments.Mixfile do
     [{:phoenix, "~> 1.2.1"},
      {:phoenix_pubsub, "~> 1.0"},
      {:phoenix_ecto, "~> 3.0"},
+     {:phoenix_html, "~> 2.6"},
      {:postgrex, ">= 0.0.0"},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
@@ -43,6 +46,7 @@ defmodule Xperiments.Mixfile do
      {:ueberauth_google, "~> 0.5"},
      {:guardian, "~> 0.14"},
      {:bodyguard, "~> 0.6.1"},
+     {:distillery, "~> 1.0"},
      {:ex_machina, "~> 1.0", only: :test},
      {:mock, "~> 0.2.0", only: :test}]
   end
