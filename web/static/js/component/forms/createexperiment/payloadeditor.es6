@@ -16,10 +16,6 @@ export default class PayloadEditor extends Form {
     unsetValidationError: React.PropTypes.func
   }
 
-  constructor(props) {
-    super(props);
-  }
-
   setPayload(key, value, type) {
     let payloadType = Object.keys(this.props.value)[0];
     let payload = {};
@@ -38,7 +34,7 @@ export default class PayloadEditor extends Form {
 
     try {
       payload[type] = this.props.types[index].defaults;
-    } catch(e) {
+    } catch (e) {
       // throw
     }
 
@@ -52,7 +48,7 @@ export default class PayloadEditor extends Form {
     if (property.requires) {
       property.requires.forEach(propertyName => {
         this.props.unsetValidationError(`payload_${propertyName}`);
-      })
+      });
     }
   }
 
@@ -69,7 +65,7 @@ export default class PayloadEditor extends Form {
         propertyValue = null;
     }
     
-    if ((property.type === 'string' || property.type == 'number') && !property.enum) {
+    if ((property.type === 'string' || property.type === 'number') && !property.enum) {
       return <div className="col-md-12">
         <TextField
           errorText={errorText}
@@ -86,7 +82,8 @@ export default class PayloadEditor extends Form {
       let options = [];
       property.enum.forEach(option => {
         options.push(<MenuItem value={option.value} primaryText={option.label} />);
-      })
+      });
+
       return <div className="col-md-12">
         <SelectField
           errorText={errorText}
@@ -114,7 +111,7 @@ export default class PayloadEditor extends Form {
       
       if (type.key === payloadType)
         selectedType = type;
-      typeOptions.push(<MenuItem value={type.key} primaryText={type.name} />)
+      typeOptions.push(<MenuItem value={type.key} primaryText={type.name} />);
     });
 
     let typeFields = [];
@@ -123,7 +120,7 @@ export default class PayloadEditor extends Form {
         if (property.hidden === true)
           return;
         typeFields.push(this.makePropertyField(property));
-      })
+      });
     }
 
     return <div className="form__payload-editor">

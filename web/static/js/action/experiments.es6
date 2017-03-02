@@ -1,4 +1,3 @@
-import Store from 'store/index.es6';
 import ActionHelper from 'modules/redux-actions/index.es6';
 import API from 'modules/api/index.es6';
 import {actions as AppActions} from 'action/app.es6';
@@ -20,7 +19,7 @@ export const actions = ActionHelper.types([
 
 export default ActionHelper.generate({
   list() {
-    return async (dispatch, getState) => {
+    return async dispatch => {
       dispatch({type: actions.FETCH_EXPERIMENTS});
 
       API.get(config.api.resources.experiments.GET)
@@ -57,7 +56,7 @@ export default ActionHelper.generate({
   },
 
   deleteExperiment(experimentId) {
-    return async (dispatch, getState) => {
+    return async dispatch => {
       dispatch({
         type: actions.DELETE_EXPERIMENT,
         data: {
@@ -67,20 +66,18 @@ export default ActionHelper.generate({
 
       API.delete(`${config.api.resources.experiments.GET}/${experimentId}`)
         .then(response => {
-          response.json().then(json => {
-            dispatch({
-              type: actions.DELETED_EXPERIMENT,
-              data: {
-                experimentId
-              }
-            });
+          dispatch({
+            type: actions.DELETED_EXPERIMENT,
+            data: {
+              experimentId
+            }
           });
         });
     };
   },
 
   updateState(experimentId, data) {
-    return async (dispatch) => {
+    return async dispatch => {
       dispatch({
         type: actions.UPDATE_EXPERIMENT_STATE,
         data: {
@@ -123,9 +120,9 @@ export default ActionHelper.generate({
         dispatch({type: actions.UPDATE_EXPERIMENT_STATE_FAILED});
 
         throw 'ValidationErrors';
-      } catch(e) {
+      } catch (e) {
         throw 'APIPutFailed';
       }
-    }
+    };
   }
 });

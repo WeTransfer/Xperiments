@@ -57,13 +57,12 @@ export default class Rules extends React.Component {
     this.props.delete(rule);
   }
 
-  editRule(rule) {
-  }
-
   getParameterLabel(parameterValue) {
     try {
       return RuleParameters[RuleParameters.findIndex(el => el.value === parameterValue)].label;
-    } catch (e) {}
+    } catch (e) {
+      // do something
+    }
 
     return parameterValue;
   }
@@ -71,14 +70,16 @@ export default class Rules extends React.Component {
   getOperatorLabel(operatorValue) {
     try {
       return RuleOperators[RuleOperators.findIndex(el => el.value === operatorValue)].label;
-    } catch (e) {}
+    } catch (e) {
+      // do something
+    }
 
     return operatorValue;
   }
 
   getValueLabel(value, parameter) {
     try {
-      switch(parameter) {
+      switch (parameter) {
         case 'device':
           return Devices[Devices.findIndex(el => el.id === value)].label;
         case 'language':
@@ -88,7 +89,9 @@ export default class Rules extends React.Component {
         default:
           return value;
       }
-    } catch (e) {}
+    } catch (e) {
+      // do something
+    }
 
     return value;
   }
@@ -105,8 +108,6 @@ export default class Rules extends React.Component {
   getActions(rule) {
     let actions = [];
     actions.push(<a onClick={e => this.props.delete(rule)}>Delete</a>);
-    // actions.push(" | ");
-    // actions.push(<a href="#" onClick={e => this.editRule(rule)}>Edit</a>);
     return actions;
   }
 

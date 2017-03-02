@@ -1,10 +1,17 @@
 import React from 'react';
 
 export default class Form extends React.Component {
+  static propTypes = {
+    validationErrors: React.PropTypes.object,
+    unsetValidationError: React.PropTypes.func
+  };
+
   getError(key) {
     try {
       return this.props.validationErrors[key][0];
-    } catch(e) {}
+    } catch (e) {
+      // do something
+    }
     return null;
   }
 

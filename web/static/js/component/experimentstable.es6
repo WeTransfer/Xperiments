@@ -39,7 +39,8 @@ export default class ExperimentsTable extends React.Component {
     stop: React.PropTypes.func.isRequired,
     terminate: React.PropTypes.func.isRequired,
     delete: React.PropTypes.func.isRequired,
-    title: React.PropTypes.string
+    title: React.PropTypes.string,
+    filter: React.PropTypes.func
   };
 
   state = {
@@ -78,14 +79,14 @@ export default class ExperimentsTable extends React.Component {
     this.props.delete(experimentId);
   }
 
-  getActions (experiment) {
+  getActions(experiment) {
     const {user} = Store.getState();
 
     let actions = [];
     // Edit
     if (experiment.state === 'draft') {
       actions.push(<Link to={`/experiments/${experiment.id}/edit`} disabled={true}>Edit</Link>);
-      actions.push(" | ");
+      actions.push(' | ');
     }
     
     // View
@@ -100,19 +101,19 @@ export default class ExperimentsTable extends React.Component {
     
     if (config.users[user.email] && config.users[user.email].rights && config.users[user.email].rights.indexOf('CHANGE_STATE') > -1) {
       if (experiment.state === 'draft') {
-        actions.push(" | ");
+        actions.push(' | ');
         actions.push(startAction);
       } else if (experiment.state === 'stopped') {
-        actions.push(" | ");
+        actions.push(' | ');
         actions.push(startAction);
-        actions.push(" | ");
+        actions.push(' | ');
         actions.push(terminateAction);
-        actions.push(" | ");
+        actions.push(' | ');
         actions.push(reportAction);
       } else if (experiment.state === 'running') {
-        actions.push(" | ");
+        actions.push(' | ');
         actions.push(stopAction);
-        actions.push(" | ");
+        actions.push(' | ');
         actions.push(reportAction);
       }
     }
@@ -157,11 +158,11 @@ export default class ExperimentsTable extends React.Component {
             label="close"
             primary={true}
             onTouchTap={::this.hideExperiment}
-          />,
+          />
         ];
         dialog = <Dialog modal={true} open={true} title={visibleExperiment.name} actions={actions}>
           <TextField disabled={true} rows={10} multiLine={true} defaultValue={JSON.stringify(visibleExperiment)} fullWidth={true} floatingLabelText="Data" />
-        </Dialog>
+        </Dialog>;
       }
     }
 

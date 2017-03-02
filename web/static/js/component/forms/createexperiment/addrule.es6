@@ -13,7 +13,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
-import Checkbox from 'material-ui/Checkbox';
 import MenuItem from 'material-ui/MenuItem';
 import AutoComplete from 'material-ui/AutoComplete';
 import SelectField from 'material-ui/SelectField';
@@ -52,10 +51,6 @@ export default class AddRule extends Form {
     unsetValidationError: React.PropTypes.func
   }
 
-  constructor(props) {
-    super(props);
-  }
-
   handleAdd = () => {
     this.props.set(this.props.rule);
   }
@@ -89,7 +84,7 @@ export default class AddRule extends Form {
         primary={true}
         disabled={false}
         onTouchTap={this.handleAdd}
-      />,
+      />
     ];
 
     let valueField = null;
@@ -154,7 +149,6 @@ export default class AddRule extends Form {
               }}
               ref="operator"
               errorText={this.getError('operator')}
-              fullWidth={true}
               disabled={operatorFieldIsDisabled}
             >
               {this.getRuleOperators()}

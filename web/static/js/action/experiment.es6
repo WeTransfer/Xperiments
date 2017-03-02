@@ -1,4 +1,3 @@
-import Store from 'store/index.es6';
 import {actions as ValidationErrorsActions} from 'action/validationerrors.es6';
 import {actions as AppActions} from 'action/app.es6';
 import ActionHelper from 'modules/redux-actions/index.es6';
@@ -34,10 +33,10 @@ export default ActionHelper.generate({
             data: json.experiment
           });
         });
-      } catch(e) {
+      } catch (e) {
         throw 'APIGetFailed';
       }
-    }
+    };
   },
 
   setValues(data) {
@@ -58,14 +57,14 @@ export default ActionHelper.generate({
     };
   },
 
-  updateVariant(newData, variant, formName) {
-    return (dispatch, getState) => {
+  updateVariant(newData, variant) {
+    return dispatch => {
       dispatch({
         type: actions.UPDATE_EXPERIMENT_VARIANT,
         newData,
         variant
       });
-    }
+    };
   },
 
   popVariant(variant) {
@@ -77,13 +76,13 @@ export default ActionHelper.generate({
     };
   },
 
-  pushRule(data, formName) {
+  pushRule(data) {
     return dispatch => {
       dispatch({
         type: actions.SET_EXPERIMENT_RULE,
         data
       });
-    }
+    };
   },
 
   popRule(rule) {
@@ -101,7 +100,7 @@ export default ActionHelper.generate({
         type: actions.SET_EXPERIMENT_EXCLUSION,
         experimentId
       });
-    }
+    };
   },
 
   update(data, formName) {
@@ -135,7 +134,7 @@ export default ActionHelper.generate({
             });
           });
           return;
-        } else if(response.status === 422) {
+        } else if (response.status === 422) {
           response.json().then(json => {
             const validationErrors = json.errors;
             if (Object.keys(validationErrors).length) {
@@ -158,9 +157,9 @@ export default ActionHelper.generate({
         }
 
         dispatch({type: actions.UPDATE_EXPERIMENT_FAILED});
-      } catch(e) {
+      } catch (e) {
         throw 'APIPutFailed';
       }
-    }
+    };
   }
 });

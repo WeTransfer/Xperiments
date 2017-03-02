@@ -1,4 +1,3 @@
-import Store from 'store/index.es6';
 import ActionHelper from 'modules/redux-actions/index.es6';
 import {actions as UserActions} from 'action/user.es6';
 import API from 'modules/api/index.es6';
