@@ -26,7 +26,7 @@ defmodule Xperiments.User do
   ## Auth
 
   def find_or_create(%Auth{} = auth) do
-    if String.split(auth.info.email, "@")[1] != "wetransfer.com" do
+    if List.last(String.split(auth.info.email, "@")) != "wetransfer.com" do
       {:error, "company emails only allowed"}
     else
       case Repo.get_by(__MODULE__, email: auth.info.email) do
