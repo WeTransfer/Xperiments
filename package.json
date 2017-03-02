@@ -3,7 +3,7 @@
   "license": "MIT",
   "scripts": {
     "deploy": "webpack -p",
-    "watch": "webpack --watch-stdin --progress --color",
+    "watch": "NODE_ENV=development webpack --watch-stdin --progress --color",
     "lint": "eslint . --ext .es6"
   },
   "dependencies": {
