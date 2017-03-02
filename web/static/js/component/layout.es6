@@ -81,6 +81,7 @@ export default class Layout extends React.Component {
       dialogOptions.title = this.props.notification.title;
     
     let dialogChildren = [];
+    console.log(this.props.notification);
     this.props.notification.message.forEach(el => {
       el.forEach(subEl => {
         if (typeof subEl === 'string') {

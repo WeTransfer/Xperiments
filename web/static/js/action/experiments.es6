@@ -108,15 +108,21 @@ export default ActionHelper.generate({
           return;
         }
 
-        let message = await Helper.makeErrorMessage(response);
-        dispatch({
-          type: AppActions.SET_APP_NOTIFICATION,
-          notificationData: {
-            type: 'error',
-            title: 'Errors',
-            message: message || 'There was an error updating the experiment state, please try again'
+        // Validation errors
+        response.json().then(json => {
+          if (response.status === 422) {
+            let message = Helper.makeErrorMessage(json);
+            dispatch({
+              type: AppActions.SET_APP_NOTIFICATION,
+              notificationData: {
+                type: 'error',
+                title: 'Errors',
+                message: message || 'There was an error updating the experiment state, please try again'
+              }
+            });
           }
         });
+
         dispatch({type: actions.UPDATE_EXPERIMENT_STATE_FAILED});
 
         throw 'ValidationErrors';
