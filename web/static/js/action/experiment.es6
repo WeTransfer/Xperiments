@@ -3,6 +3,7 @@ import {actions as AppActions} from 'action/app.es6';
 import ActionHelper from 'modules/redux-actions/index.es6';
 import API from 'modules/api/index.es6';
 
+import Helper from 'helper.es6';
 import config from 'config.es6';
 
 export const actions = ActionHelper.types([
@@ -136,6 +137,17 @@ export default ActionHelper.generate({
           return;
         } else if (response.status === 422) {
           response.json().then(json => {
+            let message = Helper.makeErrorMessage(json);
+            dispatch({
+              type: AppActions.SET_APP_NOTIFICATION,
+              notificationData: {
+                type: 'error',
+                title: 'Errors',
+                message: message || 'There was an error updating your experiment, please try again'
+              }
+            });
+
+            // Additionally show validation errors in the forms
             const validationErrors = json.errors;
             if (Object.keys(validationErrors).length) {
               dispatch({
@@ -144,14 +156,6 @@ export default ActionHelper.generate({
                 errors: validationErrors
               });
               throw 'ValidationErrors';
-            }
-          });
-        } else {
-          dispatch({
-            type: AppActions.SET_APP_NOTIFICATION,
-            notificationData: {
-              type: 'error',
-              message: 'There was an error updating your experiment, please try again.'
             }
           });
         }
