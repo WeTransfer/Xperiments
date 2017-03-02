@@ -7,18 +7,18 @@ const mapStateToProps = (state) => {
     user: state.user,
     applications: state.applications,
     notification: state.app.notificationData
-  }
-}
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
     resetNotification: () => dispatch(Actions.App.resetNotification())
   };
-}
+};
 
 const Layout = connect(
   mapStateToProps,
   mapDispatchToProps
-)(LayoutComponent)
+)(LayoutComponent);
 
 export default Layout;

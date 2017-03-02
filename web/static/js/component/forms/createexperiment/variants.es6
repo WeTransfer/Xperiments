@@ -4,7 +4,6 @@ import VariantPayloadOptions from 'variantpayloadoptions.es6';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
-import Dialog from 'material-ui/Dialog';
 
 import CreateVariantFormContainer from 'containers/createvariantform.es6';
 import EditVariantFormContainer from 'containers/editvariantform.es6';
@@ -39,7 +38,7 @@ export default class Variants extends React.Component {
     });
   }
 
-  hideEditVariant = (variant) => {
+  hideEditVariant = () => {
     this.setState({
       editableVariant: null
     });
@@ -62,11 +61,11 @@ export default class Variants extends React.Component {
 
     if (variant.id && this.props.selectedApplication) {
       actions.push(<a target="_blank" href={`${this.props.selectedApplication.settings.url}/?experiment_id=${this.props.experimentId}&variant_id=${variant.id}`}>Preview</a>);
-      actions.push(" | ");
+      actions.push(' | ');
     }
 
     actions.push(<a onClick={e => this.showEditVariant(variant)}>Edit</a>);
-    actions.push(" | ");
+    actions.push(' | ');
 
     actions.push(<a onClick={e => this.props.delete(variant)}>Delete</a>);
     return actions;

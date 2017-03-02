@@ -65,7 +65,7 @@ export default ActionHelper.generate({
       });
 
       API.delete(`${config.api.resources.experiments.GET}/${experimentId}`)
-        .then(response => {
+        .then(() => {
           dispatch({
             type: actions.DELETED_EXPERIMENT,
             data: {
@@ -102,7 +102,7 @@ export default ActionHelper.generate({
             type: AppActions.SET_APP_NOTIFICATION,
             notificationData: {
               type: 'info',
-              message: `experiment was updated`
+              message: 'experiment was updated'
             }
           });
           return;

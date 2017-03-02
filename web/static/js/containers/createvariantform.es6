@@ -1,4 +1,3 @@
-import Store from 'store/index.es6';
 import {connect} from 'react-redux';
 import Actions from 'action/index.es6';
 import VariantForm from 'component/forms/createexperiment/variantform.es6';
@@ -9,32 +8,32 @@ const setValue = (key, value) => {
   let data = {};
   data[key] = value;
   return Actions.NewVariant.setValues(data);
-}
+};
 
 const _allowControlGroupSelection = (variants = []) => {
   let has = true;
   variants.forEach((element) => {
-    if (element.control_group == true)
+    if (element.control_group === true)
       has = false;
   })
   return has;
-}
+};
 
-const mapStateToProps = (state, newProps) => {
+const mapStateToProps = state => {
   return {
     variant: state.newvariant,
     allowControlGroupSelection: _allowControlGroupSelection(state.experiment.data.variants),
     validationErrors: state.validationerrors[FORM_NAME]
   };
-}
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    setName: value => {dispatch(setValue('name', value));},
-    setAllocation: value => {dispatch(setValue('allocation', value));},
-    setControlGroup: value => {dispatch(setValue('control_group', value));},
-    setPayload: value => {dispatch(setValue('payload', value));},
-    setDescription: value => {dispatch(setValue('description', value));},
+    setName: value => dispatch(setValue('name', value)),
+    setAllocation: value => dispatch(setValue('allocation', value)),
+    setControlGroup: value => dispatch(setValue('control_group', value)),
+    setPayload: value => dispatch(setValue('payload', value)),
+    setDescription: value => dispatch(setValue('description', value)),
     set: data => {
       dispatch(Actions.NewVariant.validate(data, FORM_NAME));
       dispatch(Actions.Experiment.pushVariant(data));
@@ -49,8 +48,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     unsetValidationError: fieldName => {
       dispatch(Actions.ValidationErrors.unset(fieldName, FORM_NAME));
     }
-  }
-}
+  };
+};
 
 const VariantFormContainer = connect(
   mapStateToProps,
