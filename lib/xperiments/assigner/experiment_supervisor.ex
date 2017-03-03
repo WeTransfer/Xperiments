@@ -23,11 +23,11 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
         Experiment.register_priority(pid)
         Logger.info "Experiment #{experiment_data.name} successfully started"
         {:ok, pid}
-      {:error, {:bad_experiment, experiment}} ->
-        Logger.error "Given experiment is not started: #{inspect experiment}"
+      {:error, {:bad_experiment, err, experiment}} ->
+        Logger.error "Given experiment is not started: #{inspect experiment} with error: #{inspect err}"
         :error
       err ->
-        Logger.error "Can't start an experiment with the reason: #{inspect err}"
+        Logger.error "Can't start an experiment with a reason: #{inspect err}"
         :error
     end
   end
