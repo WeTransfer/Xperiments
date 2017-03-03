@@ -5,6 +5,7 @@ defmodule Xperiments.Assigner.Experiment do
   """
   use GenServer
   require Logger
+  alias Xperiments.Experiment, as: ModelExperiment
 
   @stat_treshhold 50 # defines how often save statistic data to DB
 
@@ -25,9 +26,7 @@ defmodule Xperiments.Assigner.Experiment do
 
   def terminate(reason, state) do
     do_sync_stat_to_db(state.statistics, state.id, true)
-    spawn fn ->
-      Xperiments.Experiment.set_terminated_state(state.id)
-    end
+    Task.start(ModelExperiment, :set_terminated_state, [state.id])
     Logger.info "Shutting down the experiment '#{state.name}' with id #{state.id} with reason: #{reason}"
     :normal
   end
@@ -48,7 +47,7 @@ defmodule Xperiments.Assigner.Experiment do
   end
 
   defp prepare_statistics(%{statistics: nil} = exp) do
-    Map.update!(exp, :statistics, fn _ -> Map.from_struct(%Xperiments.Experiment.Statistics{}) end)
+    Map.update!(exp, :statistics, fn _ -> Map.from_struct(%ModelExperiment.Statistics{}) end)
   end
   defp prepare_statistics(exp), do: exp
 
@@ -282,9 +281,7 @@ defmodule Xperiments.Assigner.Experiment do
   defp do_sync_stat_to_db(stat, eid, force \\ false)
   defp do_sync_stat_to_db(%{common_impression: imp} = stat, eid, force) when imp != 0 do
     if force or rem(stat.common_impression, @stat_treshhold) == 0 do
-      spawn fn ->
-        Xperiments.Experiment.update_statistics(eid, stat)
-      end
+      Task.start(ModelExperiment, :update_statistics, [eid, stat])
     end
     stat
   end

@@ -16,7 +16,7 @@ defmodule Xperiments.Assigner.ExperimentSupervisorTest do
     exp = insert(:experiment, state: "draft")
     assert capture_log(fn ->
       :error = ExperimentSupervisor.start_experiment(exp)
-      end) =~ ":error"
+      end) =~ "Given experiment is not started"
   end
 
   test "start a new experiment", context do
