@@ -246,7 +246,7 @@ defmodule Xperiments.Assigner.Experiment do
   defp do_compare_rules(segments, rules) do
     result =
       Enum.map(rules, fn r ->
-        if given_value = Map.get(segments, r.parameter) do
+        if given_value = Map.get(segments, String.downcase(r.parameter)) do
           apply(Kernel, String.to_atom(r.operator), [given_value, r.value])
         else
           false
