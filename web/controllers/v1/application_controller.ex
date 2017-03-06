@@ -1,4 +1,4 @@
-defmodule Xperiments.ApplicationController do
+defmodule Xperiments.V1.ApplicationController do
   use Xperiments.Web, :controller
   alias Xperiments.Application
 

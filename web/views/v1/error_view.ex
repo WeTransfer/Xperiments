@@ -1,4 +1,4 @@
-defmodule Xperiments.ErrorView do
+defmodule Xperiments.V1.ErrorView do
   use Xperiments.Web, :view
 
   def render("404.json", _assigns) do

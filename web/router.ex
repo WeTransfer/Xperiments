@@ -41,17 +41,20 @@ defmodule Xperiments.Router do
     get "/:provider/callback", AuthController, :callback
   end
 
-  scope "/api/v1", Xperiments do
+  scope "/api", Xperiments do
     pipe_through [:api, :api_auth]
 
-    resources "/applications", ApplicationController, only: [:index], param: :name do
-      resources "/experiments", ExperimentController, except: [:delete, :new] do
-        put "/state",  ExperimentController, :change_state, as: :state
-        get "/variant/:variant_id", ExperimentController, :variant, as: :variant
+    scope "/v1", as: :api_v1, alias: V1 do
+      resources "/applications", ApplicationController, only: [:index], param: :name do
+        resources "/experiments", ExperimentController, except: [:delete, :new] do
+          put "/state",  ExperimentController, :change_state, as: :state
+          get "/variant/:variant_id", ExperimentController, :variant, as: :variant
+        end
       end
     end
   end
 
+  # Additional option routes added because of CORS
   scope "/assigner", Xperiments do
     pipe_through [:api, :external]
 
