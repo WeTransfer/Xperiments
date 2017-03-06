@@ -32,6 +32,14 @@ defmodule Xperiments.Assigner.ExperimentSupervisorTest do
     assert length(ExperimentSupervisor.experiment_pids()) == 0
   end
 
+  test "change a state to 'terminated' in a DB when trying to load invalid experiment" do
+    exp = insert(:experiment, state: "running", end_date: Timex.shift(Timex.now, days: -1))
+    :error = ExperimentSupervisor.start_experiment(exp)
+    :timer.sleep 30
+    db_exp = Xperiments.Repo.get!(Xperiments.Experiment, exp.id)
+    assert db_exp.state == "terminated"
+  end
+
   test "returning pids of children in order sorted by priority" do
     use Timex
     datetime = fn (d) -> Timex.shift(Timex.now, days: d) end

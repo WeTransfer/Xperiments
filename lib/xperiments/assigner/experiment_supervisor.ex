@@ -2,6 +2,7 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
   use Supervisor
   require Logger
   alias Xperiments.Assigner.Experiment
+  alias Xperiments.Experiment, as: ModelExperiment
 
   def start_link do
     Supervisor.start_link(__MODULE__, :ok, name: __MODULE__)
@@ -25,6 +26,7 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
         {:ok, pid}
       {:error, {:bad_experiment, err, experiment}} ->
         Logger.error "Given experiment is not started: #{inspect experiment} with error: #{inspect err}"
+        Task.start(ModelExperiment, :set_terminated_state, [experiment.id])
         :error
       err ->
         Logger.error "Can't start an experiment with a reason: #{inspect err}"
