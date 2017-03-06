@@ -13,8 +13,15 @@ const validate = data => {
   if (!data.operator)
     errors.operator = ['This field is required'];
 
-  if (!data.value)
+  if (data.value === '' || data.value === null) {
     errors.value = ['This field is required'];
+  } else if (data.type) {
+    if (data.type === 'string' && typeof data.value !== data.type){
+      errors.value = ['Provide a string'];
+    } else if (data.type === 'number' && typeof data.value !== data.type) {
+      errors.value = ['Provide a number'];
+    }
+  }
 
   return errors;
 };

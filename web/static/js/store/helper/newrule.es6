@@ -1,6 +1,6 @@
 export default {
   parameter: null,
-  type: 'string',
-  operator: '==',
+  type: null,
+  operator: null,
   value: null
 };
