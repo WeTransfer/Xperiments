@@ -3,7 +3,8 @@ import React from 'react';
 import Form from 'component/form.es6';
 
 import RuleParameters from 'ruleparameters.es6';
-import RuleOperators from 'ruleoperators.es6';
+import RuleOperatorsByType from 'ruleoperatorsbytype.es6';
+import RuleTypesByParameter from 'ruletypesbyparameter.es6';
 import Countries from 'countries.es6';
 import Languages from 'languages.es6';
 import Devices from 'devices.es6';
@@ -44,6 +45,7 @@ export default class AddRule extends Form {
     cancel: React.PropTypes.func,
     onAdd: React.PropTypes.func,
     setParameter: React.PropTypes.func,
+    setType: React.PropTypes.func,
     setOperator: React.PropTypes.func,
     setValue: React.PropTypes.func,
     open: React.PropTypes.bool,
@@ -65,10 +67,22 @@ export default class AddRule extends Form {
 
   getRuleOperators() {
     let items = [];
-    RuleOperators.forEach(operator => {
-      items.push(<MenuItem value={operator.value} primaryText={operator.label} />);
-    });
+    
+    if (this.props.rule.type) {
+      RuleOperatorsByType[this.props.rule.type].forEach(operator => {
+        items.push(<MenuItem value={operator.value} primaryText={operator.label} />);
+      });
+    }
+
     return items;
+  }
+
+  handleValue(value, ruleType) {
+    if (ruleType === 'number')
+      value = parseFloat(value);
+
+    this.props.setValue(value);
+    this.unsetError('value');
   }
 
   render() {
@@ -88,7 +102,6 @@ export default class AddRule extends Form {
     ];
 
     let valueField = null;
-    let operatorFieldIsDisabled = true;
     if (dataSource[this.props.rule.parameter]) {
       valueField = <AutoComplete
         fullWidth={true}
@@ -98,8 +111,7 @@ export default class AddRule extends Form {
         openOnFocus={true}
         ref="value"
         onNewRequest={(request) => {
-          this.props.setValue(request.id);
-          this.unsetError('value');
+          this.handleValue(request.id, this.props.rule.type);
         }}
         errorText={this.getError('value')}
         dataSourceConfig={{text: 'label', value: 'id'}}
@@ -113,11 +125,9 @@ export default class AddRule extends Form {
         ref="value"
         errorText={this.getError('value')}
         onChange={(e, value) => {
-          this.props.setValue(value);
-          this.unsetError('value');
+          this.handleValue(value, this.props.rule.type);
         }}
       />;
-      operatorFieldIsDisabled = false;
     }
 
     return <div className="form__create-rule">
@@ -129,6 +139,7 @@ export default class AddRule extends Form {
               floatingLabelText="Parameter*"
               value={this.props.rule.parameter}
               onChange={(e, value, payload) => {
+                this.props.setType(RuleTypesByParameter[payload]);
                 this.props.setParameter(payload);
                 this.unsetError('parameter');
               }}
@@ -149,7 +160,6 @@ export default class AddRule extends Form {
               }}
               ref="operator"
               errorText={this.getError('operator')}
-              disabled={operatorFieldIsDisabled}
             >
               {this.getRuleOperators()}
             </SelectField>
