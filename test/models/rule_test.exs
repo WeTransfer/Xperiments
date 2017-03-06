@@ -24,11 +24,11 @@ defmodule Xperiments.RuleTest do
   test "validate operators for specific types" do
     chset = Rule.changeset(%Rule{}, %{@valid_attrs | operator: ">="})
     refute chset.valid?
-    assert hd(chset.errors) == {:type, {"For String types only '==' and '!=' operators are allowed", []}}
+    assert hd(chset.errors) == {:type, {"string types must have only '==' and '!=' operators", []}}
     # boolean
     chset = Rule.changeset(%Rule{}, %{@valid_attrs | type: "boolean", operator: "!="})
     refute chset.valid?
-    assert hd(chset.errors) == {:type, {"Boolean type must have only '==' operator and value should be 'true' or 'false'", []}}
+    assert hd(chset.errors) == {:type, {"boolean type must have only '==' operator and value must be 'true' or 'false'", []}}
   end
 
   test "downcase of a parameter when saving" do
