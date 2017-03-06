@@ -32,7 +32,7 @@ defmodule Xperiments.Rule do
 
   def validate_string_type(chset) do
     changes = chset.changes
-    if changes.type == "string" and not changes.operator in ["==", "!="] do
+    if changes[:type] == "string" and not changes[:operator] in ["==", "!="] do
       add_error(chset, :type, "For String types only '==' and '!=' operators are allowed")
     else
       chset
@@ -41,7 +41,7 @@ defmodule Xperiments.Rule do
 
   def validate_boolean_type(chset) do
     changes = chset.changes
-    if changes.type == "boolean" and changes.operator != "==" and not changes.value in ["true", "false"]  do
+    if changes[:type] == "boolean" and changes[:operator] != "==" and not changes[:value] in ["true", "false"]  do
       add_error(chset, :type, "Boolean type must have only '==' operator and value should be 'true' or 'false'")
     else
       chset
