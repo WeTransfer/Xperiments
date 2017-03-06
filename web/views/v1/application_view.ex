@@ -1,4 +1,4 @@
-defmodule Xperiments.ApplicationView do
+defmodule Xperiments.V1.ApplicationView do
   use Xperiments.Web, :view
 
   def render("index.json", %{applications: apps}) do
