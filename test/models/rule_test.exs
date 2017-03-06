@@ -36,4 +36,9 @@ defmodule Xperiments.RuleTest do
     assert chset.valid?
     assert chset.changes[:parameter] == "lang"
   end
+
+  test "validation for value if type set to 'number'" do
+    chset = Rule.changeset(%Rule{}, %{@valid_attrs | type: "number", value: "str"})
+    refute chset.valid?
+  end
 end
