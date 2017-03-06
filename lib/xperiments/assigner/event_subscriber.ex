@@ -18,7 +18,7 @@ defmodule Xperiments.Assigner.EventSubscriber do
   end
 
   def handle_info(%{event: "run_experiment", payload: payload}, state) do
-    Taks.start(Experiment, :restart, [payload.id])
+    Task.start(Experiment, :restart, [payload.id])
     {:noreply, state}
   end
 
