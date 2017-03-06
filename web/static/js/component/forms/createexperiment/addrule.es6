@@ -78,9 +78,6 @@ export default class AddRule extends Form {
   }
 
   handleValue(value, ruleType) {
-    if (ruleType === 'number')
-      value = parseFloat(value);
-
     this.props.setValue(value);
     this.unsetError('value');
   }
