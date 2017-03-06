@@ -8,6 +8,8 @@ import Countries from 'countries.es6';
 import Languages from 'languages.es6';
 import Devices from 'devices.es6';
 import UserAccountTypes from 'useraccounttypes.es6';
+import Browsers from 'browsers.es6';
+import Platforms from 'platforms.es6';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -33,7 +35,9 @@ const dataSource = {
   device: Devices,
   language: Languages,
   country: Countries,
-  userAccountType: UserAccountTypes
+  userAccountType: UserAccountTypes,
+  browser: Browsers,
+  platform: Platforms
 };
 
 export default class AddRule extends Form {
@@ -58,6 +62,7 @@ export default class AddRule extends Form {
   getRuleParameters() {
     let items = [<MenuItem value={null} primaryText="" />];
     RuleParameters.forEach(parameter => {
+      if (parameter.disabled) return;
       items.push(<MenuItem value={parameter.value} primaryText={parameter.label} />);
     });
     return items;
@@ -103,7 +108,7 @@ export default class AddRule extends Form {
         }}
         errorText={this.getError('value')}
         dataSourceConfig={{text: 'label', value: 'id'}}
-        maxSearchResults={5}
+        maxSearchResults={6}
       />;
     } else {
       valueField = <TextField
