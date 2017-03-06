@@ -58,7 +58,6 @@ defmodule Xperiments.Rule do
     end
   end
 
-
   def downcase_parameter(chset) do
     if parameter = chset.changes[:parameter] do
       change(chset, parameter: String.downcase(parameter))
