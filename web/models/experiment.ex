@@ -105,7 +105,7 @@ defmodule Xperiments.Experiment do
   def validate_current_or_future_date(changeset, field) do
     case get_field(changeset, field) do
       nil -> changeset
-      date -> do_compare_two_dates(changeset, field, date, DateTime.utc_now, "Date in the past")
+      date -> do_compare_two_dates(changeset, field, date, DateTime.utc_now, "Date is in the past")
     end
   end
 
@@ -130,7 +130,7 @@ defmodule Xperiments.Experiment do
   """
   def validate_model_has_variants(changeset) do
     if length(changeset.data.variants) == 0 do
-      add_error(changeset, :variants, "It should be at least one variant to run an experiment")
+      add_error(changeset, :variants, "There should be at least one variant to run the experiment")
     else
       changeset
     end
