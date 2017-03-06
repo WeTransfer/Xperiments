@@ -30,4 +30,10 @@ defmodule Xperiments.RuleTest do
     refute chset.valid?
     assert hd(chset.errors) == {:type, {"Boolean type must have only '==' operator and value should be 'true' or 'false'", []}}
   end
+
+  test "downcase of a parameter when saving" do
+    chset = Rule.changeset(%Rule{}, %{@valid_attrs | parameter: "Lang"})
+    assert chset.valid?
+    assert chset.changes[:parameter] == "lang"
+  end
 end

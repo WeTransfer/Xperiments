@@ -28,6 +28,7 @@ defmodule Xperiments.Rule do
     |> validate_inclusion(:operator, ~w(== != > < >= <=))
     |> validate_string_type()
     |> validate_boolean_type()
+    |> downcase_parameter()
   end
 
   def validate_string_type(chset) do
@@ -43,6 +44,14 @@ defmodule Xperiments.Rule do
     changes = chset.changes
     if changes[:type] == "boolean" and changes[:operator] != "==" and not changes[:value] in ["true", "false"]  do
       add_error(chset, :type, "Boolean type must have only '==' operator and value should be 'true' or 'false'")
+    else
+      chset
+    end
+  end
+
+  def downcase_parameter(chset) do
+    if parameter = chset.changes[:parameter] do
+      change(chset, parameter: String.downcase(parameter))
     else
       chset
     end
