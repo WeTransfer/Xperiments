@@ -22,6 +22,13 @@ export default class AddExperiment extends Form {
   };
 
   render() {
+    let datePickerOptions = {
+      minDate: new Date(),
+      okLabel: 'Select',
+      mode: 'portrait',
+      locale: 'en-US'
+    };
+
     return <div className="form__create-experiment form__create-experiment--is-step-one">
       <div className="row">
         <div className="col-md-12">
@@ -64,6 +71,7 @@ export default class AddExperiment extends Form {
               this.unsetError('start_date');
             }}
             errorText={this.getError('start_date')}
+            {...datePickerOptions}
           />
         </div>
         <div className="col-md-7">
@@ -89,6 +97,7 @@ export default class AddExperiment extends Form {
               this.unsetError('end_date');
             }}
             errorText={this.getError('end_date')}
+            {...datePickerOptions}
           />
         </div>
         <div className="col-md-7">
