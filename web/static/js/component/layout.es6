@@ -1,6 +1,7 @@
 import React from 'react';
 import Store from 'store/index.es6';
 import Actions from 'action/index.es6';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Link} from 'react-router';
 
@@ -52,6 +53,12 @@ const styling = {
     }
   }
 };
+
+const muiTheme = getMuiTheme({
+  palette: {
+    textColor: '#444444'
+  }
+});
 
 export default class Layout extends React.Component {
   static propTypes = {
@@ -123,13 +130,13 @@ export default class Layout extends React.Component {
 
     let children = null;
     if (this.props.children !== null) {
-      children = <MuiThemeProvider>
+      children = <MuiThemeProvider muiTheme={muiTheme}>
         {this.props.children}
       </MuiThemeProvider>;
     }
 
     return <div>
-      <MuiThemeProvider>
+      <MuiThemeProvider muiTheme={muiTheme}>
         <Paper style={styling.paper} zDepth={1} rounded={false}>
           <div className="row">
             <div className="col-xs-12 col-md-2">
