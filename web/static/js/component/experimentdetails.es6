@@ -12,7 +12,7 @@ export default class ExperimentDetails extends React.Component {
     return <div className="experiment__details">
       <Rules
         list={this.props.experiment.rules}
-        title="Targeting"
+        title="Rules"
         readOnly={true}
       />
       <Variants
