@@ -13,8 +13,8 @@ defmodule Xperiments.Rule do
   @primary_key false
   embedded_schema do
     field :parameter
-    field :type, :string, default: "string"
-    field :operator, :string, default: "=="
+    field :type, :string
+    field :operator, :string
     field :value
   end
 
@@ -24,8 +24,45 @@ defmodule Xperiments.Rule do
     struct
     |> cast(params, @allowed_params)
     |> validate_required(@allowed_params)
-    |> validate_inclusion(:type, ~w(string number))
+    |> validate_inclusion(:type, ~w(string number boolean))
     |> validate_inclusion(:operator, ~w(== != > < >= <=))
+    |> validate_string_type()
+    |> validate_boolean_type()
+    |> validate_number_for_type_number()
+    |> downcase_parameter()
   end
 
+  def validate_string_type(chset) do
+    changes = chset.changes
+    if changes[:type] == "string" and not changes[:operator] in ["==", "!="] do
+      add_error(chset, :type, "string types must have only '==' and '!=' operators")
+    else
+      chset
+    end
+  end
+
+  def validate_boolean_type(chset) do
+    changes = chset.changes
+    if changes[:type] == "boolean" and changes[:operator] != "==" and not changes[:value] in ["true", "false"]  do
+      add_error(chset, :type, "boolean type must have only '==' operator and value must be 'true' or 'false'")
+    else
+      chset
+    end
+  end
+
+  def validate_number_for_type_number(chset) do
+    if chset.changes[:type] == "number" and not is_number(chset.changes[:value]) do
+      add_error(chset, :value, "must be a number")
+    else
+      chset
+    end
+  end
+
+  def downcase_parameter(chset) do
+    if parameter = chset.changes[:parameter] do
+      change(chset, parameter: String.downcase(parameter))
+    else
+      chset
+    end
+  end
 end

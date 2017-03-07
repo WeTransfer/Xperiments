@@ -20,4 +20,25 @@ defmodule Xperiments.RuleTest do
     changeset = Rule.changeset(%Rule{}, %{@valid_attrs | type: "bad_type"})
     refute changeset.valid?
   end
+
+  test "validate operators for specific types" do
+    chset = Rule.changeset(%Rule{}, %{@valid_attrs | operator: ">="})
+    refute chset.valid?
+    assert hd(chset.errors) == {:type, {"string types must have only '==' and '!=' operators", []}}
+    # boolean
+    chset = Rule.changeset(%Rule{}, %{@valid_attrs | type: "boolean", operator: "!="})
+    refute chset.valid?
+    assert hd(chset.errors) == {:type, {"boolean type must have only '==' operator and value must be 'true' or 'false'", []}}
+  end
+
+  test "downcase of a parameter when saving" do
+    chset = Rule.changeset(%Rule{}, %{@valid_attrs | parameter: "Lang"})
+    assert chset.valid?
+    assert chset.changes[:parameter] == "lang"
+  end
+
+  test "validation for value if type set to 'number'" do
+    chset = Rule.changeset(%Rule{}, %{@valid_attrs | type: "number", value: "str"})
+    refute chset.valid?
+  end
 end
