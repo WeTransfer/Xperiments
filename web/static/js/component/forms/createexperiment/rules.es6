@@ -21,7 +21,8 @@ export default class Rules extends React.Component {
   static propTypes = {
     title: React.PropTypes.string,
     list: React.PropTypes.array,
-    delete: React.PropTypes.func
+    delete: React.PropTypes.func,
+    readOnly: React.PropTypes.boolean
   };
 
   state = {
@@ -97,11 +98,15 @@ export default class Rules extends React.Component {
   }
 
   makeRuleRow(rule) {
+    let actionsRow = null;
+    if (!this.props.readOnly)
+      actionsRow = <TableRowColumn>{this.getActions(rule)}</TableRowColumn>;
+
     return <TableRow>
       <TableRowColumn>{this.getParameterLabel(rule.parameter)}</TableRowColumn>
       <TableRowColumn>{this.getOperatorLabel(rule.operator, rule.type)}</TableRowColumn>
       <TableRowColumn>{this.getValueLabel(rule.value, rule.parameter)}</TableRowColumn>
-      <TableRowColumn>{this.getActions(rule)}</TableRowColumn>
+      {actionsRow}
     </TableRow>;
   }
 
@@ -126,16 +131,26 @@ export default class Rules extends React.Component {
       </TableRow>);
     }
 
+    let actionsRow = null;
+    let addRule = null;
+    if (!this.props.readOnly) {
+      actionsRow = <TableHeaderColumn>Actions</TableHeaderColumn>;
+      addRule = [
+        <RaisedButton label="add rule" secondary={true} onTouchTap={this.showAddRule} className="pull-right" />,
+        <AddRuleForm
+          open={this.state.isAddRuleVisible}
+          onCancel={this.hideAddRule}
+          onAdd={this.hideAddRule}
+        />
+      ];
+    }
+
+
     return <div className="form__rules">
       <div className="row">
         <div className="col-md-6"><h4>{this.props.title}</h4></div>
         <div className="col-md-6">
-          <RaisedButton label="add rule" secondary={true} onTouchTap={this.showAddRule} className="pull-right" />
-          <AddRuleForm
-            open={this.state.isAddRuleVisible}
-            onCancel={this.hideAddRule}
-            onAdd={this.hideAddRule}
-          />
+          {addRule}
         </div>
       </div>
       <div className="row">
@@ -146,7 +161,7 @@ export default class Rules extends React.Component {
                 <TableHeaderColumn>Parameter</TableHeaderColumn>
                 <TableHeaderColumn>Operator</TableHeaderColumn>
                 <TableHeaderColumn>Value</TableHeaderColumn>
-                <TableHeaderColumn>Actions</TableHeaderColumn>
+                {actionsRow}
               </TableRow>
             </TableHeader>
             <TableBody displayRowCheckbox={false}>{renderedList}</TableBody>
