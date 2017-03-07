@@ -1,12 +1,12 @@
 import React from 'react';
-import Store from 'store/index.es6';
-import Actions from 'action/index.es6';
+import Store from 'store';
+import Actions from 'action';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 
-import CreateExperimentForm from 'containers/createexperiment.es6';
-import VisibleExperimentsList from 'containers/visibleexperimentslist.es6';
+import CreateExperimentForm from 'containers/createexperiment';
+import VisibleExperimentsList from 'containers/visibleexperimentslist';
 
 const styling = {
   paper: {

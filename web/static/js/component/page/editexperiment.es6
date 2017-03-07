@@ -1,16 +1,16 @@
 import React from 'react';
-import Store from 'store/index.es6';
-import Actions from 'action/index.es6';
+import Store from 'store';
+import Actions from 'action';
 import {Link} from 'react-router';
 
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 
-import ExperimentForm from 'component/forms/createexperiment/experimentform.es6';
-import Rules from 'component/forms/createexperiment/rules.es6';
-import Variants from 'component/forms/createexperiment/variants.es6';
-import Exclusions from 'component/forms/createexperiment/exclusions.es6';
+import ExperimentForm from 'component/forms/createexperiment/experimentform';
+import Rules from 'component/forms/createexperiment/rules';
+import Variants from 'component/forms/createexperiment/variants';
+import Exclusions from 'component/forms/createexperiment/exclusions';
 
 const styling = {
   paper: {

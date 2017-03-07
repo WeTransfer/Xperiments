@@ -1,9 +1,9 @@
-import ActionHelper from 'modules/redux-actions/index.es6';
-import {actions as AppActions} from 'action/app.es6';
-import {actions as ValidationErrorsActions} from 'action/validationerrors.es6';
-import {actions as ExperimentsActions} from 'action/experiments.es6';
-import API from 'modules/api/index.es6';
-import config from 'config.es6';
+import ActionHelper from 'modules/redux-actions';
+import {actions as AppActions} from 'action/app';
+import {actions as ValidationErrorsActions} from 'action/validationerrors';
+import {actions as ExperimentsActions} from 'action/experiments';
+import API from 'modules/api';
+import config from 'config';
 
 const validate = data => {
   let errors = {};

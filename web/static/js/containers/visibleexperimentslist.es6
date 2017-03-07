@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import Actions from 'action/index.es6';
-import ExperimentsTable from 'component/experimentstable.es6';
+import Actions from 'action';
+import ExperimentsTable from 'component/experimentstable';
 
 const getVisibleExperiments = (experiments, filter = 'all') => {
   switch (filter) {

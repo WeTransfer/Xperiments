@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
-import Actions from 'action/index.es6';
-import AddExperiment from 'component/forms/createexperiment/addexperiment.es6';
+import Actions from 'action';
+import AddExperiment from 'component/forms/createexperiment/addexperiment';
 
 const FORM_NAME = 'createExperimentForm';
 

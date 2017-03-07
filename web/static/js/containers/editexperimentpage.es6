@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
-import Actions from 'action/index.es6';
-import EditExperimentPage from 'component/page/editexperiment.es6';
+import Actions from 'action';
+import EditExperimentPage from 'component/page/editexperiment';
 
 const FORM_NAME = 'editExperimentForm';
 let cachedSelectedApplication = null;

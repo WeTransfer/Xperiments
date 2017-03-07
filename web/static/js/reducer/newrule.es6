@@ -1,5 +1,5 @@
-import {actions} from 'action/newrule.es6';
-import initialRuleState from 'store/helper/newrule.es6';
+import {actions} from 'action/newrule';
+import initialRuleState from 'store/helper/newrule';
 
 export default function(state = {}, action) {
   const {type} = action;

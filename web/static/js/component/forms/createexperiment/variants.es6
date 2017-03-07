@@ -1,14 +1,14 @@
 import React from 'react';
 
-import VariantPayloadOptions from 'variantpayloadoptions.es6';
+import VariantPayloadOptions from 'variantpayloadoptions';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import CreateVariantFormContainer from 'containers/createvariantform.es6';
-import EditVariantFormContainer from 'containers/editvariantform.es6';
+import CreateVariantFormContainer from 'containers/createvariantform';
+import EditVariantFormContainer from 'containers/editvariantform';
 
-import globalStyling from 'globalstyling.es6';
+import globalStyling from 'globalstyling';
 
 const styling = {
   ...globalStyling

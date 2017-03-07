@@ -1,11 +1,11 @@
 import React from 'react';
-import Store from 'store/index.es6';
-import Actions from 'action/index.es6';
+import Store from 'store';
+import Actions from 'action';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Link} from 'react-router';
 
-import config from 'config.es6';
-import VisibleApplicationsMenu from 'containers/visibleapplicationsmenu.es6';
+import config from 'config';
+import VisibleApplicationsMenu from 'containers/visibleapplicationsmenu';
 
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
