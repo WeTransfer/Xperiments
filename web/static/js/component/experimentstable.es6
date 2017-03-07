@@ -131,7 +131,6 @@ export default class ExperimentsTable extends React.Component {
       this.props.list.forEach((experiment) => {
         renderedExperiments.push(React.createElement(TableRow, {key: `experiment__table-row-${experiment.id}`}, [
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-vre-${experiment.id}`}, `${experiment.rules.length} - ${experiment.variants.length} - ${experiment.exclusions.length}`),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-state-${experiment.id}`}, <Chip labelStyle={globalStyling.chipLabel} backgroundColor={globalStyling.stateColors[experiment.state]}>{experiment.state}</Chip>),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-start-date-${experiment.id}`}, Helper.formatDateTime(experiment.start_date)),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-end-date-${experiment.id}`}, Helper.formatDateTime(experiment.end_date)),
@@ -190,7 +189,6 @@ export default class ExperimentsTable extends React.Component {
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>Name</TableHeaderColumn>
-            <TableHeaderColumn>Rules - Variants - Exclusions</TableHeaderColumn>
             <TableHeaderColumn>Status</TableHeaderColumn>
             <TableHeaderColumn>Start Date</TableHeaderColumn>
             <TableHeaderColumn>End Date</TableHeaderColumn>

@@ -1,6 +1,11 @@
+import Moment from 'react-moment';
+import jstz from 'jstz';
+
+const timezone = jstz.determine();
+
 export default {
   formatDateTime(dateTime) {
-    return `${new Date(dateTime).toDateString()} ${new Date(dateTime).toLocaleTimeString()}`;
+    return <Moment format="Do MMM YYYY HH:MM" tz={timezone.name()}>{dateTime}</Moment>;
   },
 
   makeErrorMessage(json) {
