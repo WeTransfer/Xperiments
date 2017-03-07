@@ -1,7 +1,7 @@
-import ActionHelper from 'modules/redux-actions/index.es6';
-import API from 'modules/api/index.es6';
+import ActionHelper from 'modules/redux-actions';
+import API from 'modules/api';
 
-import config from 'config.es6';
+import config from 'config';
 
 export const actions = ActionHelper.types([
   'FETCH_EXCLUDABLE_EXPERIMENTS',

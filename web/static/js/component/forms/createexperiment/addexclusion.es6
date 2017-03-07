@@ -1,13 +1,13 @@
 import React from 'react';
 
-import Helper from 'helper.es6';
+import Helper from 'helper';
 
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
-import globalStyling from 'globalstyling.es6';
+import globalStyling from 'globalstyling';
 
 const styling = {
   checkbox: {

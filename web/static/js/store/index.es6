@@ -1,17 +1,17 @@
 import * as Redux from 'redux';
 import Thunk from 'redux-thunk';
-import Reducer from 'reducer/index.es6';
+import Reducer from 'reducer';
 
-import app from './helper/app.es6';
-import user from './helper/user.es6';
-import applications from './helper/applications.es6';
-import newexperiment from './helper/newexperiment.es6';
-import experiment from './helper/experiment.es6';
-import experiments from './helper/experiments.es6';
-import excludableexperiments from './helper/excludableexperiments.es6';
-import newvariant from './helper/newvariant.es6';
-import newrule from './helper/newrule.es6';
-import validationerrors from './helper/validationerrors.es6';
+import app from './helper/app';
+import user from './helper/user';
+import applications from './helper/applications';
+import newexperiment from './helper/newexperiment';
+import experiment from './helper/experiment';
+import experiments from './helper/experiments';
+import excludableexperiments from './helper/excludableexperiments';
+import newvariant from './helper/newvariant';
+import newrule from './helper/newrule';
+import validationerrors from './helper/validationerrors';
 
 // Create our initial state
 const initialState = {

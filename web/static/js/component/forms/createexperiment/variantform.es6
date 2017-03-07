@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Form from 'component/form.es6';
+import Form from 'component/form';
 
-import VariantPayloadOptions from 'variantpayloadoptions.es6';
-import PayloadEditor from './payloadeditor.es6';
+import VariantPayloadOptions from 'variantpayloadoptions';
+import PayloadEditor from './payloadeditor';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -11,7 +11,7 @@ import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
 
-import globalStyling from 'globalstyling.es6';
+import globalStyling from 'globalstyling';
 
 const styling = {
   checkbox: {
