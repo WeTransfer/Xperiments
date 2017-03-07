@@ -19,9 +19,15 @@ defmodule Xperiments.Application do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:name])
-    |> update_change(:name, &String.downcase/1)
+    |> cast_embed(:settings, with: &settings_changeset/2)
     |> unique_constraint(:name)
     |> validate_required([:name])
+    |> update_change(:name, &String.downcase/1)
+  end
+
+  def settings_changeset(changeset, params) do
+    changeset
+    |> cast(params, [:url])
   end
 
   ## Serializer
