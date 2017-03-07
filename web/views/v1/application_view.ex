@@ -5,4 +5,7 @@ defmodule Xperiments.V1.ApplicationView do
     %{applications: apps}
   end
 
+  def render("show.json", %{application: app}) do
+    %{application: app}
+  end
 end
