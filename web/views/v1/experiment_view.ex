@@ -1,4 +1,4 @@
-defmodule Xperiments.ExperimentView do
+defmodule Xperiments.V1.ExperimentView do
   use Xperiments.Web, :view
 
   def render("show.json", %{experiment: exp}) do

@@ -21,7 +21,7 @@ defmodule Xperiments.AuthController do
       {:error, reason} ->
         conn
         |> put_status(401)
-        |> render(Xperiments.ErrorView, "common_error.json", message: "Could not login with the reason: #{reason}")
+        |> render(Xperiments.V1.ErrorView, "common_error.json", message: "Could not login with the reason: #{reason}")
     end
   end
 

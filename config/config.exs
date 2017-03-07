@@ -13,7 +13,7 @@ config :xperiments,
 config :xperiments, Xperiments.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "wmyoXASvGJLg451QAYP78cyDkFi9d5MEDmG73goFsFdzg0cnSYxYxcWptWjqHjBs",
-  render_errors: [view: Xperiments.ErrorView, accepts: ~w(json)],
+  render_errors: [view: Xperiments.V1.ErrorView, accepts: ~w(json)],
   pubsub: [name: Xperiments.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
