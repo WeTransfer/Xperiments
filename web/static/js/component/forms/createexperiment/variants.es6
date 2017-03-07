@@ -20,7 +20,8 @@ export default class Variants extends React.Component {
     title: React.PropTypes.string,
     list: React.PropTypes.array,
     experimentId: React.PropTypes.string,
-    delete: React.PropTypes.func
+    delete: React.PropTypes.func,
+    readOnly: React.PropTypes.boolean
   }
 
   defaultProps = {
@@ -79,12 +80,16 @@ export default class Variants extends React.Component {
     let payloadKey = JSON.parse(variant.payload);
     let type = VariantPayloadOptions.web[VariantPayloadOptions.web.findIndex(el => el.key === Object.keys(payloadKey)[0])].name;
 
+    let actionsRow = null;
+    if (!this.props.readOnly)
+      actionsRow = <TableRowColumn>{this.getActions(variant)}</TableRowColumn>;
+
     return <TableRow>
       <TableRowColumn>{variant.name}</TableRowColumn>
       <TableRowColumn>{variant.allocation}%</TableRowColumn>
       <TableRowColumn>{variant.control_group ? 'Yes' : 'No'}</TableRowColumn>
       <TableRowColumn>{type}</TableRowColumn>
-      <TableRowColumn>{this.getActions(variant)}</TableRowColumn>
+      {actionsRow}
     </TableRow>;
   }
 
@@ -111,16 +116,25 @@ export default class Variants extends React.Component {
       />;
     }
 
+    let actionsRow = null;
+    let addVariant = null;
+    if (!this.props.readOnly) {
+      actionsRow = <TableHeaderColumn>Actions</TableHeaderColumn>;
+      addVariant = [
+        <RaisedButton label="add variant" secondary={true} onTouchTap={this.showCreateVariant} className="pull-right" />,
+        <CreateVariantFormContainer
+          open={this.state.isCreateVariantVisible}
+          onCancel={this.hideCreateVariant}
+          onAdd={this.hideCreateVariant}
+        />
+      ];
+    }
+
     return <div className="variants__manager">
       <div className="row">
         <div className="col-md-6"><h4>{this.props.title}</h4></div>
         <div className="col-md-6">
-          <RaisedButton label="add variant" secondary={true} onTouchTap={this.showCreateVariant} className="pull-right" />
-          <CreateVariantFormContainer
-            open={this.state.isCreateVariantVisible}
-            onCancel={this.hideCreateVariant}
-            onAdd={this.hideCreateVariant}
-          />
+          {addVariant}
         </div>
       </div>
       <div className="row">
@@ -132,7 +146,7 @@ export default class Variants extends React.Component {
                 <TableHeaderColumn>Allocation</TableHeaderColumn>
                 <TableHeaderColumn>Control Group</TableHeaderColumn>
                 <TableHeaderColumn>Type</TableHeaderColumn>
-                <TableHeaderColumn>Actions</TableHeaderColumn>
+                {actionsRow}
               </TableRow>
             </TableHeader>
             <TableBody displayRowCheckbox={false}>{renderedList}</TableBody>
