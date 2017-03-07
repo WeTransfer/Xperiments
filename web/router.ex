@@ -51,6 +51,8 @@ defmodule Xperiments.Router do
           get "/variant/:variant_id", ExperimentController, :variant, as: :variant
         end
       end
+
+      resources "/users", UserController
     end
   end
 
