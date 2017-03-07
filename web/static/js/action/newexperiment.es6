@@ -3,7 +3,6 @@ import {actions as AppActions} from 'action/app.es6';
 import {actions as ValidationErrorsActions} from 'action/validationerrors.es6';
 import {actions as ExperimentsActions} from 'action/experiments.es6';
 import API from 'modules/api/index.es6';
-import Helper from 'helper.es6';
 import config from 'config.es6';
 
 const validate = data => {
@@ -74,19 +73,19 @@ export default ActionHelper.generate({
         dispatch({type: actions.RESET_NEW_EXPERIMENT});
         return;
       } else if (response.status === 422) {
-          response.json().then(json => {
-            // Additionally show validation errors in the forms
-            const validationErrors = json.errors;
-            if (Object.keys(validationErrors).length) {
-              dispatch({
-                type: ValidationErrorsActions.SET_VALIDATION_ERRORS,
-                form: formName,
-                errors: validationErrors
-              });
-              throw 'ValidationErrors';
-            }
-          });
-        }
+        response.json().then(json => {
+          // Additionally show validation errors in the forms
+          const validationErrors = json.errors;
+          if (Object.keys(validationErrors).length) {
+            dispatch({
+              type: ValidationErrorsActions.SET_VALIDATION_ERRORS,
+              form: formName,
+              errors: validationErrors
+            });
+            throw 'ValidationErrors';
+          }
+        });
+      }
 
     };
   },
