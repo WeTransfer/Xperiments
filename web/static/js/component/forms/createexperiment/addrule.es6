@@ -119,7 +119,7 @@ export default class AddRule extends Form {
         maxSearchResults={6}
       />;
     } else {
-      let valueType = this.props.rule.type != null ? `(${this.props.rule.type})` : '';
+      let valueType = this.props.rule.type !== null ? `(${this.props.rule.type})` : '';
       valueField = <TextField
         fullWidth={true}
         defaultValue={this.props.value}
