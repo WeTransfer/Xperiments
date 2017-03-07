@@ -82,7 +82,7 @@ export default class AddRule extends Form {
     return items;
   }
 
-  handleValue(value, ruleType) {
+  handleValue(value) {
     this.props.setValue(value);
     this.unsetError('value');
   }
@@ -107,27 +107,26 @@ export default class AddRule extends Form {
     if (dataSource[this.props.rule.parameter]) {
       valueField = <AutoComplete
         fullWidth={true}
-        floatingLabelText="Value*"
+        floatingLabelText="Select Value*"
         filter={AutoComplete.caseInsensitiveFilter}
         dataSource={dataSource[this.props.rule.parameter]}
         openOnFocus={true}
-        ref="value"
         onNewRequest={(request) => {
-          this.handleValue(request.id, this.props.rule.type);
+          this.handleValue(request.id);
         }}
         errorText={this.getError('value')}
         dataSourceConfig={{text: 'label', value: 'id'}}
         maxSearchResults={6}
       />;
     } else {
+      let valueType = this.props.rule.type != null ? `(${this.props.rule.type})` : '';
       valueField = <TextField
         fullWidth={true}
         defaultValue={this.props.value}
-        floatingLabelText="Value*"
-        ref="value"
+        floatingLabelText={`Value* ${valueType}`}
         errorText={this.getError('value')}
         onChange={(e, value) => {
-          this.handleValue(value, this.props.rule.type);
+          this.handleValue(value);
         }}
       />;
     }
