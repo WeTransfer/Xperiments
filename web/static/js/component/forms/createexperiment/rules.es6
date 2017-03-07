@@ -6,7 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import AddRuleForm from 'containers/addruleform.es6';
 
 import RuleParameters from 'ruleparameters.es6';
-import RuleOperators from 'ruleoperators.es6';
+import RuleOperatorsByType from 'ruleoperatorsbytype.es6';
 import Countries from 'countries.es6';
 import Languages from 'languages.es6';
 import Devices from 'devices.es6';
@@ -67,9 +67,9 @@ export default class Rules extends React.Component {
     return parameterValue;
   }
 
-  getOperatorLabel(operatorValue) {
+  getOperatorLabel(operatorValue, ruleType) {
     try {
-      return RuleOperators[RuleOperators.findIndex(el => el.value === operatorValue)].label;
+      return RuleOperatorsByType[ruleType][RuleOperatorsByType.findIndex(el => el.value === operatorValue)].label;
     } catch (e) {
       // do something
     }
@@ -99,7 +99,7 @@ export default class Rules extends React.Component {
   makeRuleRow(rule) {
     return <TableRow>
       <TableRowColumn>{this.getParameterLabel(rule.parameter)}</TableRowColumn>
-      <TableRowColumn>{this.getOperatorLabel(rule.operator)}</TableRowColumn>
+      <TableRowColumn>{this.getOperatorLabel(rule.operator, rule.type)}</TableRowColumn>
       <TableRowColumn>{this.getValueLabel(rule.value, rule.parameter)}</TableRowColumn>
       <TableRowColumn>{this.getActions(rule)}</TableRowColumn>
     </TableRow>;
