@@ -22,7 +22,7 @@ export default class AddExperiment extends Form {
   };
 
   render() {
-    return <div className="form__create-experiment form__create-experiment--is-step-one">
+    return <div className="form__create-experiment">
       <div className="row">
         <div className="col-md-12">
           <TextField
