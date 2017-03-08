@@ -45,12 +45,14 @@ defmodule Xperiments.Router do
     pipe_through [:api, :api_auth]
 
     scope "/v1", as: :api_v1, alias: V1 do
-      resources "/applications", ApplicationController, only: [:index], param: :name do
+      resources "/applications", ApplicationController, except: [:new], param: "name" do
         resources "/experiments", ExperimentController, except: [:delete, :new] do
           put "/state",  ExperimentController, :change_state, as: :state
           get "/variant/:variant_id", ExperimentController, :variant, as: :variant
         end
       end
+
+      resources "/users", UserController, except: [:new]
     end
   end
 
