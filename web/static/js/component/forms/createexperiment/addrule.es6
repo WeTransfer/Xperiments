@@ -82,7 +82,7 @@ export default class AddRule extends Form {
     return items;
   }
 
-  handleValue(value, ruleType) {
+  handleValue(value) {
     this.props.setValue(value);
     this.unsetError('value');
   }
