@@ -1,16 +1,16 @@
 import React from 'react';
 
-import Form from 'component/form.es6';
+import Form from 'component/form';
 
-import RuleParameters from 'ruleparameters.es6';
-import RuleOperatorsByType from 'ruleoperatorsbytype.es6';
-import RuleTypesByParameter from 'ruletypesbyparameter.es6';
-import Countries from 'countries.es6';
-import Languages from 'languages.es6';
-import Devices from 'devices.es6';
-import UserAccountTypes from 'useraccounttypes.es6';
-import Browsers from 'browsers.es6';
-import Platforms from 'platforms.es6';
+import RuleParameters from 'ruleparameters';
+import RuleOperatorsByType from 'ruleoperatorsbytype';
+import RuleTypesByParameter from 'ruletypesbyparameter';
+import Countries from 'countries';
+import Languages from 'languages';
+import Devices from 'devices';
+import UserAccountTypes from 'useraccounttypes';
+import Browsers from 'browsers';
+import Platforms from 'platforms';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -20,7 +20,7 @@ import MenuItem from 'material-ui/MenuItem';
 import AutoComplete from 'material-ui/AutoComplete';
 import SelectField from 'material-ui/SelectField';
 
-import globalStyling from 'globalstyling.es6';
+import globalStyling from 'globalstyling';
 
 const styling = {
   checkbox: {

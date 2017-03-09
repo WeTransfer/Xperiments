@@ -1,4 +1,4 @@
-import ActionHelper from 'modules/redux-actions/index.es6';
+import ActionHelper from 'modules/redux-actions';
 
 export const actions = ActionHelper.types([
   'SET_VALIDATION_ERRORS',

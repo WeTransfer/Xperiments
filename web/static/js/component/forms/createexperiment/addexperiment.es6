@@ -4,9 +4,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 
-import ExperimentForm from './experimentform.es6';
+import ExperimentForm from './experimentform';
 
-import globalStyling from 'globalstyling.es6';
+import globalStyling from 'globalstyling';
 
 const styling = {
   ...globalStyling

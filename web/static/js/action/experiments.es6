@@ -1,9 +1,9 @@
-import ActionHelper from 'modules/redux-actions/index.es6';
-import API from 'modules/api/index.es6';
-import {actions as AppActions} from 'action/app.es6';
+import ActionHelper from 'modules/redux-actions';
+import API from 'modules/api';
+import {actions as AppActions} from 'action/app';
 
-import config from 'config.es6';
-import Helper from 'helper.es6';
+import config from 'config';
+import Helper from 'helper';
 
 export const actions = ActionHelper.types([
   'FETCH_EXPERIMENTS',

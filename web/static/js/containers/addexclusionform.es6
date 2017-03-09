@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
-import Actions from 'action/index.es6';
-import AddExclusion from 'component/forms/createexperiment/addexclusion.es6';
+import Actions from 'action';
+import AddExclusion from 'component/forms/createexperiment/addexclusion';
 
 const list = (experiments, excludedIds) => {
   const list = [];
