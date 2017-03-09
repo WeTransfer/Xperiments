@@ -72,7 +72,7 @@ export default class CloneExperiment extends Form {
             <DatePicker
               value={this.props.experiment.start_date ? new Date(this.props.experiment.start_date) : null}
               floatingLabelText="Start Date"
-              mode="landscape"
+              mode="portrait"
               onChange={(e, value) => {
                 this.props.setStartDate(value);
                 this.unsetError('start_date');
@@ -98,7 +98,7 @@ export default class CloneExperiment extends Form {
             <DatePicker
               value={this.props.experiment.end_date ? new Date(this.props.experiment.end_date) : null}
               floatingLabelText="End Date"
-              mode="landscape"
+              mode="portrait"
               onChange={(e, value) => {
                 this.props.setEndDate(value);
                 this.unsetError('end_date');

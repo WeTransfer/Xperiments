@@ -153,7 +153,7 @@ export default class ExperimentsTable extends React.Component {
           <FlatButton
             label="close"
             primary={true}
-            onTouchTap={::this.hideCloneExperimentForm}
+            onTouchTap={::this.hideExperiment}
           />
         ];
         return <Dialog
