@@ -29,18 +29,19 @@ module.exports = {
         query: {
           presets: ["es2015", "react", "react-optimize", "stage-0"]
         }
-      },
-      {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract({use: 'css'})
-      }
-    ]
+      }, {
+      	test: /\.css$/,
+      	loader: ExtractTextPlugin.extract({use: 'css'})
+      }, {
+      	test: /\.json$/, loader: "json-loader"
+   }]
   },
 
   plugins: [
     new webpack.LoaderOptionsPlugin({debug: true}),
     new ExtractTextPlugin("css/app.css"),
-    new CopyWebpackPlugin([{ from: "./web/static/assets" }])
+    new CopyWebpackPlugin([{ from: "./web/static/assets" }]),
+    new webpack.ContextReplacementPlugin(/moment[\\\/]lang$/, /^\.\/(en-gb|de|pl)$/)
   ]
 
 };

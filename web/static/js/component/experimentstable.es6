@@ -7,7 +7,6 @@ import Helper from 'helper';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import Dialog from 'material-ui/Dialog';
-import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -15,6 +14,8 @@ import Chip from 'material-ui/Chip';
 
 import globalStyling from 'globalstyling';
 import config from 'config';
+
+import ExperimentDetails from 'component/experimentdetails.es6';
 
 const styling = {
   ...globalStyling
@@ -83,14 +84,15 @@ export default class ExperimentsTable extends React.Component {
     const {user} = Store.getState();
 
     let actions = [];
-    // Edit
-    if (experiment.state === 'draft') {
-      actions.push(<Link to={`/experiments/${experiment.id}/edit`} disabled={true}>Edit</Link>);
-      actions.push(' | ');
-    }
-    
+
     // View
     actions.push(<a href="#" onClick={() => this.showExperiment(experiment.id)}>View</a>);
+
+    // Edit
+    if (experiment.state === 'draft') {
+      actions.push(' | ');
+      actions.push(<Link to={`/experiments/${experiment.id}/edit`} disabled={true}>Edit</Link>);
+    }
 
     // Run / Stop
     let ingPostfix = this.props.isUpdatingState === experiment.id ? 'ing' : '';
@@ -131,7 +133,6 @@ export default class ExperimentsTable extends React.Component {
       this.props.list.forEach((experiment) => {
         renderedExperiments.push(React.createElement(TableRow, {key: `experiment__table-row-${experiment.id}`}, [
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-vre-${experiment.id}`}, `${experiment.rules.length} - ${experiment.variants.length} - ${experiment.exclusions.length}`),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-state-${experiment.id}`}, <Chip labelStyle={globalStyling.chipLabel} backgroundColor={globalStyling.stateColors[experiment.state]}>{experiment.state}</Chip>),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-start-date-${experiment.id}`}, Helper.formatDateTime(experiment.start_date)),
           React.createElement(TableRowColumn, {key: `experiment__table-row-column-end-date-${experiment.id}`}, Helper.formatDateTime(experiment.end_date)),
@@ -160,8 +161,17 @@ export default class ExperimentsTable extends React.Component {
             onTouchTap={::this.hideExperiment}
           />
         ];
-        dialog = <Dialog modal={true} open={true} title={visibleExperiment.name} actions={actions}>
-          <TextField disabled={true} rows={10} multiLine={true} defaultValue={JSON.stringify(visibleExperiment)} fullWidth={true} floatingLabelText="Data" />
+        dialog = <Dialog
+          modal={true}
+          open={true}
+          title={visibleExperiment[0].name}
+          actions={actions}
+          repositionOnUpdate={true}
+          autoScrollBodyContent={true}
+        >
+          <ExperimentDetails
+            experiment={visibleExperiment[0]}
+          />
         </Dialog>;
       }
     }
@@ -190,7 +200,6 @@ export default class ExperimentsTable extends React.Component {
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>Name</TableHeaderColumn>
-            <TableHeaderColumn>Rules - Variants - Exclusions</TableHeaderColumn>
             <TableHeaderColumn>Status</TableHeaderColumn>
             <TableHeaderColumn>Start Date</TableHeaderColumn>
             <TableHeaderColumn>End Date</TableHeaderColumn>

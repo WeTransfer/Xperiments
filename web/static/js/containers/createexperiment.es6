@@ -28,10 +28,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setSamplingRate: value => setValue('sampling_rate', value, dispatch),
     setMaxUsers: value => setValue('max_users', value, dispatch),
     save: (data, formName) => {
-      let promise = dispatch(Actions.NewExperiment.create(data, formName));
-      promise.then(() => {
-        ownProps.onSave();
-      });
+      dispatch(Actions.NewExperiment.create(data, formName));
     },
     cancel: () => {
       dispatch(Actions.ValidationErrors.reset(FORM_NAME));
