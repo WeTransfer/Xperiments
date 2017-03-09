@@ -1,6 +1,6 @@
 import React from 'react';
-import Store from 'store/index.es6';
-import Actions from 'action/index.es6';
+import Store from 'store';
+import Actions from 'action';
 
 import {Link} from 'react-router';
 
