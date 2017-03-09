@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
 
-import VisibleApplicationsMenu from 'containers/visibleapplicationsmenu.es6';
+import VisibleApplicationsMenu from 'containers/visibleapplicationsmenu';
 
 import Paper from 'material-ui/Paper';
 

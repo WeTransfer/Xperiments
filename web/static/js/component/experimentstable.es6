@@ -16,7 +16,7 @@ import Chip from 'material-ui/Chip';
 import globalStyling from 'globalstyling';
 import config from 'config';
 
-import ExperimentDetails from 'component/experimentdetails.es6';
+import ExperimentDetails from 'component/experimentdetails';
 
 const styling = {
   ...globalStyling
