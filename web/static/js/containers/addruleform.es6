@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
-import Actions from 'action/index.es6';
-import AddRule from 'component/forms/createexperiment/addrule.es6';
+import Actions from 'action';
+import AddRule from 'component/forms/createexperiment/addrule';
 
 const FORM_NAME = 'addRuleForm';
 

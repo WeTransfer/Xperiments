@@ -3,15 +3,15 @@ import React from 'react';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import AddRuleForm from 'containers/addruleform.es6';
+import AddRuleForm from 'containers/addruleform';
 
-import RuleParameters from 'ruleparameters.es6';
-import RuleOperatorsByType from 'ruleoperatorsbytype.es6';
-import Countries from 'countries.es6';
-import Languages from 'languages.es6';
-import Devices from 'devices.es6';
+import RuleParameters from 'ruleparameters';
+import RuleOperatorsByType from 'ruleoperatorsbytype';
+import Countries from 'countries';
+import Languages from 'languages';
+import Devices from 'devices';
 
-import globalStyling from 'globalstyling.es6';
+import globalStyling from 'globalstyling';
 
 const styling = {
   ...globalStyling

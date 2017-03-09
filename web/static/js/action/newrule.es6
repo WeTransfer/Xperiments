@@ -1,5 +1,5 @@
-import ActionHelper from 'modules/redux-actions/index.es6';
-import {actions as ValidationErrorsActions} from 'action/validationerrors.es6';
+import ActionHelper from 'modules/redux-actions';
+import {actions as ValidationErrorsActions} from 'action/validationerrors';
 
 const validate = data => {
   let errors = {};
