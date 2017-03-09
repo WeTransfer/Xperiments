@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-import Store from 'store/index.es6';
+import Store from 'store';
 import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 
-import LayoutContainer from 'containers/layout.es6';
-import EditExperimentPageContainer from 'containers/editexperimentpage.es6';
-import ExperimentsDashboardPage from 'component/page/experimentsdashboard.es6';
+import LayoutContainer from 'containers/layout';
+import EditExperimentPageContainer from 'containers/editexperimentpage';
+import ExperimentsDashboardPage from 'component/page/experimentsdashboard';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 

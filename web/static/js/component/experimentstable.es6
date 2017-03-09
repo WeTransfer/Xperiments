@@ -1,11 +1,10 @@
 import React from 'react';
-import Store from 'store/index.es6';
+import Store from 'store';
 
 import {Link} from 'react-router';
 
-import CloneExperimentContainer from 'containers/cloneexperiment.es6';
-
-import Helper from 'helper.es6';
+import CloneExperimentContainer from 'containers/cloneexperiment';
+import Helper from 'helper';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import Dialog from 'material-ui/Dialog';
@@ -14,8 +13,8 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import Chip from 'material-ui/Chip';
 
-import globalStyling from 'globalstyling.es6';
-import config from 'config.es6';
+import globalStyling from 'globalstyling';
+import config from 'config';
 
 import ExperimentDetails from 'component/experimentdetails.es6';
 

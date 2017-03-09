@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Form from 'component/form.es6';
+import Form from 'component/form';
 
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';

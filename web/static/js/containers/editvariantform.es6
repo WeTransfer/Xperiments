@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
-import Actions from 'action/index.es6';
-import VariantForm from 'component/forms/createexperiment/variantform.es6';
+import Actions from 'action';
+import VariantForm from 'component/forms/createexperiment/variantform';
 
 const FORM_NAME = 'variantForm';
 let setValuesFromProperty = true;

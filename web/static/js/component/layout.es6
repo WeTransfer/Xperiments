@@ -1,13 +1,13 @@
 import React from 'react';
-import Store from 'store/index.es6';
-import Actions from 'action/index.es6';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Store from 'store';
+import Actions from 'action';
 
 import Header from 'component/header.es6';
 
-import config from 'config.es6';
+import config from 'config';
 
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
