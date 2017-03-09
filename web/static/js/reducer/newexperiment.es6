@@ -1,5 +1,5 @@
-import {actions} from 'action/newexperiment.es6';
-import initialExperimentState from 'store/helper/newexperiment.es6';
+import {actions} from 'action/newexperiment';
+import initialExperimentState from 'store/helper/newexperiment';
 
 export default function(state = {}, action) {
   const {type} = action;

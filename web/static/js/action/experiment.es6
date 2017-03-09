@@ -1,10 +1,10 @@
-import {actions as ValidationErrorsActions} from 'action/validationerrors.es6';
-import {actions as AppActions} from 'action/app.es6';
-import ActionHelper from 'modules/redux-actions/index.es6';
-import API from 'modules/api/index.es6';
+import {actions as ValidationErrorsActions} from 'action/validationerrors';
+import {actions as AppActions} from 'action/app';
+import ActionHelper from 'modules/redux-actions';
+import API from 'modules/api';
 
-import Helper from 'helper.es6';
-import config from 'config.es6';
+import Helper from 'helper';
+import config from 'config';
 
 export const actions = ActionHelper.types([
   'FETCH_EXPERIMENT',

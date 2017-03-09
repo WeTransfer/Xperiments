@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import LayoutComponent from 'component/layout.es6';
-import Actions from 'action/index.es6';
+import LayoutComponent from 'component/layout';
+import Actions from 'action';
 
 const mapStateToProps = (state) => {
   return {

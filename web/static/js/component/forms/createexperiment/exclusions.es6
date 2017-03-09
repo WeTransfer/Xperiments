@@ -1,13 +1,13 @@
 import React from 'react';
 
-import Helper from 'helper.es6';
+import Helper from 'helper';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import AddExclusionForm from 'containers/addexclusionform.es6';
+import AddExclusionForm from 'containers/addexclusionform';
 
-import globalStyling from 'globalstyling.es6';
+import globalStyling from 'globalstyling';
 
 const styling = {
   ...globalStyling

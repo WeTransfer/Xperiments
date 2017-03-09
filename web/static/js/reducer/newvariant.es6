@@ -1,5 +1,5 @@
-import {actions} from 'action/newvariant.es6';
-import initialVariantState from 'store/helper/newvariant.es6';
+import {actions} from 'action/newvariant';
+import initialVariantState from 'store/helper/newvariant';
 
 export default function(state = {}, action) {
   const {type} = action;
