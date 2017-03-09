@@ -1,6 +1,7 @@
 import React from 'react';
 import Store from 'store/index.es6';
 import Actions from 'action/index.es6';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import Header from 'component/header.es6';
@@ -10,6 +11,12 @@ import config from 'config.es6';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
+
+const muiTheme = getMuiTheme({
+  palette: {
+    textColor: '#444444'
+  }
+});
 
 export default class Layout extends React.Component {
   static propTypes = {
@@ -81,13 +88,13 @@ export default class Layout extends React.Component {
 
     let children = null;
     if (this.props.children !== null) {
-      children = <MuiThemeProvider>
+      children = <MuiThemeProvider muiTheme={muiTheme}>
         {this.props.children}
       </MuiThemeProvider>;
     }
 
     return <div>
-      <MuiThemeProvider>
+      <MuiThemeProvider muiTheme={muiTheme}>
         <Header user={this.props.user} />
       </MuiThemeProvider>
       {children}

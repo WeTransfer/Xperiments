@@ -2,7 +2,7 @@ export default [
   {id: 'Chrome', label: 'Chrome'},
   {id: 'Firefox', label: 'Firefox'},
   {id: 'Edge', label: 'Edge'},
-  {id: 'MSIE', label: 'Internet Explorer'},
+  {id: 'Explorer', label: 'Internet Explorer'},
   {id: 'Safari', label: 'Safari'},
   {id: 'Opera', label: 'Opera'},
   {id: 'OmniWeb', label: 'OmniWeb'},
