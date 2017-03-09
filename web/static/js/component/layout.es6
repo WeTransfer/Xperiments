@@ -2,7 +2,7 @@ import React from 'react';
 import Store from 'store';
 import Actions from 'action';
 
-import Header from 'component/header.es6';
+import Header from 'component/header';
 
 import config from 'config';
 
