@@ -7,7 +7,6 @@ import Helper from 'helper.es6';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import Dialog from 'material-ui/Dialog';
-import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -15,6 +14,8 @@ import Chip from 'material-ui/Chip';
 
 import globalStyling from 'globalstyling.es6';
 import config from 'config.es6';
+
+import ExperimentDetails from 'component/experimentdetails.es6';
 
 const styling = {
   ...globalStyling
@@ -83,14 +84,15 @@ export default class ExperimentsTable extends React.Component {
     const {user} = Store.getState();
 
     let actions = [];
-    // Edit
-    if (experiment.state === 'draft') {
-      actions.push(<Link to={`/experiments/${experiment.id}/edit`} disabled={true}>Edit</Link>);
-      actions.push(' | ');
-    }
-    
+
     // View
     actions.push(<a href="#" onClick={() => this.showExperiment(experiment.id)}>View</a>);
+
+    // Edit
+    if (experiment.state === 'draft') {
+      actions.push(' | ');
+      actions.push(<Link to={`/experiments/${experiment.id}/edit`} disabled={true}>Edit</Link>);
+    }
 
     // Run / Stop
     let ingPostfix = this.props.isUpdatingState === experiment.id ? 'ing' : '';
@@ -159,8 +161,17 @@ export default class ExperimentsTable extends React.Component {
             onTouchTap={::this.hideExperiment}
           />
         ];
-        dialog = <Dialog modal={true} open={true} title={visibleExperiment.name} actions={actions}>
-          <TextField disabled={true} rows={10} multiLine={true} defaultValue={JSON.stringify(visibleExperiment)} fullWidth={true} floatingLabelText="Data" />
+        dialog = <Dialog
+          modal={true}
+          open={true}
+          title={visibleExperiment[0].name}
+          actions={actions}
+          repositionOnUpdate={true}
+          autoScrollBodyContent={true}
+        >
+          <ExperimentDetails
+            experiment={visibleExperiment[0]}
+          />
         </Dialog>;
       }
     }
