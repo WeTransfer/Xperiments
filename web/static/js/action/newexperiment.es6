@@ -56,23 +56,36 @@ export default ActionHelper.generate({
       const {user} = getState();
       data.user_id = user.id;
 
-      return API.post(config.api.resources.experiments.POST, {experiment: data})
-        .then(response => {
-          response.json().then(json => {
-            dispatch({
-              type: ExperimentsActions.PUSH_TO_EXPERIMENTS,
-              data: json.experiment
-            });
-
-            dispatch({
-              type: AppActions.SET_APP_REDIRECT,
-              path: `/experiments/${json.experiment.id}/edit`
-            });
+      const response = await API.post(config.api.resources.experiments.POST, {experiment: data});
+      if (response.status === 200) {
+        response.json().then(json => {
+          dispatch({
+            type: ExperimentsActions.PUSH_TO_EXPERIMENTS,
+            data: json.experiment
           });
 
-          dispatch({type: actions.RESET_NEW_EXPERIMENT});
+          dispatch({
+            type: AppActions.SET_APP_REDIRECT,
+            path: `/experiments/${json.experiment.id}/edit`
+          });
         });
 
+        dispatch({type: actions.RESET_NEW_EXPERIMENT});
+        return;
+      } else if (response.status === 422) {
+        response.json().then(json => {
+          // Additionally show validation errors in the forms
+          const validationErrors = json.errors;
+          if (Object.keys(validationErrors).length) {
+            dispatch({
+              type: ValidationErrorsActions.SET_VALIDATION_ERRORS,
+              form: formName,
+              errors: validationErrors
+            });
+            throw 'ValidationErrors';
+          }
+        });
+      }
 
     };
   },
