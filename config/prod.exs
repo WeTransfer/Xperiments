@@ -9,13 +9,13 @@ config :xperiments, Xperiments.Endpoint,
   version: Mix.Project.config[:version]
 
 config :xperiments, :cors,
-  origin: ~r/http(s)?.*wetransfer\d?\.com|http(s)?.*wtd0\d?\.com$/
+  origin: ~r/http(s)?.*wetransfer\d?\.com|http(s)?.*wtd0\d?\.com|http(s)?.*wetransferbeta\.com$/
 
 # Do not print debug messages in production
 config :logger, level: :info
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
-  redirect_uri: "https://xperiments.wetransfer.net"
+  redirect_uri: {:system, "GOOGLE_OAUTH_CALLBACK"}
 
 config :xperiments, Xperiments.Endpoint,
   secret_key_base: {:system, "SECRET_KEY_BASE"}
