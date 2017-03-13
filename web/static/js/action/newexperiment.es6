@@ -57,7 +57,7 @@ export default ActionHelper.generate({
       data.user_id = user.id;
 
       const response = await API.post(config.api.resources.experiments.POST, {experiment: data});
-      if (response.status === 200) {
+      if (response.status === 201) {
         response.json().then(json => {
           dispatch({
             type: ExperimentsActions.PUSH_TO_EXPERIMENTS,
