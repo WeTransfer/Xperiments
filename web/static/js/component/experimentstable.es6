@@ -14,7 +14,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Chip from 'material-ui/Chip';
 
 import globalStyling from 'globalstyling';
-import config from 'config';
+import * as CONSTANTS from 'appconstants';
 
 import ExperimentDetails from 'component/experimentdetails';
 
@@ -24,10 +24,10 @@ const styling = {
 
 const filters = [
   {label: 'All', value: 'all'},
-  {label: 'Draft', value: 'draft'},
-  {label: 'Running', value: 'running'},
-  {label: 'Stopped', value: 'stopped'},
-  {label: 'Terminated', value: 'terminated'}
+  {label: 'Draft', value: CONSTANTS.EXPERIMENT_STATE_DRAFT},
+  {label: 'Running', value: CONSTANTS.EXPERIMENT_STATE_RUNNING},
+  {label: 'Stopped', value: CONSTANTS.EXPERIMENT_STATE_STOPPED},
+  {label: 'Terminated', value: CONSTANTS.EXPERIMENT_STATE_TERMINATED}
 ];
 
 export default class ExperimentsTable extends React.Component {
@@ -103,7 +103,7 @@ export default class ExperimentsTable extends React.Component {
     actions.push(<a href="#" onClick={() => this.showExperiment(experiment.id)}>View</a>);
 
     // Edit
-    if (experiment.state === 'draft') {
+    if (experiment.state === CONSTANTS.EXPERIMENT_STATE_DRAFT) {
       actions.push(' | ');
       actions.push(<Link to={`/experiments/${experiment.id}/edit`} disabled={true}>Edit</Link>);
     }
@@ -115,28 +115,36 @@ export default class ExperimentsTable extends React.Component {
     let stopAction = <a onClick={() => this.stopExperiment(experiment.id)}>{`Stop${ingPostfix}`}</a>;
     let reportAction = <a target="_blank" href="https://analytics.google.com/analytics/web/?authuser=1#my-reports/5IyMQAn0Tcqdu2Va8V9BIg/a69714416w130256140p134086343/%3F_u.date00%3D20170227%26_u.date01%3D20170227%26_u.sampleOption%3Dmoreprecision%26_u.sampleSize%3D500000/">Report</a>;
     
-    if (config.users[user.email] && config.users[user.email].rights && config.users[user.email].rights.indexOf('CHANGE_STATE') > -1) {
-      if (experiment.state === 'draft') {
+    if (user.role === CONSTANTS.USER_ADMIN) {
+      if (experiment.state === CONSTANTS.EXPERIMENT_STATE_DRAFT) {
         actions.push(' | ');
         actions.push(startAction);
-      } else if (experiment.state === 'stopped') {
+      } else if (experiment.state === CONSTANTS.EXPERIMENT_STATE_STOPPED) {
         actions.push(' | ');
         actions.push(startAction);
         actions.push(' | ');
         actions.push(terminateAction);
         actions.push(' | ');
         actions.push(reportAction);
-      } else if (experiment.state === 'running') {
+      } else if (experiment.state === CONSTANTS.EXPERIMENT_STATE_RUNNING) {
         actions.push(' | ');
         actions.push(stopAction);
-        actions.push(' | ');
-        actions.push(reportAction);
       }
+    }
+
+
+    if (experiment.state === CONSTANTS.EXPERIMENT_STATE_RUNNING) {
+      actions.push(' | ');
+      actions.push(reportAction);
     }
 
     // Clone
     actions.push(' | ');
     actions.push(<a onClick={() => this.showCloneExperimentForm(experiment.id)}>Clone</a>);
+
+    // Delete
+    // actions.push(" | ");
+    // actions.push(<a onClick={() => this.deleteExperiment(experiment.id)}>{`Delete`}</a>);
 
     return actions;
   }
