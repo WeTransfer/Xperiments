@@ -5,8 +5,20 @@ import jstz from 'jstz';
 const timezone = jstz.determine();
 
 export default {
-  formatDateTime(dateTime) {
-    return <Moment format="Do MMM YYYY HH:MM" tz={timezone.name()}>{dateTime}</Moment>;
+  formatDateTime(dateTime, utc = true) {
+    let options = {};
+    
+    if (utc) {
+      options.utc = true;
+    } else {
+      options.tz = timezone.name();
+    }
+    
+    return <Moment format="Do MMM YYYY HH:mm" {...options}>{dateTime}</Moment>;
+  },
+
+  getCurrentTime() {
+    return <Moment format="HH:mm" tz={timezone.name()}>{new Date()}</Moment>;
   },
 
   makeErrorMessage(json) {

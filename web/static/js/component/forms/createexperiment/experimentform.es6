@@ -6,6 +6,8 @@ import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 
+import Helper from 'helper';
+
 export default class AddExperiment extends Form {
   static propTypes = {
     experiment: React.PropTypes.object,
@@ -25,9 +27,17 @@ export default class AddExperiment extends Form {
     let datePickerOptions = {
       minDate: new Date(),
       okLabel: 'Select',
-      mode: 'portrait',
-      locale: 'en-US'
+      mode: 'portrait'
     };
+
+    let currentTimezoneText = null;
+    if (this.props.experiment.start_date && this.props.experiment.end_date) {
+      currentTimezoneText = <div className="row">
+        <div className="col-md-12">
+          <h5>Note: This experiment will run from {Helper.formatDateTime(this.props.experiment.start_date, true)} to {Helper.formatDateTime(this.props.experiment.end_date, true)} (UTC).</h5>
+        </div>
+      </div>;
+    }
 
     return <div className="form__create-experiment form__create-experiment--is-step-one">
       <div className="row">
@@ -65,7 +75,6 @@ export default class AddExperiment extends Form {
           <DatePicker
             value={this.props.experiment.start_date ? new Date(this.props.experiment.start_date) : null}
             floatingLabelText="Start Date"
-            mode="landscape"
             onChange={(e, value) => {
               this.props.setStartDate(value);
               this.unsetError('start_date');
@@ -77,7 +86,7 @@ export default class AddExperiment extends Form {
         <div className="col-md-7">
           <TimePicker
             value={this.props.experiment.start_date ? new Date(this.props.experiment.start_date) : null}
-            floatingLabelText="Start Time"
+            floatingLabelText="Start Time (GMT)"
             onChange={(e, value) => {
               this.props.setStartTime(value);
               this.unsetError('start_date');
@@ -90,10 +99,11 @@ export default class AddExperiment extends Form {
       <div className="row">
         <div className="col-md-5">
           <DatePicker
+            fullWidth={true}
             value={this.props.experiment.end_date ? new Date(this.props.experiment.end_date) : null}
             floatingLabelText="End Date"
-            mode="landscape"
             onChange={(e, value) => {
+              console.log(value);
               this.props.setEndDate(value);
               this.unsetError('end_date');
             }}
@@ -104,7 +114,7 @@ export default class AddExperiment extends Form {
         <div className="col-md-7">
           <TimePicker
             value={this.props.experiment.end_date ? new Date(this.props.experiment.end_date) : null}
-            floatingLabelText="End Time"
+            floatingLabelText="End Time (GMT)"
             onChange={(e, value) => {
               this.props.setEndTime(value);
               this.unsetError('end_date');
@@ -114,6 +124,7 @@ export default class AddExperiment extends Form {
           />
         </div>
       </div>
+      {currentTimezoneText}
       <div className="row">
         <div className="col-md-12">
           <TextField
