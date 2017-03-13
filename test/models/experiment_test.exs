@@ -95,19 +95,6 @@ defmodule Xperiments.ExperimentTest do
     assert db_var_payload == variant.payload
   end
 
-  test "validation that at least one varian is a control group when running" do
-    bad_exp = build(:experiment, start_date: Timex.now |> Timex.shift(days: 1)) |> with_balanced_variants |> insert
-    changeset = Experiment.change_state(bad_exp, "run")
-    refute changeset.valid?
-    variants = [
-      Xperiments.Factory.variant(50),
-      %{ Xperiments.Factory.variant(50) | control_group: true }
-    ]
-    exp = insert(:experiment, variants: variants, start_date: Timex.now |> Timex.shift(days: 1))
-    changeset = Experiment.run(exp)
-    assert changeset.valid?
-  end
-
   test "rules should be without a primary key" do
     exp = insert(:experiment, rules: Xperiments.Factory.rules_1)
     Enum.map(exp.rules, fn r ->
