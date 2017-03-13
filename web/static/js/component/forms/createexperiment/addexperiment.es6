@@ -51,7 +51,14 @@ export default class AddExperiment extends React.Component {
       />
     ];
 
-    return <Dialog modal={true} actions={actions} open={this.props.isVisible} title="Create Experiment">
+    return <Dialog
+      modal={true}
+      actions={actions}
+      open={this.props.isVisible}
+      title="Create Experiment"
+      repositionOnUpdate={true}
+      autoScrollBodyContent={true}
+    >
       <ExperimentForm
         experiment={this.props.experiment}
         setName={this.props.setName}

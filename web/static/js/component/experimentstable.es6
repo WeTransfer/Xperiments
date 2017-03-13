@@ -204,8 +204,8 @@ export default class ExperimentsTable extends React.Component {
           <TableRow>
             <TableHeaderColumn>Name</TableHeaderColumn>
             <TableHeaderColumn>Status</TableHeaderColumn>
-            <TableHeaderColumn>Start Date</TableHeaderColumn>
-            <TableHeaderColumn>End Date</TableHeaderColumn>
+            <TableHeaderColumn>Start Date (UTC)</TableHeaderColumn>
+            <TableHeaderColumn>End Date (UTC)</TableHeaderColumn>
             <TableHeaderColumn></TableHeaderColumn>
           </TableRow>
         </TableHeader>
