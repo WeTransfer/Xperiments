@@ -34,7 +34,7 @@ export default class AddExperiment extends Form {
     if (this.props.experiment.start_date && this.props.experiment.end_date) {
       currentTimezoneText = <div className="row">
         <div className="col-md-12">
-          <h5>Note: This experiment will run from {Helper.formatDateTime(this.props.experiment.start_date, true)} to {Helper.formatDateTime(this.props.experiment.end_date, true)} (UTC).</h5>
+          <h5>Note: This experiment will run from {Helper.formatDateTime(this.props.experiment.start_date, true)} to {Helper.formatDateTime(this.props.experiment.end_date, true)} (UTC)</h5>
         </div>
       </div>;
     }
@@ -86,7 +86,7 @@ export default class AddExperiment extends Form {
         <div className="col-md-7">
           <TimePicker
             value={this.props.experiment.start_date ? new Date(this.props.experiment.start_date) : null}
-            floatingLabelText="Start Time (GMT)"
+            floatingLabelText="Start Time (Local)"
             onChange={(e, value) => {
               this.props.setStartTime(value);
               this.unsetError('start_date');
@@ -114,7 +114,7 @@ export default class AddExperiment extends Form {
         <div className="col-md-7">
           <TimePicker
             value={this.props.experiment.end_date ? new Date(this.props.experiment.end_date) : null}
-            floatingLabelText="End Time (GMT)"
+            floatingLabelText="End Time (Local)"
             onChange={(e, value) => {
               this.props.setEndTime(value);
               this.unsetError('end_date');
