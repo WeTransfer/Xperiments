@@ -38,8 +38,8 @@ config :ueberauth, Ueberauth,
   ]
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
-  client_id: System.get_env("GOOGLE_CLIENT_ID"),
-  client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
+  client_id: {:system, "GOOGLE_CLIENT_ID"},
+  client_secret: {:system, "GOOGLE_CLIENT_SECRET"},
   redirect_uri: "http://lvh.me:5000"
 
 config :guardian, Guardian,
