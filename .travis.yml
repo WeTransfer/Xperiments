@@ -23,3 +23,18 @@ before_script:
   - yarn install --silent > /dev/null
 script:
   - mix test
+before_deploy:
+  - yarn run deploy
+  - MIX_ENV=prod mix phoenix.digest
+  - MIX_ENV=prod mix release --env=prod
+deploy:
+  provider: s3
+  region: eu-west-1
+  access_key_id: $DEPLOY_ACCESS_KEY_ID
+  secret_access_key: $DEPLOY_SECRET_ACCESS_KEY
+  bucket: $DEPLOY_S3_BUCKET
+  upload_dir: $DEPLOY_S3_UPLOAD_DIR/$TRAVIS_TAG
+  local_dir: _build/prod/rel/xperiments/releases/0.0.1
+  skip_cleanup: true
+  on:
+    tags: true
