@@ -14,6 +14,7 @@ import Chip from 'material-ui/Chip';
 
 import globalStyling from 'globalstyling';
 import * as CONSTANTS from 'appconstants';
+import config from 'config';
 
 import ExperimentDetails from 'component/experimentdetails.es6';
 
@@ -99,7 +100,7 @@ export default class ExperimentsTable extends React.Component {
     let startAction = <a onClick={() => this.startExperiment(experiment.id)}>{`Start${ingPostfix}`}</a>;
     let terminateAction = <a onClick={() => this.terminateExperiment(experiment.id)}>{`Kill${ingPostfix}`}</a>;
     let stopAction = <a onClick={() => this.stopExperiment(experiment.id)}>{`Stop${ingPostfix}`}</a>;
-    let reportAction = <a target="_blank" href="https://analytics.google.com/analytics/web/?authuser=1#my-reports/5IyMQAn0Tcqdu2Va8V9BIg/a69714416w130256140p134086343/%3F_u.date00%3D20170227%26_u.date01%3D20170227%26_u.sampleOption%3Dmoreprecision%26_u.sampleSize%3D500000/">Report</a>;
+    let reportAction = <a target="_blank" href={config.reports.url}>Report</a>;
     
     if (user.role === CONSTANTS.USER_ADMIN) {
       if (experiment.state === CONSTANTS.EXPERIMENT_STATE_DRAFT) {
