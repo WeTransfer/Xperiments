@@ -10,6 +10,7 @@ import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 
 import globalStyling from 'globalstyling';
+import Helper from 'helper';
 
 const styling = {
   ...globalStyling
@@ -35,6 +36,15 @@ export default class CloneExperiment extends Form {
   }
 
   render() {
+    let currentTimezoneText = null;
+    if (this.props.experiment.start_date && this.props.experiment.end_date) {
+      currentTimezoneText = <div className="row">
+        <div className="col-md-12">
+          <h5>Note: This experiment will run from {Helper.formatDateTime(this.props.experiment.start_date, true)} to {Helper.formatDateTime(this.props.experiment.end_date, true)} (UTC)</h5>
+        </div>
+      </div>;
+    }
+
     const actions = [
       <FlatButton
         label="Cancel"
@@ -119,6 +129,7 @@ export default class CloneExperiment extends Form {
             />
           </div>
         </div>
+        {currentTimezoneText}
       </div>
     </Dialog>;
   }
