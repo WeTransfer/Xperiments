@@ -26,7 +26,7 @@ environment :dev do
 end
 
 environment :prod do
-  set include_erts: false
+  set include_erts: true
   set include_src: false
   set cookie: System.get_env("NODE_COOKIE")
 
@@ -44,4 +44,3 @@ end
 release :xperiments do
   set version: current_version(:xperiments)
 end
-
