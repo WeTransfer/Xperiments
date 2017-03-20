@@ -12,6 +12,11 @@ defmodule Xperiments.AssignerControllerTest do
     conn =
       build_conn()
       |> put_req_header("accept", "application/json")
+
+    on_exit fn ->
+      ExRated.delete_bucket("127.0.0.1:assigner/application/test_app/experiments/events")
+    end
+
     [conn: conn, app: app]
   end
 
