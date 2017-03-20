@@ -9,21 +9,23 @@ config :xperiments, Xperiments.Endpoint,
   version: Mix.Project.config[:version]
 
 config :xperiments, :cors,
-  origin: ~r/http(s)?.*wetransfer\d?\.com|http(s)?.*wtd0\d?\.com|http(s)?.*wetransferbeta\.com$/
+  origin: ~r/http(s)?.*wetransfer\d?\.com|http(s)?.*wtd0\d?\.com|http(s)?.*wetransferbeta\.net$/
 
 # Do not print debug messages in production
 config :logger, level: :info
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
-  redirect_uri: {:system, "GOOGLE_OAUTH_CALLBACK"}
+  client_id: "${GOOGLE_CLIENT_ID}",
+  client_secret: "${GOOGLE_CLIENT_SECRET}",
+  redirect_uri: "${GOOGLE_OAUTH_CALLBACK}"
 
 config :xperiments, Xperiments.Endpoint,
-  secret_key_base: {:system, "SECRET_KEY_BASE"}
+  secret_key_base: "${SECRET_KEY_BASE}"
 
 config :guardian, Guardian,
-  secret_key: {:system, "SECRET_KEY_BASE"}
+  secret_key: "${SECRET_KEY_BASE}"
 
 config :xperiments, Xperiments.Repo,
   adapter: Ecto.Adapters.Postgres,
-  url: {:system, "DB_URL"},
+  url: "${DB_URL}",
   pool_size: 20
