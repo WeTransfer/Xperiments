@@ -7,7 +7,7 @@ defmodule Xperiments.Assigner.Experiment do
   require Logger
   alias Xperiments.Experiment, as: ModelExperiment
 
-  @stat_treshhold 50 # defines how often save statistic data to DB
+  @stat_treshold Application.get_env(:xperiments, Experiment, 100)[:stat_treshold] # defines how often save statistic data to a DB
 
   def start_link(%{id: id} = experiment) do
     GenServer.start_link(__MODULE__, experiment, name: via_tuple(id))
@@ -280,7 +280,7 @@ defmodule Xperiments.Assigner.Experiment do
 
   defp do_sync_stat_to_db(stat, eid, force \\ false)
   defp do_sync_stat_to_db(%{common_impression: imp} = stat, eid, force) when imp != 0 do
-    if force or rem(stat.common_impression, @stat_treshhold) == 0 do
+    if force or rem(stat.common_impression, @stat_treshold) == 0 do
       Task.start(ModelExperiment, :update_statistics, [eid, stat])
     end
     stat
