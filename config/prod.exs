@@ -9,7 +9,7 @@ config :xperiments, Xperiments.Endpoint,
   version: Mix.Project.config[:version]
 
 config :xperiments, :cors,
-  origin: ~r/http(s)?.*wetransfer\d?\.com|http(s)?.*wtd0\d?\.com|http(s)?.*wetransferbeta\.net$/
+  origin: ~r/http(s)?.*wetransfer\d?\.com|http(s)?.*wtd0\d?\.com|http(s)?.*wetransferbeta\.com$/
 
 # Do not print debug messages in production
 config :logger, level: :info
