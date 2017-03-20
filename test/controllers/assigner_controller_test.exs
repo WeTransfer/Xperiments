@@ -46,8 +46,16 @@ defmodule Xperiments.AssignerControllerTest do
   test "returning of a specific variant", context do
     exp = insert(:experiment)
     var = hd(exp.variants)
+    salt = Application.get_env(:xperiments, Xperiments.Endpoint)[:secret_key_base]
+    token = Phoenix.Token.sign(Xperiments.Endpoint, salt, 1)
+
+    # without a token
+    response = get(context.conn, "#{@api_path}/experiments/#{exp.id}/variants/#{var.id}")
+    assert response.status == 403
+
+    # with a token
     body =
-      get(context.conn, "#{@api_path}/experiments/#{exp.id}/variants/#{var.id}")
+      get(context.conn, "#{@api_path}/experiments/#{exp.id}/variants/#{var.id}?token=#{token}")
       |> json_response(200)
     assert hd(body["assign"])["id"] == exp.id
   end

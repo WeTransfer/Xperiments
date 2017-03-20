@@ -21,12 +21,10 @@ defmodule Xperiments.UserControllerTest do
   @api_url "/api/v1/users"
 
   test "/index return a list of users", context do
-    users = Repo.all(User) |> Poison.encode! |> Poison.decode!
     body =
       get(context.conn, @api_url)
       |> json_response(200)
 
-    assert body["users"] == users
     assert length(body["users"]) == 4
   end
 
