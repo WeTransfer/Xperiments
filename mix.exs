@@ -19,7 +19,8 @@ defmodule Xperiments.Mixfile do
   def application do
     [mod: {Xperiments, []},
      applications: [:phoenix, :phoenix_pubsub, :cowboy, :logger, :phoenix_html,
-                    :phoenix_ecto, :postgrex, :timex, :ueberauth, :ueberauth_google],
+                    :phoenix_ecto, :postgrex, :timex, :ueberauth, :ueberauth_google,
+                    :ex_rated],
      included_applications: [:cors_plug, :distillery, :ecto_state_machine, :guardian,
                              :bodyguard]]
   end
@@ -47,6 +48,7 @@ defmodule Xperiments.Mixfile do
      {:guardian, "~> 0.14"},
      {:bodyguard, "~> 0.6.1"},
      {:distillery, "~> 1.0"},
+     {:ex_rated, "~> 1.3"},
      {:ex_machina, "~> 1.0", only: :test},
      {:mock, "~> 0.2.0", only: :test}]
   end
