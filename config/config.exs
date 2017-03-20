@@ -9,8 +9,8 @@ use Mix.Config
 config :xperiments,
   ecto_repos: [Xperiments.Repo]
 
-config :xperiments, Experiments,
-  stat_rechold: 100
+config :xperiments, Experiment,
+  stat_treshold: 100
 
 # Configures the endpoint
 config :xperiments, Xperiments.Endpoint,
