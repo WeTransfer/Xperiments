@@ -13,7 +13,7 @@ config :xperiments,
 config :xperiments, Xperiments.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "wmyoXASvGJLg451QAYP78cyDkFi9d5MEDmG73goFsFdzg0cnSYxYxcWptWjqHjBs",
-  render_errors: [view: Xperiments.V1.ErrorView, accepts: ~w(json)],
+  render_errors: [view: Xperiments.V1.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Xperiments.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
@@ -38,8 +38,8 @@ config :ueberauth, Ueberauth,
   ]
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
-  client_id: {:system, "GOOGLE_CLIENT_ID"},
-  client_secret: {:system, "GOOGLE_CLIENT_SECRET"},
+  client_id: System.get_env("GOOGLE_CLIENT_ID"),
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
   redirect_uri: "http://lvh.me:5000"
 
 config :guardian, Guardian,
