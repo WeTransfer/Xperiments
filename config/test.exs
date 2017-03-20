@@ -6,6 +6,9 @@ config :xperiments, Xperiments.Endpoint,
   http: [port: 4001],
   server: false
 
+config :xperiments, Experiment,
+  stat_treshold: 4
+
 # Print only warnings and errors during test
 config :logger, level: :warn
 
