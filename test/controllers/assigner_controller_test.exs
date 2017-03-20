@@ -72,14 +72,25 @@ defmodule Xperiments.AssignerControllerTest do
     end
 
     test "saving statistics data to DB after we reach a trashhold", context do
-      for _i <- 0..51 do
+      for _i <- 0..4 do
         post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
         |> json_response(200)
       end
       :timer.sleep 100 # yep, async tests are hard
       db_exp = Xperiments.Repo.get!(Xperiments.Experiment, context.exp.id)
-      assert db_exp.statistics.common_impression == 50
-      assert db_exp.statistics.variants_impression == %{hd(context.exp.variants).id => 50}
+      assert db_exp.statistics.common_impression == 4
+      assert db_exp.statistics.variants_impression == %{hd(context.exp.variants).id => 4}
+    end
+
+    test "requests are throttled", context do
+      for _i <- 0..4 do
+        post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
+        |> json_response(200)
+      end
+      body =
+        post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
+      |> json_response(403)
+      assert body == %{"error" => "Rate limit exceeded"}
     end
   end
 
