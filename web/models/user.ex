@@ -54,7 +54,14 @@ defmodule Xperiments.User do
       model
       |> Map.from_struct
       |> Map.take([:name, :email, :role, :id, :avatar_uri])
+      |> add_token()
       |> Poison.encode!
+    end
+
+    def add_token(user) do
+      salt = Application.get_env(:xperiments, Xperiments.Endpoint)[:secret_key_base]
+      token = Phoenix.Token.sign(Xperiments.Endpoint, salt, user.id)
+      Map.put_new(user, :token, token)
     end
   end
 end
