@@ -55,8 +55,8 @@ defmodule Xperiments.AssignerControllerTest do
     token = Phoenix.Token.sign(Xperiments.Endpoint, salt, 1)
 
     # without a token
-    response = get(context.conn, "#{@api_path}/experiments/#{exp.id}/variants/#{var.id}")
-    assert response.status == 403
+    get(context.conn, "#{@api_path}/experiments/#{exp.id}/variants/#{var.id}")
+    |> json_response(403)
 
     # with a token
     body =
