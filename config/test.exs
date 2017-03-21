@@ -7,7 +7,7 @@ config :xperiments, Xperiments.Endpoint,
   server: false
 
 config :xperiments, Experiment,
-  stat_treshold: 4
+  stat_threshold: 4
 
 # Print only warnings and errors during test
 config :logger, level: :warn

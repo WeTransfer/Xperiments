@@ -10,7 +10,7 @@ config :xperiments,
   ecto_repos: [Xperiments.Repo]
 
 config :xperiments, Experiment,
-  stat_treshold: 100
+  stat_threshold: 100
 
 # Configures the endpoint
 config :xperiments, Xperiments.Endpoint,

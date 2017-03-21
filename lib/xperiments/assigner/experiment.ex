@@ -7,7 +7,7 @@ defmodule Xperiments.Assigner.Experiment do
   require Logger
   alias Xperiments.Experiment, as: ModelExperiment
 
-  @stat_treshold Application.get_env(:xperiments, Experiment, 100)[:stat_treshold] # defines how often save statistic data to a DB
+  @stat_treshold Application.get_env(:xperiments, Experiment)[:stat_threshold] # defines how often save statistic data to a DB
 
   def start_link(%{id: id} = experiment) do
     GenServer.start_link(__MODULE__, experiment, name: via_tuple(id))

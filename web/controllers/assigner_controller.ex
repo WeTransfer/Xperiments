@@ -1,9 +1,9 @@
 defmodule Xperiments.AssignerController do
   use Xperiments.Web, :controller
   alias Xperiments.{Repo, Experiment}
-  plug :auth_request when action in [:example]
 
   plug Xperiments.Plug.RateLimit, max_requests: 5, interval_seconds: 60
+  plug :auth_request when action in [:example]
 
   def experiments(conn, params) do
     experiments = Xperiments.Assigner.Dispatcher.get_suitable_experiments(
