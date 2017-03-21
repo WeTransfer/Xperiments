@@ -30,6 +30,7 @@ defmodule Xperiments.AssignerController do
       {:error, _} ->
         conn
         |> put_status(:forbidden)
+        |> json(%{error: "Access denied"})
         |> halt()
     end
   end
