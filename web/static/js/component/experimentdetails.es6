@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Variants from 'component/forms/createexperiment/variants.es6';
-import Rules from 'component/forms/createexperiment/rules.es6';
+import Variants from 'component/forms/createexperiment/variants';
+import Rules from 'component/forms/createexperiment/rules';
 
 export default class ExperimentDetails extends React.Component {
   static propTypes = {
