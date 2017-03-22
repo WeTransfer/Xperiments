@@ -69,6 +69,8 @@ defmodule Xperiments.Experiment do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @allowed_params)
+    |> cast_embed(:variants)
+    |> cast_embed(:rules)
     |> validate_required([:name, :description, :start_date, :end_date, :sampling_rate])
     |> validate_end_date_greater_start_date([:start_date, :end_date])
     |> validate_current_or_future_date(:start_date)
@@ -81,8 +83,6 @@ defmodule Xperiments.Experiment do
     struct
     |> changeset(params)
     |> validate_allowed_state()
-    |> cast_embed(:variants, required: true)
-    |> cast_embed(:rules)
   end
 
   def changeset_run_state(struct) do
