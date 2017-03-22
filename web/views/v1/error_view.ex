@@ -13,6 +13,10 @@ defmodule Xperiments.V1.ErrorView do
     %{errors: %{detail: "Internal server error"}}
   end
 
+  def render("500.html", _assigns) do
+    "Internal server error"
+  end
+
   def render("error.json", %{changeset: changeset}) do
     # When encoded, the changeset returns its errors
     # as a JSON object. So we just pass it forward.

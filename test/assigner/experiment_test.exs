@@ -104,7 +104,7 @@ defmodule Xperiments.Assigner.ExperimentTest do
     {:ok, state} = Experiment.init(context.exp)
     db_exp = Xperiments.Repo.get!(Xperiments.Experiment, context.exp.id)
     assert db_exp.statistics == nil
-    Enum.scan(0..51, state, fn _, state ->
+    Enum.scan(0..5, state, fn _, state ->
       {:noreply, new_state} = Experiment.handle_cast({:inc_impression, "any_var_id"}, state)
       new_state
     end)
@@ -112,8 +112,8 @@ defmodule Xperiments.Assigner.ExperimentTest do
     db_exp = Xperiments.Repo.get!(Xperiments.Experiment, context.exp.id)
     assert db_exp.statistics ==
       %Xperiments.Experiment.Statistics{
-        common_impression: 50,
-        variants_impression: %{"any_var_id" => 50}
+        common_impression: 4,
+        variants_impression: %{"any_var_id" => 4}
       }
   end
 
