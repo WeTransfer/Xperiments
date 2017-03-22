@@ -25,7 +25,8 @@ const mapStateToProps = (state) => {
     selectedApplication: getSelectedApplication(state.applications.list, state.user),
     experiment: state.experiment,
     indexedExperimentsList: state.experiments.indexedList,
-    validationErrors: state.validationerrors[FORM_NAME]
+    validationErrors: state.validationerrors[FORM_NAME],
+    user: state.user
   };
 };
 

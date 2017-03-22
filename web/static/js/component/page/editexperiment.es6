@@ -42,7 +42,8 @@ export default class EditExperimentPage extends React.Component {
     setSamplingRate: React.PropTypes.func,
     validationErrors: React.PropTypes.object,
     params: React.PropTypes.object,
-    unsetValidationError: React.PropTypes.func
+    unsetValidationError: React.PropTypes.func,
+    user: React.PropTypes.object
   };
 
   componentWillMount() {
@@ -117,6 +118,7 @@ export default class EditExperimentPage extends React.Component {
             experimentId={this.props.experiment.data.id}
             selectedApplication={this.props.selectedApplication}
             delete={this.props.deleteVariant}
+            user={this.props.user}
           />
         </Paper>
         <div className="spacing spacing--is-30"></div>

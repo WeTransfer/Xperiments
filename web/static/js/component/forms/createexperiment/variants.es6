@@ -21,7 +21,8 @@ export default class Variants extends React.Component {
     list: React.PropTypes.array,
     experimentId: React.PropTypes.string,
     delete: React.PropTypes.func,
-    readOnly: React.PropTypes.boolean
+    readOnly: React.PropTypes.boolean,
+    user: React.PropTypes.object
   }
 
   defaultProps = {
@@ -61,7 +62,7 @@ export default class Variants extends React.Component {
     let actions = [];
 
     if (variant.id && this.props.selectedApplication) {
-      actions.push(<a target="_blank" href={`${this.props.selectedApplication.settings.url}/?experiment_id=${this.props.experimentId}&variant_id=${variant.id}`}>Preview</a>);
+      actions.push(<a target="_blank" href={`${this.props.selectedApplication.settings.url}/?experiment_id=${this.props.experimentId}&variant_id=${variant.id}&token=${this.props.user.token}`}>Preview</a>);
       actions.push(' | ');
     }
 
