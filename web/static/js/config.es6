@@ -1,5 +1,6 @@
 let currentAppName = 'web';
 const BASE_PATH = '/api/v1';
+const REPORTING_URL = window['__REPORTING_URL__'] || '';
 
 export default {
   api: {
@@ -12,6 +13,9 @@ export default {
         POST: `${BASE_PATH}/applications/${currentAppName}/experiments`
       }
     }
+  },
+  reports: {
+    url: REPORTING_URL
   },
   notification: {
     info: {
