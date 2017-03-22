@@ -219,7 +219,6 @@ export default class ExperimentsTable extends React.Component {
   makeRow(experiment) {
     return <TableRow key={`experiment__table-row-${experiment.id}`}>
       <TableRowColumn key={`experiment__table-row-column-name-${experiment.id}`}>{experiment.name}</TableRowColumn>
-      <TableRowColumn key={`experiment__table-row-column-vre-${experiment.id}`}>{`${experiment.rules.length} - ${experiment.variants.length} - ${experiment.exclusions.length}`}</TableRowColumn>
       <TableRowColumn key={`experiment__table-row-column-state-${experiment.id}`}><Chip labelStyle={globalStyling.chipLabel} backgroundColor={globalStyling.stateColors[experiment.state]}>{experiment.state}</Chip></TableRowColumn>
       <TableRowColumn key={`experiment__table-row-column-start-date-${experiment.id}`}>{Helper.formatDateTime(experiment.start_date)}</TableRowColumn>
       <TableRowColumn key={`experiment__table-row-column-end-date-${experiment.id}`}>{Helper.formatDateTime(experiment.end_date)}</TableRowColumn>
