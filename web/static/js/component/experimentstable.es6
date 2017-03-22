@@ -3,6 +3,7 @@ import Store from 'store';
 
 import {Link} from 'react-router';
 
+import CloneExperimentContainer from 'containers/cloneexperiment';
 import Helper from 'helper';
 
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
@@ -15,7 +16,7 @@ import Chip from 'material-ui/Chip';
 import globalStyling from 'globalstyling';
 import * as CONSTANTS from 'appconstants';
 
-import ExperimentDetails from 'component/experimentdetails.es6';
+import ExperimentDetails from 'component/experimentdetails';
 
 const styling = {
   ...globalStyling
@@ -45,7 +46,8 @@ export default class ExperimentsTable extends React.Component {
   };
 
   state = {
-    showingExperimentId: null 
+    showingExperimentId: null,
+    cloningExperimentId: null
   }
   
   showExperiment(id) {
@@ -57,6 +59,18 @@ export default class ExperimentsTable extends React.Component {
   hideExperiment() {
     this.setState({
       showingExperimentId: null
+    });
+  }
+
+  hideCloneExperimentForm = () => {
+    this.setState({
+      cloningExperimentId: null
+    });
+  }
+
+  showCloneExperimentForm = id => {
+    this.setState({
+      cloningExperimentId: id
     });
   }
 
@@ -118,10 +132,15 @@ export default class ExperimentsTable extends React.Component {
       }
     }
 
+
     if (experiment.state === CONSTANTS.EXPERIMENT_STATE_RUNNING) {
       actions.push(' | ');
       actions.push(reportAction);
     }
+
+    // Clone
+    actions.push(' | ');
+    actions.push(<a onClick={() => this.showCloneExperimentForm(experiment.id)}>Clone</a>);
 
     // Delete
     // actions.push(" | ");
@@ -130,27 +149,8 @@ export default class ExperimentsTable extends React.Component {
     return actions;
   }
 
-  render() {
-    let renderedExperiments = [];
-    if (!this.props.isFetching) {
-      this.props.list.forEach((experiment) => {
-        renderedExperiments.push(React.createElement(TableRow, {key: `experiment__table-row-${experiment.id}`}, [
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-name-${experiment.id}`}, experiment.name),
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-state-${experiment.id}`}, <Chip labelStyle={globalStyling.chipLabel} backgroundColor={globalStyling.stateColors[experiment.state]}>{experiment.state}</Chip>),
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-start-date-${experiment.id}`}, Helper.formatDateTime(experiment.start_date)),
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-end-date-${experiment.id}`}, Helper.formatDateTime(experiment.end_date)),
-          React.createElement(TableRowColumn, {key: `experiment__table-row-column-actions-${experiment.id}`}, this.getActions(experiment))
-        ]));
-      });
-    }
 
-    if (!renderedExperiments.length) {
-      renderedExperiments.push(<TableRow>
-        <TableRowColumn style={styling.emptyTD} colSpan={5}>{this.props.isFetching ? 'Getting your data, hang on...' : 'No experiments'}</TableRowColumn>
-      </TableRow>);
-    }
-
-    let dialog = null;
+  getShownExperiment() {
     if (this.state.showingExperimentId !== null) {
       let visibleExperiment = this.props.list.filter((experiment) => {
         return experiment.id === this.state.showingExperimentId;
@@ -164,7 +164,7 @@ export default class ExperimentsTable extends React.Component {
             onTouchTap={::this.hideExperiment}
           />
         ];
-        dialog = <Dialog
+        return <Dialog
           modal={true}
           open={true}
           title={visibleExperiment[0].name}
@@ -178,25 +178,75 @@ export default class ExperimentsTable extends React.Component {
         </Dialog>;
       }
     }
+    return null;
+  }
 
+  getCloneExperimentForm() {
+    if (this.state.cloningExperimentId !== null) {
+      let clonableExperiment = this.props.list.filter((experiment) => {
+        return experiment.id === this.state.cloningExperimentId;
+      });
+      
+      if (clonableExperiment) {
+        return <CloneExperimentContainer
+          isVisible={true}
+          experiment={clonableExperiment[0]}
+          onClose={this.hideCloneExperimentForm}
+          onSave={this.hideCloneExperimentForm}
+        />;
+      }
+    }
+    return null;
+  }
+
+  renderList() {
+    let renderedExperiments = [];
+    
+    if (!this.props.isFetching) {
+      this.props.list.forEach(experiment => renderedExperiments.push(this.makeRow(experiment)));
+    }
+
+    // Empty
+    if (!renderedExperiments.length) {
+      renderedExperiments.push(<TableRow>
+        <TableRowColumn style={styling.emptyTD} colSpan={5}>{this.props.isFetching ? 'Getting your data, hang on...' : 'No experiments'}</TableRowColumn>
+      </TableRow>);
+    }
+
+    return renderedExperiments;
+  }
+
+  makeRow(experiment) {
+    return <TableRow key={`experiment__table-row-${experiment.id}`}>
+      <TableRowColumn key={`experiment__table-row-column-name-${experiment.id}`}>{experiment.name}</TableRowColumn>
+      <TableRowColumn key={`experiment__table-row-column-state-${experiment.id}`}><Chip labelStyle={globalStyling.chipLabel} backgroundColor={globalStyling.stateColors[experiment.state]}>{experiment.state}</Chip></TableRowColumn>
+      <TableRowColumn key={`experiment__table-row-column-start-date-${experiment.id}`}>{Helper.formatDateTime(experiment.start_date)}</TableRowColumn>
+      <TableRowColumn key={`experiment__table-row-column-end-date-${experiment.id}`}>{Helper.formatDateTime(experiment.end_date)}</TableRowColumn>
+      <TableRowColumn key={`experiment__table-row-column-actions-${experiment.id}`}>{this.getActions(experiment)}</TableRowColumn>
+    </TableRow>;
+  }
+
+  renderFilter() {
     let filterItems = [];
     filters.forEach(filter => {
       filterItems.push(<MenuItem value={filter.value} primaryText={filter.label} />);
     });
 
+    return <SelectField
+      floatingLabelText="Filter by"
+      value={this.props.currentFilter}
+      onChange={(e, index, value) => this.props.filter(value)}
+    >
+      {filterItems}
+    </SelectField>;
+  }
+
+  render() {
     return <div className="experiments__table">
       <div className="row">
         <div className="col-xs-6"><h4>{this.props.title}</h4></div>
         <div className="col-xs-6">
-          <div className="pull-right">
-            <SelectField
-              floatingLabelText="Filter by"
-              value={this.props.currentFilter}
-              onChange={(e, index, value) => this.props.filter(value)}
-            >
-              {filterItems}
-            </SelectField>
-          </div>
+          <div className="pull-right">{this.renderFilter()}</div>
         </div>
       </div>
       <Table>
@@ -209,9 +259,10 @@ export default class ExperimentsTable extends React.Component {
             <TableHeaderColumn></TableHeaderColumn>
           </TableRow>
         </TableHeader>
-        <TableBody displayRowCheckbox={false}>{renderedExperiments}</TableBody>
+        <TableBody displayRowCheckbox={false}>{this.renderList()}</TableBody>
       </Table>
-      {dialog}
+      {this.getShownExperiment()}
+      {this.getCloneExperimentForm()}
     </div>;
   }
 }

@@ -10,5 +10,6 @@ export default {
   variants: [],
   exclusions: [],
   isSaving: false,
-  user_id: null
+  user_id: null,
+  state: null
 };
