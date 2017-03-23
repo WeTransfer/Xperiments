@@ -1,5 +1,6 @@
 defmodule Xperiments.Endpoint do
   use Phoenix.Endpoint, otp_app: :xperiments
+  use Appsignal.Phoenix
 
   socket "/socket", Xperiments.UserSocket
 
