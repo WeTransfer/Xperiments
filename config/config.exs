@@ -18,7 +18,8 @@ config :xperiments, Xperiments.Endpoint,
   secret_key_base: "wmyoXASvGJLg451QAYP78cyDkFi9d5MEDmG73goFsFdzg0cnSYxYxcWptWjqHjBs",
   render_errors: [view: Xperiments.V1.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Xperiments.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+           adapter: Phoenix.PubSub.PG2],
+  instrumenters: [Appsignal.Phoenix.Instrumenter]
 
 # Configures Elixir's Logger
 config :logger, :console,
