@@ -18,7 +18,7 @@ defmodule Xperiments.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Xperiments, []},
-     applications: [:phoenix, :phoenix_pubsub, :cowboy, :logger, :phoenix_html,
+     applications: [:appsignal, :phoenix, :phoenix_pubsub, :cowboy, :logger, :phoenix_html,
                     :phoenix_ecto, :postgrex, :timex, :ueberauth, :ueberauth_google,
                     :ex_rated],
      included_applications: [:cors_plug, :distillery, :ecto_state_machine, :guardian,
@@ -49,6 +49,7 @@ defmodule Xperiments.Mixfile do
      {:bodyguard, "~> 0.6.1"},
      {:distillery, "~> 1.0"},
      {:ex_rated, "~> 1.3"},
+     {:appsignal, "~> 0.0"},
      {:ex_machina, "~> 1.0", only: :test},
      {:mock, "~> 0.2.0", only: :test}]
   end
