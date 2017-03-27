@@ -12,6 +12,7 @@ defmodule Xperiments.AssignerControllerTest do
     conn =
       build_conn()
       |> put_req_header("accept", "application/json")
+      |> put_req_header("x-forwarded-for", "for=127.0.0.1")
 
     on_exit fn ->
       ExRated.delete_bucket("127.0.0.1:assigner/application/test_app/experiments/events")
