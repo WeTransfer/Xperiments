@@ -22,7 +22,7 @@ defmodule Xperiments.Mixfile do
                     :phoenix_ecto, :postgrex, :timex, :ueberauth, :ueberauth_google,
                     :ex_rated],
      included_applications: [:cors_plug, :distillery, :ecto_state_machine, :guardian,
-                             :bodyguard]]
+                             :bodyguard, :remote_ip, :ex2ms]]
   end
 
   # Specifies which paths to compile per environment.
