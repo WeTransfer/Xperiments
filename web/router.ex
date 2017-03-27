@@ -18,6 +18,7 @@ defmodule Xperiments.Router do
   end
 
   pipeline :external do
+    plug RemoteIp
     plug CORSPlug, origin: Application.get_env(:xperiments, :cors)[:origin]
   end
 
