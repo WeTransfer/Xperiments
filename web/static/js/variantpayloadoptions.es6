@@ -1,5 +1,5 @@
-const options = [
-  {
+const options = {
+  none: {
     name: 'None',
     key: 'none',
     defaults: {},
@@ -8,7 +8,7 @@ const options = [
       properties: []
     }
   },
-  {
+  splashpagePlusCTA: {
     name: 'SplashPage Plus CTA link',
     key: 'splashpagePlusCTA',
     defaults: {
@@ -17,21 +17,29 @@ const options = [
     },
     schema: {
       type: 'object',
+      rules: {
+        pathname: {
+          type: 'string',
+          required: true
+        },
+        search: {
+          type: 'string',
+          required: true
+        }
+      },
       properties: [
         {
           key: 'pathname',
-          type: 'string',
           title: 'Link*'
         },
         {
           key: 'search',
-          type: 'string',
           title: 'Tracking ID*'
         }
       ]
     }
   },
-  {
+  transferBubble: {
     name: 'Transfer tooltip',
     key: 'transferBubble',
     defaults: {
@@ -39,18 +47,69 @@ const options = [
       align: '.transfer__window',
       delay: 0,
       timeout: 5000,
+      buttonType: 'none',
       buttonText: null,
       buttonAction: null,
-      when: null
+      buttonLink: null,
+      when: 'never',
+      textContent: null
     },
     schema: {
       type: 'object',
+      rules: {
+        when: {
+          type: 'string',
+          required: true
+        },
+        textContent: {
+          type: 'string',
+          required: true
+        },
+        delay: {
+          type: 'number',
+          required: true
+        },
+        timeout: {
+          type: 'number',
+          required: true
+        },
+        text: {
+          type: 'string',
+          required: true
+        },
+        align: {
+          type: 'string'
+        },
+        buttonType: {
+          type: 'string'
+        },
+        buttonText: {
+          type:'string',
+          requiredWhen: {
+            field: 'buttonType',
+            value: ['action', 'link']
+          }
+        },
+        buttonLink: {
+          type: 'string',
+          requiredWhen: {
+            field: 'buttonType',
+            value: 'link'
+          }
+        },
+        buttonAction: {
+          type: 'string',
+          requiredWhen: {
+            field: 'buttonType',
+            value: 'action'
+          }
+        }
+      },
       properties: [
         {
           key: 'when',
-          type: 'string',
           enum: [
-            {label: '', value: null},
+            {label: 'never', value: 'never'},
             {label: 'transfer is uploading', value: 'transferInProgress'},
             {label: 'transfer is downloading', value: 'transferDownloadStarted'}
           ],
@@ -58,7 +117,6 @@ const options = [
         },
         {
           key: 'textContent',
-          type: 'string',
           title: 'Tooltip Text*',
           uiOptions: {
             multiLine: true,
@@ -67,7 +125,6 @@ const options = [
         },
         {
           key: 'delay',
-          type: 'number',
           title: 'Show after (seconds)*',
           enum: [
             {label: '0', value: 0},
@@ -98,21 +155,6 @@ const options = [
           ]
         },
         {
-          key: 'buttonText',
-          type: 'string',
-          title: 'Button Text',
-          requires: ['buttonAction']
-        },
-        {
-          key: 'buttonAction',
-          type: 'string',
-          enum: [
-            {label: '', value: null},
-            {label: 'Create New Transfer', value: 'createNewTransfer'}
-          ],
-          title: 'Button Action'
-        },
-        {
           key: 'text',
           type: 'string',
           title: 'Text',
@@ -123,11 +165,40 @@ const options = [
           type: 'string',
           title: 'Align',
           hidden: true
+        },
+        {
+          key: 'buttonType',
+          type: 'string',
+          title: 'Button Type',
+          enum: [
+            {label: 'none', value: 'none'},
+            {label: 'link', value: 'link'},
+            {label: 'action', value: 'action'}
+          ]
+        },
+        {
+          key: 'buttonText',
+          type: 'string',
+          title: 'Button Label'
+        },
+        {
+          key: 'buttonLink',
+          type: 'string',
+          title: 'Button Link'
+        },
+        {
+          key: 'buttonAction',
+          type: 'string',
+          enum: [
+            {label: '', value: null},
+            {label: 'Create New Transfer', value: 'createNewTransfer'}
+          ],
+          title: 'Button Action'
         }
       ]
     }
   },
-  {
+  mobileHeader: {
     name: 'Mobile Header',
     key: 'mobileHeader',
     defaults: {
@@ -136,6 +207,16 @@ const options = [
     },
     schema: {
       type: 'object',
+      rules: {
+        pathname: {
+          type: 'string',
+          required: true
+        },
+        text: {
+          type: 'string',
+          required: true
+        }
+      },
       properties: [
         {
           key: 'pathname',
@@ -158,7 +239,7 @@ const options = [
       ]
     }
   },
-  {
+  signupFormPlanSelectorType: {
     name: 'Singup Form - Plan Selector Type',
     key: 'signupFormPlanSelectorType',
     defaults: {
@@ -166,6 +247,12 @@ const options = [
     },
     schema: {
       type: 'object',
+      rules: {
+        type: {
+          type: 'string',
+          required: true
+        }
+      },
       properties: [
         {
           key: 'type',
@@ -180,7 +267,7 @@ const options = [
       ]
     }
   },
-  {
+  helpPageType: {
     name: 'Help Page Type',
     key: 'helpPageType',
     defaults: {
@@ -188,6 +275,12 @@ const options = [
     },
     schema: {
       type: 'object',
+      rules: {
+        type: {
+          type: 'string',
+          required: true
+        }
+      },
       properties: [
         {
           key: 'type',
@@ -201,7 +294,7 @@ const options = [
       ]
     }
   },
-  {
+  custom: {
     name: 'Custom',
     key: 'custom',
     disabled: true,
@@ -223,6 +316,8 @@ const options = [
       ]
     }
   }
-];
+};
 
-export default {web: options};
+export default {
+  web: options
+};

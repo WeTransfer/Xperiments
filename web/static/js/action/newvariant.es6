@@ -1,13 +1,10 @@
 import ActionHelper from 'modules/redux-actions';
 import {actions as ValidationErrorsActions} from 'action/validationerrors';
 
+import VariantPayloadOptions from 'variantpayloadoptions';
+
 const validate = data => {
   let errors = {};
-
-  // let totalAllocation = 0;
-  // variants.forEach(variant => {
-  //   totalAllocation += variant.allocation;
-  // });
 
   if (!data.name)
     errors.name = ['This field is required'];
@@ -16,59 +13,48 @@ const validate = data => {
     errors.allocation = ['This field is required'];
   else if (isNaN(data.allocation))
     errors.allocation = ['Provide a valid number'];
-  // else if (totalAllocation + data.allocation > 100)
-  //   errors.allocation = [`Allocation can not be greater than 100% (currently allocated: ${totalAllocation}%)`];
   
   if (!data.payload) {
     errors.payload_type = ['This field is required'];
   } else {
     let payloadType = Object.keys(data.payload)[0];
-    switch (payloadType) {
-      case 'splashpagePlusCTA':
-        if (!data.payload[payloadType].pathname)
-          errors.payload_pathname = ['This field is required'];
+    let propertyRules = VariantPayloadOptions.web[payloadType].schema.rules;
+
+    if (propertyRules) {
+      Object.keys(propertyRules).forEach(key => {
+        const validatableValue = data.payload[payloadType][key];
+        const validatableValueDataType = typeof data.payload[payloadType][key];
+        const requiredDataType = propertyRules[key].type;
         
-        if (!data.payload[payloadType].search)
-          errors.payload_search = ['This field is required'];
-        break;
-      case 'transferBubble':
-        if (data.payload[payloadType].delay === null)
-          errors.payload_delay = ['This field is required'];
-        else if (isNaN(data.payload[payloadType].delay))
-          errors.payload_delay = ['Provide a valid number'];
-        
-        if (data.payload[payloadType].timeout === null)
-          errors.payload_timeout = ['This field is required'];
-        else if (isNaN(data.payload[payloadType].timeout))
-          errors.payload_timeout = ['Provide a valid number'];
+        let shouldBeValidated = false;
 
-        if (!data.payload[payloadType].textContent)
-          errors.payload_textContent = ['This field is required'];
+        // Validation is always required
+        if (propertyRules[key].required) {
+          shouldBeValidated = true;
+        }
 
-        if (!data.payload[payloadType].when)
-          errors.payload_when = ['This field is required'];
-
-        if (data.payload[payloadType].buttonText && !data.payload[payloadType].buttonAction)
-          errors.payload_buttonAction = ['This field is required'];
-        break;
-      case 'mobileHeader':
-        if (!data.payload[payloadType].pathname)
-          errors.payload_pathname = ['This field is required'];
-
-        if (!data.payload[payloadType].text)
-          errors.payload_text = ['This field is required'];
-        break;
-      case 'custom':
-        if (!data.payload[payloadType].content) {
-          errors.payload_content = ['This field is required'];
-        } else {
-          try {
-            JSON.stringify(data.payload[payloadType].content);
-          } catch (e) {
-            errors.payload_content = ['Provide a valid JSON'];
+        // Validation requried when a certain other value is available
+        if (propertyRules[key].requiredWhen) {
+          const whenFieldValue = data.payload[payloadType][propertyRules[key].requiredWhen.field];
+          const requiredValue = propertyRules[key].requiredWhen.value;
+          
+          if (typeof requiredValue === 'object' && requiredValue.indexOf(whenFieldValue) !== -1) {
+            shouldBeValidated = true;
+          } else if (typeof requiredValue === 'string' && requiredValue === whenFieldValue) {
+            shouldBeValidated = true;
           }
         }
-        break;
+
+        // First let's see if the field is required
+        if (shouldBeValidated) {
+          if (validatableValue === '' || validatableValue === null) {
+            errors[`payload_${key}`] = ['This field is required'];
+          } else if (requiredDataType && validatableValueDataType !== requiredDataType) {
+            console.log(requiredDataType, validatableValueDataType);
+            errors[`payload_${key}`] = [`This field should be a ${propertyRules[key].type}`];
+          }
+        }
+      });
     }
   }
 
