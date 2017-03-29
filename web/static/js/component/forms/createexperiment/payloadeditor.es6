@@ -38,7 +38,7 @@ export default class PayloadEditor extends Form {
       if (key.match('payload_')) {
         this.props.unsetValidationError(key);
       }
-    })
+    });
   }
 
   setPayload(key, type, value) {
