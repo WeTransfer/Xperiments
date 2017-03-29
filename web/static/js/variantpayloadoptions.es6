@@ -294,6 +294,41 @@ const options = {
       ]
     }
   },
+  plusPageSocialProof: {
+    name: 'Plus Page - Social Proof',
+    key: 'plusPageSocialProof',
+    defaults: {
+    },
+    schema: {
+      type: 'object',
+      rules: {
+        title: {
+          type: 'string'
+        },
+        text: {
+          type: 'string',
+          required: true
+        },
+        by: {
+          type: 'string'
+        }
+      },
+      properties: [
+        {
+          key: 'title',
+          title: 'Title'
+        },
+        {
+          key: 'text',
+          title: 'Text*'
+        },
+        {
+          key: 'by',
+          title: 'By'
+        }
+      ]
+    }
+  },
   custom: {
     name: 'Custom',
     key: 'custom',
