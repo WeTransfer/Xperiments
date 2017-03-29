@@ -140,7 +140,6 @@ const options = {
         },
         {
           key: 'timeout',
-          type: 'number',
           title: 'For a period of (seconds)*',
           enum: [
             {label: '0', value: 0},
@@ -156,19 +155,16 @@ const options = {
         },
         {
           key: 'text',
-          type: 'string',
           title: 'Text',
           hidden: true
         },
         {
           key: 'align',
-          type: 'string',
           title: 'Align',
           hidden: true
         },
         {
           key: 'buttonType',
-          type: 'string',
           title: 'Button Type',
           enum: [
             {label: 'none', value: 'none'},
@@ -178,17 +174,14 @@ const options = {
         },
         {
           key: 'buttonText',
-          type: 'string',
           title: 'Button Label'
         },
         {
           key: 'buttonLink',
-          type: 'string',
           title: 'Button Link'
         },
         {
           key: 'buttonAction',
-          type: 'string',
           enum: [
             {label: '', value: null},
             {label: 'Create New Transfer', value: 'createNewTransfer'}
@@ -294,26 +287,49 @@ const options = {
       ]
     }
   },
-  plusPageSocialProof: {
-    name: 'Plus Page - Social Proof',
-    key: 'plusPageSocialProof',
+  plusPage: {
+    name: 'Plus Page',
+    key: 'plusPage',
     defaults: {
     },
     schema: {
       type: 'object',
       rules: {
-        title: {
+        type: {
           type: 'string'
+        },
+        title: {
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'socialProof'
+          }
         },
         text: {
           type: 'string',
-          required: true
+          requiredWhen: {
+            field: 'type',
+            value: 'socialProof'
+          }
         },
         by: {
-          type: 'string'
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'socialProof'
+          }
         }
       },
       properties: [
+        {
+          key: 'type',
+          title: 'Type',
+          type: 'string',
+          enum: [
+            {label: 'none', value: 'none'},
+            {label: 'Social Proof', value: 'socialProof'}
+          ]
+        },
         {
           key: 'title',
           title: 'Title'
