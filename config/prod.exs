@@ -15,7 +15,7 @@ config :xperiments, :js_config,
   reporting_url: "https://analytics.google.com/analytics/web/?authuser=1#my-reports/sT3DgjPiSoqc8N7ffF5E-w/a11792855w62566690p64155208/%3F_r.tabId%3D460/"
 
 # Do not print debug messages in production
-config :logger, level: :info
+config :logger, level: :warn
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,
   client_id: "${GOOGLE_CLIENT_ID}",
