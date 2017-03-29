@@ -31,8 +31,7 @@ environment :prod do
   set cookie: System.get_env("NODE_COOKIE")
 
   set commands: [
-    "migrate": "rel/commands/migrate.sh",
-    "seed": "rel/commands/seed.sh"
+    "migrate": "rel/commands/migrate.sh"
   ]
 end
 
