@@ -291,6 +291,7 @@ const options = {
     name: 'Plus Page',
     key: 'plusPage',
     defaults: {
+      type: 'none'
     },
     schema: {
       type: 'object',
