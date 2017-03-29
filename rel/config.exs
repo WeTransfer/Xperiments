@@ -31,8 +31,7 @@ environment :prod do
   set cookie: :"RhyL.eD&).Y^D5]7a.BD{]*9>[w|A~Sqk4<rR3sx44&fNcF$$o1OTt^8Gym6=kD@"
 
   set commands: [
-    "migrate": "rel/commands/migrate.sh",
-    "seed": "rel/commands/seed.sh"
+    "migrate": "rel/commands/migrate.sh"
   ]
 end
 

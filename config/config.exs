@@ -33,9 +33,6 @@ config :phoenix, :generators,
 config :xperiments, :cors,
   origin: "*"
 
-config :xperiments, :seed,
-  applications: [{"web", %{url: "http://lvh.me:5000"}}]
-
 config :ex_rated, :timeout, 1_800_000
 
 config :xperiments, :js_config,
