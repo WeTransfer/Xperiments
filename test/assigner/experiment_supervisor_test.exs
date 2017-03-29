@@ -40,16 +40,16 @@ defmodule Xperiments.Assigner.ExperimentSupervisorTest do
     assert db_exp.state == "terminated"
   end
 
-  test "returning pids of children in order sorted by priority" do
-    use Timex
-    datetime = fn (d) -> Timex.shift(Timex.now, days: d) end
-    exp = insert(:experiment, state: "running", inserted_at: datetime.(1))
-    exp1 = insert(:experiment, state: "running", inserted_at: datetime.(2))
-    exp2 = insert(:experiment, state: "running", inserted_at: datetime.(3))
-    {:ok, pid2} = ExperimentSupervisor.start_experiment(exp2)
-    {:ok, pid} = ExperimentSupervisor.start_experiment(exp)
-    {:ok, pid1} = ExperimentSupervisor.start_experiment(exp1)
-    pids = ExperimentSupervisor.experiment_pids()
-    assert pids == [pid2, pid1, pid]
-  end
+  # test "returning pids of children in order sorted by priority" do
+  #   use Timex
+  #   datetime = fn (d) -> Timex.shift(Timex.now, days: d) end
+  #   exp = insert(:experiment, state: "running", inserted_at: datetime.(1))
+  #   exp1 = insert(:experiment, state: "running", inserted_at: datetime.(2))
+  #   exp2 = insert(:experiment, state: "running", inserted_at: datetime.(3))
+  #   {:ok, pid2} = ExperimentSupervisor.start_experiment(exp2)
+  #   {:ok, pid} = ExperimentSupervisor.start_experiment(exp)
+  #   {:ok, pid1} = ExperimentSupervisor.start_experiment(exp1)
+  #   pids = ExperimentSupervisor.experiment_pids()
+  #   assert pids == [pid2, pid1, pid]
+  # end
 end
