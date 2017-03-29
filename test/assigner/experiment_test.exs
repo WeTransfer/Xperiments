@@ -100,7 +100,7 @@ defmodule Xperiments.Assigner.ExperimentTest do
                                      variants_impression: %{"any_var_id" => 1, "other_var" => 1}}
   end
 
-  test "statistics saves to DB after 50(treshhold) impressions", context do
+  test "statistics saves to DB after treshhold impressions", context do
     {:ok, state} = Experiment.init(context.exp)
     db_exp = Xperiments.Repo.get!(Xperiments.Experiment, context.exp.id)
     assert db_exp.statistics == nil
