@@ -17,8 +17,8 @@ defmodule Xperiments.Assigner.Experiment do
     case validate_experiment(experiment) do
       :ok ->
         :rand.seed(:exsplus)
-        schedule_ending(experiment.end_date)
-        {:ok, prepare_state(experiment)}
+        timer_ref = schedule_ending(experiment.end_date)
+        {:ok, Map.merge(prepare_state(experiment), %{timer_end_ref: timer_ref})}
       {:error, reason} ->
         {:stop, reason}
     end
