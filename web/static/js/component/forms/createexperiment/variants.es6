@@ -79,7 +79,11 @@ export default class Variants extends React.Component {
 
   makeRow(variant) {
     let payloadKey = JSON.parse(variant.payload);
-    let type = VariantPayloadOptions.web[VariantPayloadOptions.web.findIndex(el => el.key === Object.keys(payloadKey)[0])].name;
+    let type = VariantPayloadOptions.web[Object.keys(payloadKey)[0]].name;
+
+    if (!type) {
+      return null;
+    }
 
     let actionsRow = null;
     if (!this.props.readOnly)

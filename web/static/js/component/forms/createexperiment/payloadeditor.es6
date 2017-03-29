@@ -16,8 +16,33 @@ export default class PayloadEditor extends Form {
     unsetValidationError: React.PropTypes.func
   }
 
-  setPayload(key, value, type) {
-    let payloadType = Object.keys(this.props.value)[0];
+  getPayloadType() {
+    return Object.keys(this.props.value)[0];
+  }
+
+  setType(index, type) {
+    let payload = {};
+
+    try {
+      payload[type] = this.props.types[type].defaults;
+      this.clearPayloadValidationErrors();
+    } catch (e) {
+      // throw
+    }
+
+    this.props.onChange(payload);
+  }
+
+  clearPayloadValidationErrors() {
+    Object.keys(this.props.validationErrors).forEach(key => {
+      if (key.match('payload_')) {
+        this.props.unsetValidationError(key);
+      }
+    });
+  }
+
+  setPayload(key, type, value) {
+    const payloadType = this.getPayloadType();
     let payload = {};
     payload[payloadType] = Object.assign({}, this.props.value[payloadType]);
     
@@ -29,54 +54,50 @@ export default class PayloadEditor extends Form {
     this.props.onChange(payload);
   }
 
-  setType(index, type) {
-    let payload = {};
-
-    try {
-      payload[type] = this.props.types[index].defaults;
-    } catch (e) {
-      // throw
-    }
-
-    this.props.onChange(payload);
-  }
-
-  handlePropertyChange = (property, value) => {
-    this.setPayload(property.key, value, property.type);
+  handlePropertyChange = (property, type, value) => {
+    this.setPayload(property.key, type, value);
     this.props.unsetValidationError(`payload_${property.key}`);
-
-    if (property.requires) {
-      property.requires.forEach(propertyName => {
-        this.props.unsetValidationError(`payload_${propertyName}`);
-      });
-    }
   }
 
-  makePropertyField(property) {
+  skipPropertyField(property, rules) {
+    const when = rules.requiredWhen;
+    if (!when) return false;
+    
+    let whenFieldValue =this.props.value[this.getPayloadType()][when.field];
+    
+    if (typeof when.value === 'string' && whenFieldValue === when.value) return false;
+
+    if (typeof when.value === 'object' && when.value.indexOf(whenFieldValue) !== -1) return false;
+
+    return true;
+  }
+
+  makePropertyField(property, rules) {
     let payloadType = Object.keys(this.props.value)[0];
     let propertyValue = this.props.value[payloadType][property.key];
 
     let errorText = this.getError(`payload_${property.key}`);
 
     if (propertyValue === undefined || propertyValue === null) {
-      if (property.type === 'string')
+      if (rules.type === 'string')
         propertyValue = '';
       else
         propertyValue = null;
     }
 
+    if (this.skipPropertyField(property, rules)) return null;
+
     let propertyField = null;
-    
-    if ((property.type === 'string' || property.type === 'number') && !property.enum) {
+    if ((rules.type === 'string' || rules.type === 'number') && !property.enum) {
       propertyField = <div className="col-md-12">
         <TextField
           errorText={errorText}
           fullWidth={true}
-          onChange={(e, value) => this.handlePropertyChange(property, value)}
+          onChange={(e, value) => this.handlePropertyChange(property, rules.type, value)}
           floatingLabelText={property.title}
           disabled={!!property.disabled}
           value={propertyValue}
-          key={`textfield-${property.type}-${property.key}`}
+          key={`textfield-${rules.type}-${property.key}`}
           {...property.uiOptions}
         />
       </div>;
@@ -92,8 +113,8 @@ export default class PayloadEditor extends Form {
           fullWidth={true}
           floatingLabelText={property.title}
           value={propertyValue}
-          onChange={(e, index, value) => this.handlePropertyChange(property, value)}
-          key={`selectfield-${property.type}-${property.key}`}
+          onChange={(e, index, value) => this.handlePropertyChange(property, rules.type, value)}
+          key={`selectfield-${rules.type}-${property.key}`}
           disabled={!!property.disabled}
           {...property.uiOptions}
         >
@@ -110,12 +131,18 @@ export default class PayloadEditor extends Form {
     let typeOptions = [];
     let selectedType = null;
 
-    this.props.types.forEach(type => {
-      if (type.disabled) return;
+    Object.keys(this.props.types).forEach(key => {
+      const type = this.props.types[key];
+      
+      if (type.disabled) return; // disabled
       
       if (type.key === payloadType)
         selectedType = type;
-      typeOptions.push(<MenuItem value={type.key} primaryText={type.name} />);
+
+      typeOptions.push(<MenuItem
+        value={type.key}
+        primaryText={type.name}
+      />);
     });
 
     let typeFields = [];
@@ -123,7 +150,7 @@ export default class PayloadEditor extends Form {
       selectedType.schema.properties.forEach(property => {
         if (property.hidden === true)
           return;
-        typeFields.push(this.makePropertyField(property));
+        typeFields.push(this.makePropertyField(property, selectedType.schema.rules[property.key]));
       });
     }
 
