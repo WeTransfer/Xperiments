@@ -25,11 +25,20 @@ export default class PayloadEditor extends Form {
 
     try {
       payload[type] = this.props.types[type].defaults;
+      this.clearPayloadValidationErrors();
     } catch (e) {
       // throw
     }
 
     this.props.onChange(payload);
+  }
+
+  clearPayloadValidationErrors() {
+    Object.keys(this.props.validationErrors).forEach(key => {
+      if (key.match('payload_')) {
+        this.props.unsetValidationError(key);
+      }
+    })
   }
 
   setPayload(key, type, value) {
