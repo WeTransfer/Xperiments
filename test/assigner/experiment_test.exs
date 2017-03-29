@@ -6,7 +6,7 @@ defmodule Xperiments.Assigner.ExperimentTest do
     app = insert(:application, name: "web")
     excluded_exp = insert(:experiment, application: app)
     exp =
-      insert(:experiment, state: "running", exclusions: [excluded_exp], rules: Xperiments.Factory.rules_1)
+      insert(:experiment, state: "running", max_users: 5, exclusions: [excluded_exp], rules: Xperiments.Factory.rules_1)
     exp = Map.merge(exp, %{exclusions: Xperiments.Exclusion.for_experiment(exp.id)})
     ExperimentSupervisor.start_experiment(exp)
     [exp: exp, excluded_exp: excluded_exp]
@@ -119,10 +119,11 @@ defmodule Xperiments.Assigner.ExperimentTest do
 
   test "termination of an expeiment if reached 'max_users' limit", context do
     {:ok, state} = Experiment.init(context.exp)
-    Enum.scan(0..101, state, fn _, state ->
+    Enum.scan(0..4, state, fn _, state ->
       {:noreply, new_state} = Experiment.handle_cast({:inc_impression, "any_var_id"}, state)
       new_state
     end)
     assert_receive :end_experiment
+    :timer.sleep(200)
   end
 end
