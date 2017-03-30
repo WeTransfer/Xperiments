@@ -20,24 +20,6 @@ defmodule Xperiments.ReleaseTasks do
     :init.stop()
   end
 
-  def seed do
-    do_preparations()
-
-    # Run migrations
-    Enum.each(@repos, &run_migrations_for/1)
-
-    # Run the seed script if it exists
-    seed_script = seed_path(:xperiments)
-    if File.exists?(seed_script) do
-      IO.puts "Running seed script.."
-      Code.eval_file(seed_script)
-    end
-
-    # Signal shutdown
-    IO.puts "Success!"
-    :init.stop()
-  end
-
   defp run_migrations_for(repo) do
     IO.puts "Running migrations for #{repo}"
     Ecto.Migrator.run(repo, migrations_path(:xperiments), :up, all: true)
@@ -58,5 +40,4 @@ defmodule Xperiments.ReleaseTasks do
   end
 
   defp migrations_path(app), do: Application.app_dir(app, "priv/repo/migrations")
-  defp seed_path(app), do: Path.join(Application.app_dir(app, "priv/repo/"), "seed.exs")
 end
