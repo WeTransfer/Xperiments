@@ -21,6 +21,7 @@ defmodule Xperiments.Rule do
   @allowed_params ~w(parameter type operator value)a
 
   def changeset(struct, params \\ %{}) do
+    params = make_value_as_string(params)
     struct
     |> cast(params, @allowed_params)
     |> validate_required(@allowed_params)
@@ -31,6 +32,12 @@ defmodule Xperiments.Rule do
     |> validate_number_for_type_number()
     |> downcase_parameter()
   end
+
+  def make_value_as_string(%{value: val} = params) when not is_nil(val) and is_number(val) do
+    Map.update!(params, :value, &to_string(&1))
+  end
+  def make_value_as_string(params), do: params
+
 
   def validate_string_type(chset) do
     changes = chset.changes
@@ -51,7 +58,13 @@ defmodule Xperiments.Rule do
   end
 
   def validate_number_for_type_number(chset) do
-    if chset.changes[:type] == "number" and not is_number(chset.changes[:value]) do
+    integer_parse_validation = fn(str) ->
+      case Integer.parse(str) do
+        {_num, _} -> true
+        :error -> false
+      end
+    end
+    if chset.changes[:type] == "number" and not integer_parse_validation.(chset.changes[:value]) do
       add_error(chset, :value, "must be a number")
     else
       chset
