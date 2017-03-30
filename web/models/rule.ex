@@ -33,8 +33,8 @@ defmodule Xperiments.Rule do
     |> downcase_parameter()
   end
 
-  def make_value_as_string(%{value: val} = params) when not is_nil(val) and is_number(val) do
-    Map.update!(params, :value, &to_string(&1))
+  def make_value_as_string(%{"value" => val} = params) when not is_nil(val) and is_number(val) do
+    Map.update!(params, "value", &to_string(&1))
   end
   def make_value_as_string(params), do: params
 
