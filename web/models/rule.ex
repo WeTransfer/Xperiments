@@ -58,13 +58,16 @@ defmodule Xperiments.Rule do
   end
 
   def validate_number_for_type_number(chset) do
-    integer_parse_validation = fn(str) ->
-      case Integer.parse(str) do
-        {_num, _} -> true
-        :error -> false
-      end
+    string_integer_validation = fn
+      str when is_bitstring(str) ->
+        case Integer.parse(str) do
+          {_num, _} -> true
+          :error -> false
+        end
+      num when is_number(num) -> true
+      _ -> false
     end
-    if chset.changes[:type] == "number" and not integer_parse_validation.(chset.changes[:value]) do
+    if chset.changes[:type] == "number" and not string_integer_validation.(chset.changes[:value]) do
       add_error(chset, :value, "must be a number")
     else
       chset
