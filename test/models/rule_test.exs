@@ -41,4 +41,11 @@ defmodule Xperiments.RuleTest do
     chset = Rule.changeset(%Rule{}, %{@valid_attrs | type: "number", value: "str"})
     refute chset.valid?
   end
+
+  test "validaiton for valuer as a number" do
+    chset = Rule.changeset(%Rule{}, %{@valid_attrs | type: "number", value: 3})
+    assert chset.valid?
+    chset = Rule.changeset(%Rule{}, %{@valid_attrs | type: "number"})
+    refute chset.valid?
+  end
 end
