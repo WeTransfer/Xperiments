@@ -83,7 +83,11 @@ export default class AddRule extends Form {
   }
 
   handleValue(value) {
-    this.props.setValue(value);
+    if (this.props.rule.type && this.props.rule.type === 'number') {
+      this.props.setValue(parseInt(value));
+    } else {
+      this.props.setValue(parseInt(value));
+    }
     this.unsetError('value');
   }
 
