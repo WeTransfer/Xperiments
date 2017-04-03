@@ -150,7 +150,6 @@ export default class ExperimentsTable extends React.Component {
     return actions;
   }
 
-
   getShownExperiment() {
     if (this.state.showingExperimentId !== null) {
       let visibleExperiment = this.props.list.filter((experiment) => {
@@ -218,11 +217,18 @@ export default class ExperimentsTable extends React.Component {
   }
 
   makeRow(experiment) {
+    let impressions = '-';
+    if (experiment.statistics && experiment.statistics.common_impression) {
+      impressions = experiment.statistics.common_impression;
+    }
+
     return <TableRow key={`experiment__table-row-${experiment.id}`}>
       <TableRowColumn key={`experiment__table-row-column-name-${experiment.id}`}>{experiment.name}</TableRowColumn>
       <TableRowColumn key={`experiment__table-row-column-state-${experiment.id}`}><Chip labelStyle={globalStyling.chipLabel} backgroundColor={globalStyling.stateColors[experiment.state]}>{experiment.state}</Chip></TableRowColumn>
+      <TableRowColumn key={`experiment__table-row-column-impressions-${experiment.id}`}>{impressions}</TableRowColumn>
       <TableRowColumn key={`experiment__table-row-column-start-date-${experiment.id}`}>{Helper.formatDateTime(experiment.start_date)}</TableRowColumn>
       <TableRowColumn key={`experiment__table-row-column-end-date-${experiment.id}`}>{Helper.formatDateTime(experiment.end_date)}</TableRowColumn>
+      <TableRowColumn key={`experiment__table-row-column-created-by-${experiment.id}`}>{experiment.user.name}</TableRowColumn>
       <TableRowColumn key={`experiment__table-row-column-actions-${experiment.id}`}>{this.getActions(experiment)}</TableRowColumn>
     </TableRow>;
   }
@@ -255,8 +261,10 @@ export default class ExperimentsTable extends React.Component {
           <TableRow>
             <TableHeaderColumn>Name</TableHeaderColumn>
             <TableHeaderColumn>Status</TableHeaderColumn>
+            <TableHeaderColumn>Impressions</TableHeaderColumn>
             <TableHeaderColumn>Start Date (UTC)</TableHeaderColumn>
             <TableHeaderColumn>End Date (UTC)</TableHeaderColumn>
+            <TableHeaderColumn>Created By</TableHeaderColumn>
             <TableHeaderColumn></TableHeaderColumn>
           </TableRow>
         </TableHeader>
