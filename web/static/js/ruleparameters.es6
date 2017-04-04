@@ -4,8 +4,7 @@ export default [
   {label: 'Platform', value: 'platform'},
   {label: 'Language', value: 'language'},
   {label: 'Country', value: 'country'},
-  {label: 'Transfer - Uploads', value: 'transferUploads'},
-  {label: 'Transfer - Downloads', value: 'transferDownloads'},
-  {label: 'User Account Type', value: 'userAccountType'},
-  {label: 'IP', value: 'restrictedToIP', disabled: true}
+  {label: 'Transfer - Uploads', value: 'transferuploads'},
+  {label: 'Transfer - Downloads', value: 'transferdownloads'},
+  {label: 'User Account Type', value: 'useraccounttype'}
 ];
