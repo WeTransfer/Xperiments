@@ -4,8 +4,7 @@ export default {
   platform: 'string',
   language: 'string',
   country: 'string',
-  transferUploads: 'number',
-  transferDownloads: 'number',
-  userAccountType: 'string',
-  restrictedToIP: 'string'
+  transferuploads: 'number',
+  transferdownloads: 'number',
+  useraccounttype: 'string'
 };
