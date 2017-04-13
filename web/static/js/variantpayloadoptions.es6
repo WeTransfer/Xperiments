@@ -354,8 +354,8 @@ const options = {
           title: 'By'
         },
         {
-          key: 'CTA Text',
-          title: 'ctaText'
+          key: 'ctaText',
+          title: 'CTA Text'
         }
       ]
     }
