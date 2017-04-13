@@ -233,6 +233,7 @@ const options = {
     }
   },
   signupFormPlanSelectorType: {
+    disabled: true,
     name: 'Singup Form - Plan Selector Type',
     key: 'signupFormPlanSelectorType',
     defaults: {
@@ -261,6 +262,7 @@ const options = {
     }
   },
   helpPageType: {
+    disabled: true,
     name: 'Help Page Type',
     key: 'helpPageType',
     defaults: {
@@ -319,6 +321,13 @@ const options = {
             field: 'type',
             value: 'socialProof'
           }
+        },
+        ctaText: {
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'bannerWithCTA'
+          }
         }
       },
       properties: [
@@ -328,7 +337,8 @@ const options = {
           type: 'string',
           enum: [
             {label: 'none', value: 'none'},
-            {label: 'Social Proof', value: 'socialProof'}
+            {label: 'Social Proof', value: 'socialProof'},
+            {label: 'Banner with CTA', value: 'bannerWithCTA'}
           ]
         },
         {
@@ -342,6 +352,10 @@ const options = {
         {
           key: 'by',
           title: 'By'
+        },
+        {
+          key: 'CTA Text',
+          title: 'ctaText'
         }
       ]
     }
