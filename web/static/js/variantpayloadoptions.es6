@@ -328,6 +328,13 @@ const options = {
             field: 'type',
             value: 'bannerWithCTA'
           }
+        },
+        onPage: {
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'bannerWithCTA'
+          }
         }
       },
       properties: [
@@ -356,7 +363,17 @@ const options = {
         {
           key: 'ctaText',
           title: 'CTA Text'
-        }
+        },
+        {
+          key: 'onPage',
+          title: 'Page',
+          type: 'string',
+          enum: [
+            {label: 'none', value: 'none'},
+            {label: 'Plus', value: '/plus'},
+            {label: 'Sign-in', value: '/sign-in'}
+          ]
+        },
       ]
     }
   },
