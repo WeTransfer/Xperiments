@@ -42,6 +42,7 @@ defmodule Xperiments.AssignerControllerTest do
       post(context.conn, @api_path <> "/experiments", %{})
       |> json_response(200)
     assert length(body["assign"]) == 3
+    assert hd(body["assign"])["name"] # test that we return a name of a requested experiment
     ids =
       Xperiments.Repo.all(Xperiments.Experiment)
       |> Enum.map(& &1.id)

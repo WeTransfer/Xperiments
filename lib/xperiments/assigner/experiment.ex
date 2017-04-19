@@ -218,6 +218,7 @@ defmodule Xperiments.Assigner.Experiment do
         variant ->
           {:ok,
            %{id: state.id,
+             name: state.name,
              state: state.state, # heh, looks stupid
              start_date: state.start_date,
              end_date: state.end_date,
