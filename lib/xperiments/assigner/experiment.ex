@@ -80,16 +80,12 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.call(pid, {:register_priority})
   end
 
-  @doc """
-  Adds an exclusions if an experiment is running
-  """
+  @shortdoc "Adds an exclusions if an experiment is running"
   def add_exclusion(id, caller_id) do
     GenServer.cast(via_tuple(id), {:add_exclusion, caller_id})
   end
 
-  @doc """
-  Removes an exclusion if it exists
-  """
+  @shortdoc "Removes an exclusion if it exists"
   def remove_exclusion(pid, caller_id) when is_pid(pid) do
     GenServer.cast(pid, {:remove_exclusion, caller_id})
   end
@@ -97,23 +93,17 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.cast(via_tuple(id), {:remove_exclusion, caller_id})
   end
 
-  @doc """
-  Increment an impression for an experiment
-  """
+  @shortdoc "Increment an impression for an experiment"
   def inc_impression(id, var_id) do
     GenServer.cast(via_tuple(id), {:inc_impression, var_id})
   end
 
-  @doc """
-  Gets a specific variant of the experiment
-  """
+  @shortdoc "Gets a specific variant of the experiment"
   def get_experiment_data(pid, var_id) do
     GenServer.call(pid, {:get_experiment_data, var_id})
   end
 
-  @doc """
-  Assign a variant based on their allocations
-  """
+  @shortdoc "Assign a variant based on their allocations"
   def get_random_variant(pid) when is_pid(pid) do
     GenServer.call(pid, {:get_random_variant})
   end
@@ -146,9 +136,7 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.call(via_tuple(id), {:check_segemets, segments})
   end
 
-  @doc """
-  Check that an experiment is started.
-  """
+  @shortdoc "Check that an experiment is started"
   def is_started?(pid) when is_pid(pid) do
     GenServer.call(pid, :is_started)
   end
