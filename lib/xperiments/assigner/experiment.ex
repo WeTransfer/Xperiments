@@ -203,7 +203,7 @@ defmodule Xperiments.Assigner.Experiment do
   end
 
   def handle_call({:check_segemets, segments}, _caller, state) do
-    {:reply, do_compare_rules(segments, state.rules), state}
+    {:reply, compare_rules(segments, state.rules), state}
   end
 
   def handle_call(:is_started, _caller, state) do
@@ -240,25 +240,41 @@ defmodule Xperiments.Assigner.Experiment do
     {:stop, :normal, state}
   end
 
-  defp do_compare_rules(_, []), do: true
-  defp do_compare_rules(segments, _) when segments == %{}, do: false
-  defp do_compare_rules(segments, _) when is_nil(segments), do: false
-  defp do_compare_rules(segments, rules) when map_size(segments) < length(rules), do: false
-  defp do_compare_rules(segments, rules) do
+  defp compare_rules(_, []), do: true
+  defp compare_rules(segments, _) when segments == %{}, do: false
+  defp compare_rules(segments, _) when is_nil(segments), do: false
+  defp compare_rules(segments, rules) when map_size(segments) < length(rules), do: false
+  defp compare_rules(segments, rules) do
     result =
       Enum.map(rules, fn r ->
-        if given_value = Map.get(segments, String.downcase(r.parameter)) do
-          apply(Kernel, String.to_atom(r.operator), [given_value, r.value])
+        with given_value = Map.get(segments, String.downcase(r.parameter)),
+             {:ok , casted_val} <- cast_to_type(r.type, r.value) do
+          apply(Kernel, String.to_atom(r.operator), [given_value, casted_val])
         else
-          false
+          _err -> false
         end
       end)
       |> Enum.dedup
     [true] == result
   end
 
+  defp cast_to_type("string", value), do: {:ok, to_string(value)}
+  defp cast_to_type("number", value) when is_number(value), do: value
+  defp cast_to_type("number", value) do
+    try do
+      {:ok, String.to_integer(value)}
+    rescue
+      ArgumentError -> {:error, value}
+    end
+  end
+  defp cast_to_type("regex", value), do: Regex.compile(value)
+  defp cast_to_type("boolean", value) when is_boolean(value), do: {:ok, value}
+  defp cast_to_type("boolean", "true"), do: {:ok, true}
+  defp cast_to_type("boolean", "false"), do: {:ok, false}
+  defp cast_to_type("boolean", bad_value), do: {:error, bad_value}
+
   # Create segment ranges for each variant based on their allocations
-  defp do_build_segmented_variants(variants) do
+  defp build_segmented_variants(variants) do
     {segmented_variants, _} =
       variants
       |> Enum.sort(& &1.allocation >= &2.allocation)
