@@ -33,7 +33,7 @@ config :phoenix, :generators,
 config :xperiments, :cors,
   origin: "*"
 
-config :ex_rated, :timeout, 1_800_000
+config :ex_rated, :timeout, 600_000
 
 config :xperiments, :js_config,
   reporting_url: "https://analytics.google.com/analytics/web/?authuser=1#my-reports/5IyMQAn0Tcqdu2Va8V9BIg/a69714416w130256140p134086343/%3F_u.date00%3D20170227%26_u.date01%3D20170227%26_u.sampleOption%3Dmoreprecision%26_u.sampleSize%3D500000/"
