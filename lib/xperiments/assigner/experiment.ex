@@ -65,7 +65,7 @@ defmodule Xperiments.Assigner.Experiment do
 
   @doc """
   Sets `stop` state for an experiment.
-  So it stops assigns any new requests, but still will receive events.
+  So it stops assigns any new requests, but continue to receive events.
   In fact, it pauses the experiment.
   """
   def stop(id) do
@@ -236,7 +236,7 @@ defmodule Xperiments.Assigner.Experiment do
     {:reply, response, state}
   end
 
-  def hand_info(:end_experiment, state) do
+  def handle_info(:end_experiment, state) do
     {:stop, :normal, state}
   end
 

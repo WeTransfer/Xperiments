@@ -61,10 +61,12 @@ defmodule Xperiments.Assigner.ExperimentTest do
     assert result == :stop
   end
 
-  test "automaticly shutdown an experiment on end_date" do
+  test "automaticly shutdown an experiment on the end_date" do
+    import Logger
     exp = insert(:experiment, state: "running", end_date: DateTime.utc_now() |> Timex.shift(milliseconds: 80))
-    {:ok, _} = Experiment.init(exp)
-    assert_receive :end_experiment
+    {:ok, pid} = ExperimentSupervisor.start_experiment(exp)
+    ref = Process.monitor(pid)
+    assert_receive {:DOWN, ^ref, :process, ^pid, :normal}
   end
 
   test "that an experiment start checker works" do
