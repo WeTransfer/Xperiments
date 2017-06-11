@@ -1,4 +1,4 @@
-defmodule Xperiments.ConnCase do
+defmodule Xperiments.Web.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -25,11 +25,11 @@ defmodule Xperiments.ConnCase do
       import Ecto.Changeset
       import Ecto.Query
 
-      # import Xperiments.Router.Helpers
+      # import Xperiments.Web.Router.Helpers
       import Xperiments.Factory
 
       # The default endpoint for testing
-      @endpoint Xperiments.Endpoint
+      @endpoint Xperiments.Web.Endpoint
     end
   end
 
@@ -40,8 +40,7 @@ defmodule Xperiments.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(Xperiments.Repo, {:shared, self()})
     end
 
-    conn =
-      Phoenix.ConnTest.build_conn()
+    conn = Phoenix.ConnTest.build_conn()
 
     {:ok, conn: conn}
   end
