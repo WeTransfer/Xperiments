@@ -62,7 +62,6 @@ defmodule Xperiments.Assigner.ExperimentTest do
   end
 
   test "automaticly shutdown an experiment on the end_date" do
-    import Logger
     exp = insert(:experiment, state: "running", end_date: DateTime.utc_now() |> Timex.shift(milliseconds: 80))
     {:ok, pid} = ExperimentSupervisor.start_experiment(exp)
     ref = Process.monitor(pid)

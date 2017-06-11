@@ -18,10 +18,7 @@ defmodule Xperiments.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Xperiments, []},
-     applications: [:appsignal, :phoenix, :phoenix_pubsub, :cowboy, :logger, :phoenix_html,
-                    :phoenix_ecto, :postgrex, :timex, :ueberauth, :ueberauth_google,
-                    :ex_rated, :cors_plug, :distillery, :ecto_state_machine, :guardian,
-                    :bodyguard, :remote_ip, :ex2ms, :runtime_tools]]
+    extra_application: [:logger, :ex2ms, :runtime_tools]]
   end
 
   # Specifies which paths to compile per environment.
