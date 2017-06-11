@@ -13,10 +13,10 @@ config :xperiments, Experiment,
   stat_threshold: 100
 
 # Configures the endpoint
-config :xperiments, Xperiments.Endpoint,
+config :xperiments, Xperiments.Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "wmyoXASvGJLg451QAYP78cyDkFi9d5MEDmG73goFsFdzg0cnSYxYxcWptWjqHjBs",
-  render_errors: [view: Xperiments.V1.ErrorView, accepts: ~w(html json)],
+  render_errors: [view: Xperiments.Web.V1.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Xperiments.PubSub,
            adapter: Phoenix.PubSub.PG2],
   instrumenters: [Appsignal.Phoenix.Instrumenter]

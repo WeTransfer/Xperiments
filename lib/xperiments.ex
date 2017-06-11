@@ -9,7 +9,7 @@ defmodule Xperiments do
     # Define workers and child supervisors to be supervised
     children = [
       supervisor(Xperiments.Repo, []),
-      supervisor(Xperiments.Endpoint, []),
+      supervisor(Xperiments.Web.Endpoint, []),
       supervisor(Xperiments.Assigner.Supervisor, [])
     ]
 
@@ -22,7 +22,7 @@ defmodule Xperiments do
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    Xperiments.Endpoint.config_change(changed, removed)
+    Xperiments.Web.Endpoint.config_change(changed, removed)
     :ok
   end
 end

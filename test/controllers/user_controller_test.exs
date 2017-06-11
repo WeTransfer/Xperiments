@@ -1,5 +1,5 @@
 defmodule Xperiments.UserControllerTest do
-  use Xperiments.ConnCase, async: false
+  use Xperiments.Web.ConnCase, async: false
   alias Xperiments.User
 
   setup do
@@ -9,6 +9,7 @@ defmodule Xperiments.UserControllerTest do
       build_conn()
       |> bypass_through(Xperiments.Router, [:api, :browser])
       |> get("/")
+      |> Map.update!(:state, fn (_) -> :set end)
       |> Guardian.Plug.sign_in(user, :token, [])
       |> send_resp(200, "Flush the session yo")
       |> recycle()
