@@ -233,7 +233,7 @@ const options = {
     }
   },
   signupFormPlanSelectorType: {
-    disabled: true,
+    disabled: false,
     name: 'Singup Form - Plan Selector Type',
     key: 'signupFormPlanSelectorType',
     defaults: {
@@ -245,18 +245,40 @@ const options = {
         type: {
           type: 'string',
           required: true
+        },
+        yearlyCopy: {
+          type:'string',
+          required: true,
+          requiredWhen: {
+            field: 'type',
+            value: ['priceByMonth']
+          }
+        },
+        monthlyCopy: {
+          type:'string',
+          required: true,
+          requiredWhen: {
+            field: 'type',
+            value: ['priceByMonth']
+          }
         }
       },
       properties: [
         {
           key: 'type',
-          type: 'string',
           title: 'Type*',
           enum: [
             {label: 'default', value: 'original'},
-            {label: 'full width', value: 'fullWidthBlock'},
-            {label: 'larger yearly block', value: 'largeYearlyBlock'}
+            {label: 'price by month', value: 'priceByMonth'}
           ]
+        },
+        {
+          key: 'yearlyCopy',
+          title: 'Yearly tagline*'
+        },
+        {
+          key: 'monthlyCopy',
+          title: 'Monthly tagline*'
         }
       ]
     }
