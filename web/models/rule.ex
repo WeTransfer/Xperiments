@@ -4,8 +4,8 @@ defmodule Xperiments.Rule do
 
   A rule set in form:
   - *parameter*. String. Example: "region", "country", "lang", etc.
-  - *type*. String. Can be only: "string", "number", "boolean"
-  - *operator*. String. Can be only: "==", "!=", ">", "<", ">=", "<="
+  - *type*. String. Can be only: "string", "number", "boolean", "regex"
+  - *operator*. String. Can be only: "==", "!=", ">", "<", ">=", "<=" , "=~"
   - *value*. String. Example: "eu", "ru", "100", etc.
   """
   use Xperiments.Web, :model
@@ -25,10 +25,11 @@ defmodule Xperiments.Rule do
     struct
     |> cast(params, @allowed_params)
     |> validate_required(@allowed_params)
-    |> validate_inclusion(:type, ~w(string number boolean))
-    |> validate_inclusion(:operator, ~w(== != > < >= <=))
+    |> validate_inclusion(:type, ~w(string number boolean regex))
+    |> validate_inclusion(:operator, ~w(== != > < >= <= =~))
     |> validate_string_type()
     |> validate_boolean_type()
+    |> validate_regex_type()
     |> validate_number_for_type_number()
     |> downcase_parameter()
   end
@@ -69,6 +70,15 @@ defmodule Xperiments.Rule do
     end
     if chset.changes[:type] == "number" and not string_integer_validation.(chset.changes[:value]) do
       add_error(chset, :value, "must be a number")
+    else
+      chset
+    end
+  end
+
+  def validate_regex_type(chset) do
+    changes = chset.changes
+    if changes[:type] == "regex" and not changes[:operator] in ["=~"] do
+      add_error(chset, :type, "regex types must have only '=~' operator")
     else
       chset
     end

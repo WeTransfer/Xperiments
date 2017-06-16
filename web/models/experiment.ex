@@ -63,9 +63,7 @@ defmodule Xperiments.Experiment do
 
   @allowed_params ~w(name description start_date end_date sampling_rate max_users)
 
-  @doc """
-  Builds a changeset based on the `struct` and `params`.
-  """
+  @shortdoc "Builds a changeset based on the `struct` and `params`"
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @allowed_params)
@@ -116,17 +114,13 @@ defmodule Xperiments.Experiment do
     end
   end
 
-  @doc """
-  Validates any given number, only if it set, otherwise does nothing
-  """
+  @shortdoc "Validates any given number, only if it set, otherwise does nothing"
   def maybe_validate_number(changeset, nil, _opts), do: changeset
   def maybe_validate_number(changeset, field, opts) do
     validate_number(changeset, field, opts)
   end
 
-  @doc """
-  Validate that an experiment has variants and allow to run it
-  """
+  @shortdoc "Validate that an experiment has variants and allow to run it"
   def validate_model_has_variants(changeset) do
     if length(changeset.data.variants) == 0 do
       add_error(changeset, :variants, "There should be at least one variant to run the experiment")
@@ -135,9 +129,7 @@ defmodule Xperiments.Experiment do
     end
   end
 
-  @doc """
-  Checks that sum of allocations of all provided variants equals to 100
-  """
+  @shortdoc "Checks that sum of allocations of all provided variants equals to 100"
   def validate_variants(changeset) do
     sum_allocation =
       Ecto.Changeset.get_field(changeset, :variants)
@@ -149,9 +141,7 @@ defmodule Xperiments.Experiment do
     end
   end
 
-  @doc """
-  Allow update only if state is draft
-  """
+  @shortdoc "Allow update only if state is draft"
   def validate_allowed_state(changeset) do
     if changeset.data.state != "draft" do
       add_error(changeset, :state, "It's possible to update an Experiment only in draft state")
@@ -160,9 +150,7 @@ defmodule Xperiments.Experiment do
     end
   end
 
-  @doc """
-  Tries to change a state for a given experiment and returns a changeset
-  """
+  @shortdoc "Tries to change a state for a given experiment and returns a changeset"
   def change_state(experiment, event) do
     case event do
       "run" ->

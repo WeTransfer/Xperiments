@@ -25,7 +25,7 @@ defmodule Xperiments.Assigner.Experiment do
   end
 
   def terminate(reason, state) do
-    do_sync_stat_to_db(state.statistics, state.id, true)
+    sync_stat_to_db(state.statistics, state.id, true)
     Task.start(ModelExperiment, :set_terminated_state, [state.id])
     Logger.info "Shutting down the experiment '#{state.name}' with id #{state.id} with reason: #{reason}"
     :normal
@@ -42,7 +42,7 @@ defmodule Xperiments.Assigner.Experiment do
 
   defp prepare_state(experiment) do
     Map.take(experiment, [:id, :name, :rules, :start_date, :end_date, :inserted_at, :state, :exclusions, :statistics, :max_users])
-    |> Map.merge(%{variants: do_build_segmented_variants(experiment.variants)})
+    |> Map.merge(%{variants: build_segmented_variants(experiment.variants)})
     |> prepare_statistics
   end
 
@@ -80,16 +80,12 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.call(pid, {:register_priority})
   end
 
-  @doc """
-  Adds an exclusions if an experiment is running
-  """
+  @shortdoc "Adds an exclusions if an experiment is running"
   def add_exclusion(id, caller_id) do
     GenServer.cast(via_tuple(id), {:add_exclusion, caller_id})
   end
 
-  @doc """
-  Removes an exclusion if it exists
-  """
+  @shortdoc "Removes an exclusion if it exists"
   def remove_exclusion(pid, caller_id) when is_pid(pid) do
     GenServer.cast(pid, {:remove_exclusion, caller_id})
   end
@@ -97,23 +93,17 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.cast(via_tuple(id), {:remove_exclusion, caller_id})
   end
 
-  @doc """
-  Increment an impression for an experiment
-  """
+  @shortdoc "Increment an impression for an experiment"
   def inc_impression(id, var_id) do
     GenServer.cast(via_tuple(id), {:inc_impression, var_id})
   end
 
-  @doc """
-  Gets a specific variant of the experiment
-  """
+  @shortdoc "Gets a specific variant of the experiment"
   def get_experiment_data(pid, var_id) do
     GenServer.call(pid, {:get_experiment_data, var_id})
   end
 
-  @doc """
-  Assign a variant based on their allocations
-  """
+  @shortdoc "Assign a variant based on their allocations"
   def get_random_variant(pid) when is_pid(pid) do
     GenServer.call(pid, {:get_random_variant})
   end
@@ -146,9 +136,7 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.call(via_tuple(id), {:check_segemets, segments})
   end
 
-  @doc """
-  Check that an experiment is started.
-  """
+  @shortdoc "Check that an experiment is started"
   def is_started?(pid) when is_pid(pid) do
     GenServer.call(pid, :is_started)
   end
@@ -185,8 +173,8 @@ defmodule Xperiments.Assigner.Experiment do
       |> Map.update!(:variants_impression, fn m ->
         Map.update(m, var_id, 1, fn v_imp -> v_imp + 1 end)
       end)
-      |> do_sync_stat_to_db(state.id)
-      |> do_terminate_if_reach_users_limit(state)
+      |> sync_stat_to_db(state.id)
+      |> terminate_if_reach_users_limit(state)
     {:noreply, Map.merge(state, %{statistics: statistics})}
   end
 
@@ -203,7 +191,7 @@ defmodule Xperiments.Assigner.Experiment do
   end
 
   def handle_call({:check_segemets, segments}, _caller, state) do
-    {:reply, do_compare_rules(segments, state.rules), state}
+    {:reply, compare_rules(segments, state.rules), state}
   end
 
   def handle_call(:is_started, _caller, state) do
@@ -240,25 +228,41 @@ defmodule Xperiments.Assigner.Experiment do
     {:stop, :normal, state}
   end
 
-  defp do_compare_rules(_, []), do: true
-  defp do_compare_rules(segments, _) when segments == %{}, do: false
-  defp do_compare_rules(segments, _) when is_nil(segments), do: false
-  defp do_compare_rules(segments, rules) when map_size(segments) < length(rules), do: false
-  defp do_compare_rules(segments, rules) do
+  defp compare_rules(_, []), do: true
+  defp compare_rules(segments, _) when segments == %{}, do: false
+  defp compare_rules(segments, _) when is_nil(segments), do: false
+  defp compare_rules(segments, rules) when map_size(segments) < length(rules), do: false
+  defp compare_rules(segments, rules) do
     result =
       Enum.map(rules, fn r ->
-        if given_value = Map.get(segments, String.downcase(r.parameter)) do
-          apply(Kernel, String.to_atom(r.operator), [given_value, r.value])
+        with given_value = Map.get(segments, String.downcase(r.parameter)),
+             {:ok , casted_val} <- cast_to_type(r.type, r.value) do
+          apply(Kernel, String.to_atom(r.operator), [given_value, casted_val])
         else
-          false
+          _err -> false
         end
       end)
       |> Enum.dedup
     [true] == result
   end
 
+  defp cast_to_type("string", value), do: {:ok, to_string(value)}
+  defp cast_to_type("number", value) when is_number(value), do: value
+  defp cast_to_type("number", value) do
+    try do
+      {:ok, String.to_integer(value)}
+    rescue
+      ArgumentError -> {:error, value}
+    end
+  end
+  defp cast_to_type("regex", value), do: Regex.compile(value)
+  defp cast_to_type("boolean", value) when is_boolean(value), do: {:ok, value}
+  defp cast_to_type("boolean", "true"), do: {:ok, true}
+  defp cast_to_type("boolean", "false"), do: {:ok, false}
+  defp cast_to_type("boolean", bad_value), do: {:error, bad_value}
+
   # Create segment ranges for each variant based on their allocations
-  defp do_build_segmented_variants(variants) do
+  defp build_segmented_variants(variants) do
     {segmented_variants, _} =
       variants
       |> Enum.sort(& &1.allocation >= &2.allocation)
@@ -279,20 +283,19 @@ defmodule Xperiments.Assigner.Experiment do
     |> Map.drop([:segment_range])
   end
 
-  defp do_sync_stat_to_db(stat, eid, force \\ false)
-  defp do_sync_stat_to_db(%{common_impression: imp} = stat, eid, force) when imp != 0 do
+  defp sync_stat_to_db(stat, eid, force \\ false)
+  defp sync_stat_to_db(%{common_impression: imp} = stat, eid, force) when imp != 0 do
     if force or rem(stat.common_impression, @stat_treshold) == 0 do
       Task.start(ModelExperiment, :update_statistics, [eid, stat])
     end
     stat
   end
-  defp do_sync_stat_to_db(stat, _, _), do: stat
+  defp sync_stat_to_db(stat, _, _), do: stat
 
-  defp do_terminate_if_reach_users_limit(%{common_impression: imp} = stat, %{max_users: limit})
+  defp terminate_if_reach_users_limit(%{common_impression: imp} = stat, %{max_users: limit})
   when not is_nil(limit) and limit > 0 and imp >= limit do
     send self(), :end_experiment
     stat
   end
-  defp do_terminate_if_reach_users_limit(stat, _), do: stat
-
+  defp terminate_if_reach_users_limit(stat, _), do: stat
 end

@@ -21,14 +21,21 @@ defmodule Xperiments.RuleTest do
     refute changeset.valid?
   end
 
-  test "validate operators for specific types" do
+  test "validate operators for string type" do
     chset = Rule.changeset(%Rule{}, %{@valid_attrs | "operator" => ">="})
     refute chset.valid?
     assert hd(chset.errors) == {:type, {"string types must have only '==' and '!=' operators", []}}
-    # boolean
+  end
+  test "validate operators for boolean types" do
     chset = Rule.changeset(%Rule{}, %{@valid_attrs | "type" => "boolean", "operator" => "!="})
     refute chset.valid?
     assert hd(chset.errors) == {:type, {"boolean type must have only '==' operator and value must be 'true' or 'false'", []}}
+  end
+
+  test "validation of operators for RegEx type" do
+    chset = Rule.changeset(%Rule{}, %{@valid_attrs | "type" => "regex", "operator" => "!="})
+    refute chset.valid?
+    assert hd(chset.errors) == {:type, {"regex types must have only '=~' operator", []}}
   end
 
   test "downcase of a parameter when saving" do
