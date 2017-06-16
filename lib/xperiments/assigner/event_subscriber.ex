@@ -8,7 +8,7 @@ defmodule Xperiments.Assigner.EventSubscriber do
   end
 
   def init(channel) do
-    ref = Xperiments.Endpoint.subscribe(channel)
+    ref = Xperiments.Web.Endpoint.subscribe(channel)
     {:ok, %{ref: ref}}
   end
 
