@@ -17,7 +17,7 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
 
   ## API
 
-  @doc "Start an experiment using data from the DB"
+  @shortdoc "Start an experiment using data from the DB"
   def start_experiment(experiment_data) do
     case Supervisor.start_child(__MODULE__, [experiment_data]) do
       {:ok, pid} ->
@@ -34,13 +34,13 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
     end
   end
 
-  @doc "Remove an experiment from the supervision tree"
+  @shortdoc "Remove an experiment from the supervision tree"
   def terminate_experiment(id) do
     [{pid, _}] = Registry.lookup(:registry_experiments, id)
     Supervisor.terminate_child(__MODULE__, pid)
   end
 
-  @doc "Returns a list of pid of all runninng/stopped experiments"
+  @shortdoc "Returns a list of pid of all runninng/stopped experiments"
   @spec experiment_pids() :: List
   def experiment_pids do
     Supervisor.which_children(__MODULE__)
@@ -52,9 +52,7 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
     |> Enum.map(fn {pid, _} -> pid end)
   end
 
-  @doc """
-  Returns experiment ids by given list of pids
-  """
+  @shortdoc "Returns experiment ids by given list of pids"
   @spec get_experiment_pids_by_ids(ids :: List) :: List
   def get_experiment_pids_by_ids(ids) do
     List.wrap(ids)

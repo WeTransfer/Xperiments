@@ -55,6 +55,21 @@ defmodule Xperiments.Assigner.ExperimentTest do
     assert Experiment.accept_segments?(eid, good_segment)
   end
 
+  test "match regex rules" do
+    match_rule = %{
+      parameter: "user_ids",
+      operator: "=~",
+      value: "^[\\d,]+\\d$",
+      type: "regex"}
+    exp =
+      insert(:experiment, state: "running", max_users: 5, exclusions: [], rules: [match_rule])
+    ExperimentSupervisor.start_experiment(exp)
+
+    match_segment = %{"user_ids" => "1,2,140,1005"}
+
+    assert Experiment.accept_segments?(exp.id, match_segment)
+  end
+
   test "not allow to run an out-of-date experiment" do
     exp = insert(:experiment, state: "running", end_date: DateTime.utc_now())
     {result, _} = Experiment.init(exp)
