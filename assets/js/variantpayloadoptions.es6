@@ -397,51 +397,6 @@ const options = {
       ]
     }
   },
-  transferSpotIllustration: {
-    disabled: false,
-    name: 'Spot Illustration',
-    key: 'transferSpotIllustration',
-    defaults: {
-      when: null,
-      random: null
-    },
-    schema: {
-      type: 'object',
-      rules: {
-        when: {
-          type: 'string',
-          required: true
-        },
-        random: {
-          type: 'number',
-          requiredWhen: {
-            field: 'when',
-            value: ['uploadIsComplete']
-          }
-        }
-      },
-      properties: [
-        {
-          key: 'when',
-          type: 'string',
-          title: 'When*',
-          enum: [
-            {label: 'Upload is Complete', value: 'uploadIsComplete'}
-          ]
-        },
-        {
-          key: 'random',
-          title: 'Which one?*',
-          enum: [
-            {label: 'Random 1', value: 1},
-            {label: 'Random 2', value: 2},
-            {label: 'Random 3', value: 3},
-            {label: 'Random 4', value: 4}
-          ]
-        }
-      ]
-    }
-  },
   custom: {
     name: 'Custom',
     key: 'custom',
