@@ -1,5 +1,5 @@
 defmodule Xperiments.ExperimentControllerTest do
-  use Xperiments.ConnCase, async: false
+  use Xperiments.Web.ConnCase, async: false
   use Timex
   alias Xperiments.Experiment
 
@@ -7,9 +7,10 @@ defmodule Xperiments.ExperimentControllerTest do
     user = insert(:user)
 
     conn =
-      build_conn()
+      Phoenix.ConnTest.build_conn()
       |> bypass_through(Xperiments.Router, [:api, :browser])
-      |> get("/")
+      |> get("/auth/login")
+      |> Map.update!(:state, fn (_) -> :set end)
       |> Guardian.Plug.sign_in(user, :token, [])
       |> send_resp(200, "Flush the session yo")
       |> recycle()

@@ -55,16 +55,32 @@ defmodule Xperiments.Assigner.ExperimentTest do
     assert Experiment.accept_segments?(eid, good_segment)
   end
 
+  test "match regex rules" do
+    match_rule = %{
+      parameter: "user_ids",
+      operator: "=~",
+      value: "^[\\d,]+\\d$",
+      type: "regex"}
+    exp =
+      insert(:experiment, state: "running", max_users: 5, exclusions: [], rules: [match_rule])
+    ExperimentSupervisor.start_experiment(exp)
+
+    match_segment = %{"user_ids" => "1,2,140,1005"}
+
+    assert Experiment.accept_segments?(exp.id, match_segment)
+  end
+
   test "not allow to run an out-of-date experiment" do
     exp = insert(:experiment, state: "running", end_date: DateTime.utc_now())
     {result, _} = Experiment.init(exp)
     assert result == :stop
   end
 
-  test "automaticly shutdown an experiment on end_date" do
+  test "automaticly shutdown an experiment on the end_date" do
     exp = insert(:experiment, state: "running", end_date: DateTime.utc_now() |> Timex.shift(milliseconds: 80))
-    {:ok, _} = Experiment.init(exp)
-    assert_receive :end_experiment
+    {:ok, pid} = ExperimentSupervisor.start_experiment(exp)
+    ref = Process.monitor(pid)
+    assert_receive {:DOWN, ^ref, :process, ^pid, :normal}
   end
 
   test "that an experiment start checker works" do
