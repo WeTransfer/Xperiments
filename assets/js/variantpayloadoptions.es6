@@ -248,7 +248,6 @@ const options = {
         },
         yearlyCopy: {
           type:'string',
-          required: true,
           requiredWhen: {
             field: 'type',
             value: ['priceByMonth']
@@ -256,7 +255,6 @@ const options = {
         },
         monthlyCopy: {
           type:'string',
-          required: true,
           requiredWhen: {
             field: 'type',
             value: ['priceByMonth']
