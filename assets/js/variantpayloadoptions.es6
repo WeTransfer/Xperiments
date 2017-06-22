@@ -282,7 +282,7 @@ const options = {
     }
   },
   helpPageType: {
-    disabled: true,
+    disabled: false,
     name: 'Help Page Type',
     key: 'helpPageType',
     defaults: {
@@ -303,7 +303,7 @@ const options = {
           title: 'Type*',
           enum: [
             {label: 'default', value: 'original'},
-            {label: 'New Footer - CTA - More Answers', value: 'actionToMoreAnswers'}
+            {label: 'Experimental', value: 'experimental'}
           ]
         }
       ]
