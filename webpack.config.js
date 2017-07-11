@@ -3,6 +3,8 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
+  devtool: 'source-map',
+
   entry: ['whatwg-fetch', "./web/static/js/application.es6"],
   output: {
     path: "./priv/static",
