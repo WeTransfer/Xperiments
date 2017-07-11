@@ -8,6 +8,8 @@ import ExcludableExperiments from './excludableexperiments';
 import NewVariant from './newvariant';
 import NewRule from './newrule';
 import ValidationErrors from './validationerrors';
+import Users from './users';
+import NewUser from './newuser';
 
 export default {
   App,
@@ -19,5 +21,7 @@ export default {
   ExcludableExperiments,
   NewVariant,
   NewRule,
-  ValidationErrors
+  ValidationErrors,
+  Users,
+  NewUser
 };
