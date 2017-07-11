@@ -1,6 +1,7 @@
 # Xperiments - A/B Testing Platform
 
 **Support:** [Backend](dmitry@wetransfer.com), [Frontend](manpreet@wetransfer.com)
+<br />
 **Continuous Integration:** [![Build Status](https://travis-ci.com/WeTransfer/Xperiments.svg?token=CRN5Yz56tcLXSp42GUm8&branch=master)](https://travis-ci.com/WeTransfer/Xperiments)
 <br />
 **License:** [![Apache 2](http://img.shields.io/badge/license-Apache%202-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0)
