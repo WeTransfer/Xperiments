@@ -7,7 +7,7 @@ defmodule Xperiments.Assigner.Dispatcher do
   """
   alias Xperiments.Assigner.{ExperimentSupervisor, Experiment}
 
-  @shortdoc "Entry point for the module"
+  @doc "Entry point for the module"
   def get_suitable_experiments(segments, nil) do
     assigns =
       ExperimentSupervisor.experiment_pids()
@@ -40,7 +40,7 @@ defmodule Xperiments.Assigner.Dispatcher do
     end
   end
 
-  @shortdoc "Returns a list of pids, which should be excluded in this request"
+  @doc "Returns a list of pids, which should be excluded in this request"
   def get_exclusions_pids([]), do: []
   def get_exclusions_pids(experiment_ids) do
     experiment_ids
