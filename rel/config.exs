@@ -26,13 +26,12 @@ environment :dev do
 end
 
 environment :prod do
-  set include_erts: false
+  set include_erts: true
   set include_src: false
   set cookie: :"RhyL.eD&).Y^D5]7a.BD{]*9>[w|A~Sqk4<rR3sx44&fNcF$$o1OTt^8Gym6=kD@"
 
   set commands: [
-    "migrate": "rel/commands/migrate.sh",
-    "seed": "rel/commands/seed.sh"
+    "migrate": "rel/commands/migrate.sh"
   ]
 end
 
@@ -44,4 +43,3 @@ end
 release :xperiments do
   set version: current_version(:xperiments)
 end
-

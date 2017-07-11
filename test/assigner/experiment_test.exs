@@ -6,7 +6,7 @@ defmodule Xperiments.Assigner.ExperimentTest do
     app = insert(:application, name: "web")
     excluded_exp = insert(:experiment, application: app)
     exp =
-      insert(:experiment, state: "running", exclusions: [excluded_exp], rules: Xperiments.Factory.rules_1)
+      insert(:experiment, state: "running", max_users: 5, exclusions: [excluded_exp], rules: Xperiments.Factory.rules_1)
     exp = Map.merge(exp, %{exclusions: Xperiments.Exclusion.for_experiment(exp.id)})
     ExperimentSupervisor.start_experiment(exp)
     [exp: exp, excluded_exp: excluded_exp]
@@ -55,16 +55,32 @@ defmodule Xperiments.Assigner.ExperimentTest do
     assert Experiment.accept_segments?(eid, good_segment)
   end
 
+  test "match regex rules" do
+    match_rule = %{
+      parameter: "user_ids",
+      operator: "=~",
+      value: "^[\\d,]+\\d$",
+      type: "regex"}
+    exp =
+      insert(:experiment, state: "running", max_users: 5, exclusions: [], rules: [match_rule])
+    ExperimentSupervisor.start_experiment(exp)
+
+    match_segment = %{"user_ids" => "1,2,140,1005"}
+
+    assert Experiment.accept_segments?(exp.id, match_segment)
+  end
+
   test "not allow to run an out-of-date experiment" do
     exp = insert(:experiment, state: "running", end_date: DateTime.utc_now())
     {result, _} = Experiment.init(exp)
     assert result == :stop
   end
 
-  test "automaticly shutdown an experiment on end_date" do
+  test "automaticly shutdown an experiment on the end_date" do
     exp = insert(:experiment, state: "running", end_date: DateTime.utc_now() |> Timex.shift(milliseconds: 80))
-    {:ok, _} = Experiment.init(exp)
-    assert_receive :end_experiment
+    {:ok, pid} = ExperimentSupervisor.start_experiment(exp)
+    ref = Process.monitor(pid)
+    assert_receive {:DOWN, ^ref, :process, ^pid, :normal}
   end
 
   test "that an experiment start checker works" do
@@ -100,11 +116,11 @@ defmodule Xperiments.Assigner.ExperimentTest do
                                      variants_impression: %{"any_var_id" => 1, "other_var" => 1}}
   end
 
-  test "statistics saves to DB after 50(treshhold) impressions", context do
+  test "statistics saves to DB after treshhold impressions", context do
     {:ok, state} = Experiment.init(context.exp)
     db_exp = Xperiments.Repo.get!(Xperiments.Experiment, context.exp.id)
     assert db_exp.statistics == nil
-    Enum.scan(0..51, state, fn _, state ->
+    Enum.scan(0..5, state, fn _, state ->
       {:noreply, new_state} = Experiment.handle_cast({:inc_impression, "any_var_id"}, state)
       new_state
     end)
@@ -112,17 +128,18 @@ defmodule Xperiments.Assigner.ExperimentTest do
     db_exp = Xperiments.Repo.get!(Xperiments.Experiment, context.exp.id)
     assert db_exp.statistics ==
       %Xperiments.Experiment.Statistics{
-        common_impression: 50,
-        variants_impression: %{"any_var_id" => 50}
+        common_impression: 4,
+        variants_impression: %{"any_var_id" => 4}
       }
   end
 
   test "termination of an expeiment if reached 'max_users' limit", context do
     {:ok, state} = Experiment.init(context.exp)
-    Enum.scan(0..101, state, fn _, state ->
+    Enum.scan(0..4, state, fn _, state ->
       {:noreply, new_state} = Experiment.handle_cast({:inc_impression, "any_var_id"}, state)
       new_state
     end)
     assert_receive :end_experiment
+    :timer.sleep(200)
   end
 end

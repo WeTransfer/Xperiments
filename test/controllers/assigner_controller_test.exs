@@ -1,5 +1,5 @@
 defmodule Xperiments.AssignerControllerTest do
-  use Xperiments.ConnCase, async: false
+  use Xperiments.Web.ConnCase, async: false
   import Mock
   alias Xperiments.Assigner.ExperimentSupervisor
 
@@ -12,6 +12,12 @@ defmodule Xperiments.AssignerControllerTest do
     conn =
       build_conn()
       |> put_req_header("accept", "application/json")
+      |> put_req_header("x-forwarded-for", "for=127.0.0.1")
+
+    on_exit fn ->
+      ExRated.delete_bucket("127.0.0.1:assigner/application/test_app/experiments/events")
+    end
+
     [conn: conn, app: app]
   end
 
@@ -36,6 +42,7 @@ defmodule Xperiments.AssignerControllerTest do
       post(context.conn, @api_path <> "/experiments", %{})
       |> json_response(200)
     assert length(body["assign"]) == 3
+    assert hd(body["assign"])["name"] # test that we return a name of a requested experiment
     ids =
       Xperiments.Repo.all(Xperiments.Experiment)
       |> Enum.map(& &1.id)
@@ -46,8 +53,16 @@ defmodule Xperiments.AssignerControllerTest do
   test "returning of a specific variant", context do
     exp = insert(:experiment)
     var = hd(exp.variants)
+    salt = Application.get_env(:xperiments, Xperiments.Web.Endpoint)[:secret_key_base]
+    token = Phoenix.Token.sign(Xperiments.Web.Endpoint, salt, 1)
+
+    # without a token
+    get(context.conn, "#{@api_path}/experiments/#{exp.id}/variants/#{var.id}")
+    |> json_response(403)
+
+    # with a token
     body =
-      get(context.conn, "#{@api_path}/experiments/#{exp.id}/variants/#{var.id}")
+      get(context.conn, "#{@api_path}/experiments/#{exp.id}/variants/#{var.id}?token=#{token}")
       |> json_response(200)
     assert hd(body["assign"])["id"] == exp.id
   end
@@ -72,14 +87,25 @@ defmodule Xperiments.AssignerControllerTest do
     end
 
     test "saving statistics data to DB after we reach a trashhold", context do
-      for _i <- 0..51 do
+      for _i <- 0..4 do
         post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
         |> json_response(200)
       end
       :timer.sleep 100 # yep, async tests are hard
       db_exp = Xperiments.Repo.get!(Xperiments.Experiment, context.exp.id)
-      assert db_exp.statistics.common_impression == 50
-      assert db_exp.statistics.variants_impression == %{hd(context.exp.variants).id => 50}
+      assert db_exp.statistics.common_impression == 4
+      assert db_exp.statistics.variants_impression == %{hd(context.exp.variants).id => 4}
+    end
+
+    test "requests are throttled", context do
+      for _i <- 0..4 do
+        post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
+        |> json_response(200)
+      end
+      body =
+        post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
+      |> json_response(403)
+      assert body == %{"error" => "Rate limit exceeded"}
     end
   end
 

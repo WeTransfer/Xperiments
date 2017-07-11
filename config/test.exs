@@ -2,9 +2,12 @@ use Mix.Config
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :xperiments, Xperiments.Endpoint,
+config :xperiments, Xperiments.Web.Endpoint,
   http: [port: 4001],
   server: false
+
+config :xperiments, Experiment,
+  stat_threshold: 4
 
 # Print only warnings and errors during test
 config :logger, level: :warn
