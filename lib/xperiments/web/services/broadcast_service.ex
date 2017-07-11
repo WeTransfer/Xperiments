@@ -25,7 +25,7 @@ defmodule Xperiments.BroadcastService do
   end
   def broadcast_state_changes(_, _), do: :ok # handle any other state changes
 
-  @shortdoc "Sends impression events to experiments"
+  @doc "Sends impression events to experiments"
   def broadcast_impression(eid, var_id) do
     @endpoint.broadcast(@channel, "event:impression", %{eid: eid, var_id: var_id})
   end
