@@ -1,4 +1,4 @@
-import {actions} from 'action/user';
+import {actions} from 'action/users';
 
 export default function(state = {}, action) {
   const {type} = action;

@@ -8,7 +8,7 @@ import TimePicker from 'material-ui/TimePicker';
 
 import Helper from 'helper';
 
-export default class AddExperiment extends Form {
+export default class ExperimentForm extends Form {
   static propTypes = {
     experiment: React.PropTypes.object,
     setName: React.PropTypes.func,
