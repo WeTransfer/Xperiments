@@ -1,7 +1,14 @@
 defmodule Xperiments.Assigner.Experiment do
   @moduledoc """
-  Run an experiment using provided data.
-  Each experiment stores the name in Registry, e.g. `{:via, Registry, {:registry_experiments, exp_id}}`
+  When the application starts, it loads all experiments and run them as GenServers.
+  Each request go through all experiments and if it fits
+  Each experiment registers its name using `Registry`, e.g. `{:via, Registry, {:registry_experiments, exp_id}}`.
+  It aggregates impression calls and sends the number to databse, when it reaches a given treshold, which can be set
+  in configurations:
+
+      config :xperiments, Experiment,
+        stat_threshold: 100 # default
+
   """
   use GenServer
   require Logger
@@ -31,37 +38,9 @@ defmodule Xperiments.Assigner.Experiment do
     :normal
   end
 
-  defp schedule_ending(end_date) do
-    duration = DateTime.to_unix(end_date, :milliseconds) - DateTime.to_unix(DateTime.utc_now(), :milliseconds)
-    Process.send_after(self(), :end_experiment, duration)
-  end
-
-  defp via_tuple(id) do
-    {:via, Registry, {:registry_experiments, id}}
-  end
-
-  defp prepare_state(experiment) do
-    Map.take(experiment, [:id, :name, :rules, :start_date, :end_date, :inserted_at, :state, :exclusions, :statistics, :max_users])
-    |> Map.merge(%{variants: build_segmented_variants(experiment.variants)})
-    |> prepare_statistics
-  end
-
-  defp prepare_statistics(%{statistics: nil} = exp) do
-    Map.update!(exp, :statistics, fn _ -> Map.from_struct(%ModelExperiment.Statistics{}) end)
-  end
-  defp prepare_statistics(exp), do: exp
-
-
-  defp validate_experiment(experiment) do
-    with :gt <- DateTime.compare(experiment.end_date, DateTime.utc_now()),
-         true <- experiment.state in ["running", "stopped"] do
-      :ok
-    else
-      err -> {:error, {:bad_experiment, err, experiment}}
-    end
-  end
-
-  ## Client API
+  #
+  # Client API
+  #
 
   @doc """
   Sets `stop` state for an experiment.
@@ -80,12 +59,12 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.call(pid, {:register_priority})
   end
 
-  @shortdoc "Adds an exclusions if an experiment is running"
+  @doc "Adds an exclusions if an experiment is running"
   def add_exclusion(id, caller_id) do
     GenServer.cast(via_tuple(id), {:add_exclusion, caller_id})
   end
 
-  @shortdoc "Removes an exclusion if it exists"
+  @doc "Removes an exclusion if it exists"
   def remove_exclusion(pid, caller_id) when is_pid(pid) do
     GenServer.cast(pid, {:remove_exclusion, caller_id})
   end
@@ -93,17 +72,17 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.cast(via_tuple(id), {:remove_exclusion, caller_id})
   end
 
-  @shortdoc "Increment an impression for an experiment"
+  @doc "Increment an impression for an experiment"
   def inc_impression(id, var_id) do
     GenServer.cast(via_tuple(id), {:inc_impression, var_id})
   end
 
-  @shortdoc "Gets a specific variant of the experiment"
+  @doc "Gets a specific variant of the experiment"
   def get_experiment_data(pid, var_id) do
     GenServer.call(pid, {:get_experiment_data, var_id})
   end
 
-  @shortdoc "Assign a variant based on their allocations"
+  @doc "Assign a variant based on their allocations"
   def get_random_variant(pid) when is_pid(pid) do
     GenServer.call(pid, {:get_random_variant})
   end
@@ -136,7 +115,7 @@ defmodule Xperiments.Assigner.Experiment do
     GenServer.call(via_tuple(id), {:check_segemets, segments})
   end
 
-  @shortdoc "Check that an experiment is started"
+  @doc "Check that an experiment is started"
   def is_started?(pid) when is_pid(pid) do
     GenServer.call(pid, :is_started)
   end
@@ -226,6 +205,39 @@ defmodule Xperiments.Assigner.Experiment do
 
   def handle_info(:end_experiment, state) do
     {:stop, :normal, state}
+  end
+
+  #
+  # Private
+  #
+
+  defp via_tuple(id) do
+    {:via, Registry, {:registry_experiments, id}}
+  end
+
+  defp schedule_ending(end_date) do
+    duration = DateTime.to_unix(end_date, :milliseconds) - DateTime.to_unix(DateTime.utc_now(), :milliseconds)
+    Process.send_after(self(), :end_experiment, duration)
+  end
+
+  defp prepare_state(experiment) do
+    Map.take(experiment, [:id, :name, :rules, :start_date, :end_date, :inserted_at, :state, :exclusions, :statistics, :max_users])
+    |> Map.merge(%{variants: build_segmented_variants(experiment.variants)})
+    |> prepare_statistics
+  end
+
+  defp prepare_statistics(%{statistics: nil} = exp) do
+    Map.update!(exp, :statistics, fn _ -> Map.from_struct(%ModelExperiment.Statistics{}) end)
+  end
+  defp prepare_statistics(exp), do: exp
+
+  defp validate_experiment(experiment) do
+    with :gt <- DateTime.compare(experiment.end_date, DateTime.utc_now()),
+         true <- experiment.state in ["running", "stopped"] do
+      :ok
+    else
+      err -> {:error, {:bad_experiment, err, experiment}}
+    end
   end
 
   defp compare_rules(_, []), do: true
