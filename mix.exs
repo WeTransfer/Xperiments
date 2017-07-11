@@ -47,6 +47,10 @@ defmodule Xperiments.Mixfile do
      {:ex_rated, "~> 1.3"},
      {:appsignal, "~> 0.0"},
      {:remote_ip, "~> 0.1.0"},
+
+     {:libcluster, "~> 2.1"},
+     {:httpoison, "~> 0.12"},
+
      {:ex_machina, "~> 1.0", only: :test},
      {:mock, "~> 0.2.0", only: :test}]
   end
