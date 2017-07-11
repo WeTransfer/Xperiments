@@ -1,7 +1,7 @@
 language: elixir
 matrix:
   include:
-    - otp_release: 19.0
+    - otp_release: 19.3
       elixir: 1.4.0
 services:
   - postgresql
@@ -20,6 +20,27 @@ before_script:
   - nvm install 6.10.0
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH=$HOME/.yarn/bin:$PATH
+  - cd ./assets
   - yarn install --silent > /dev/null
+  - cd ..
 script:
   - mix test
+before_deploy:
+  - cd ./assets
+  - yarn run deploy
+  - cd ..
+  - MIX_ENV=prod mix phoenix.digest
+  - MIX_ENV=prod mix release --env=prod
+  - mkdir ab-deploy
+  - mv _build/prod/rel/xperiments/releases/0.0.1/xperiments.tar.gz ab-deploy/$TRAVIS_TAG.tar.gz
+deploy:
+  provider: s3
+  region: eu-west-1
+  access_key_id: $DEPLOY_ACCESS_KEY_ID
+  secret_access_key: $DEPLOY_SECRET_ACCESS_KEY
+  bucket: $DEPLOY_S3_BUCKET
+  upload_dir: $DEPLOY_S3_UPLOAD_DIR
+  local_dir: ab-deploy
+  skip_cleanup: true
+  on:
+    tags: true

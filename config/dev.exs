@@ -6,13 +6,12 @@ use Mix.Config
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
-config :xperiments, Xperiments.Endpoint,
+config :xperiments, Xperiments.Web.Endpoint,
   http: [port: 5000],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: [npm: ["run", "watch"]]
-
+  watchers: [npm: ["run", "watch", cd: Path.expand("../assets", __DIR__)]]
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

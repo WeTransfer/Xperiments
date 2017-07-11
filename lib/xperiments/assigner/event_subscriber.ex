@@ -8,26 +8,22 @@ defmodule Xperiments.Assigner.EventSubscriber do
   end
 
   def init(channel) do
-    ref = Xperiments.Endpoint.subscribe(channel)
+    ref = Xperiments.Web.Endpoint.subscribe(channel)
     {:ok, %{ref: ref}}
   end
 
   def handle_info(%{event: "stop_experiment", payload: payload}, state) do
-    spawn fn ->
-      Experiment.stop(payload.id)
-    end
+    Task.start(Experiment, :stop, [payload.id])
     {:noreply, state}
   end
 
   def handle_info(%{event: "run_experiment", payload: payload}, state) do
-    spawn fn ->
-      Experiment.restart(payload.id)
-    end
+    Task.start(Experiment, :restart, [payload.id])
     {:noreply, state}
   end
 
   def handle_info(%{event: "terminate_experiment", payload: payload}, state) do
-    spawn fn ->
+    Task.start fn ->
       ExperimentSupervisor.terminate_experiment(payload.id)
       ExperimentSupervisor.experiment_pids
       |> Enum.each(fn epid -> Experiment.remove_exclusion(epid, payload.id) end)

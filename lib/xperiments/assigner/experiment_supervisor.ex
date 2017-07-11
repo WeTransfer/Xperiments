@@ -2,6 +2,7 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
   use Supervisor
   require Logger
   alias Xperiments.Assigner.Experiment
+  alias Xperiments.Experiment, as: ModelExperiment
 
   def start_link do
     Supervisor.start_link(__MODULE__, :ok, name: __MODULE__)
@@ -23,11 +24,12 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
         Experiment.register_priority(pid)
         Logger.info "Experiment #{experiment_data.name} successfully started"
         {:ok, pid}
-      {:error, {:bad_experiment, experiment}} ->
-        Logger.error "Given experiment is not started: #{inspect experiment}"
+      {:error, {:bad_experiment, err, experiment}} ->
+        Logger.error "Given experiment is not started: #{inspect experiment} with error: #{inspect err}"
+        Task.start(ModelExperiment, :set_terminated_state, [experiment.id])
         :error
       err ->
-        Logger.error "Can't start an experiment with the reason: #{inspect err}"
+        Logger.error "Can't start an experiment with a reason: #{inspect err}"
         :error
     end
   end
@@ -50,9 +52,7 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
     |> Enum.map(fn {pid, _} -> pid end)
   end
 
-  @doc """
-  Returns experiment ids by given list of pids
-  """
+  @doc "Returns experiment ids by given list of pids"
   @spec get_experiment_pids_by_ids(ids :: List) :: List
   def get_experiment_pids_by_ids(ids) do
     List.wrap(ids)

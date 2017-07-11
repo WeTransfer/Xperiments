@@ -33,6 +33,20 @@ defmodule Xperiments.ExperimentTest do
     refute changeset.valid?
   end
 
+  test "changeset with all attributes for clonning existed experiments", context do
+    variants = [
+      %{name: "var a", allocation: 100, description: "nothing", payload: "test"}
+    ]
+    rules = [
+      %{parameter: "lang", type: "string", operator: "==", value: "ru"}
+    ]
+    attrs = Map.merge(context.valid_attrs, %{variants: variants, rules: rules})
+    chset = Experiment.changeset(context.experiment, attrs)
+    assert chset.valid?
+    assert hd(chset.changes.rules).changes == hd(rules)
+    assert hd(chset.changes.variants).changes == hd(variants)
+  end
+
   test "number validation when a field can be set or not", context do
     changeset = Experiment.changeset(context[:experiment], %{context[:valid_attrs] | max_users: 0})
     assert changeset.errors == [max_users: {"must be greater than %{number}", [validation: :number, number: 0]}]
@@ -46,12 +60,9 @@ defmodule Xperiments.ExperimentTest do
     rules = [
       %{parameter: "lang", type: "string", operator: "==", value: "ru"}
     ]
-    changeset = Experiment.changeset_update(context[:experiment],
-      Map.merge(context[:valid_attrs], %{variants: variants, rules: rules}))
+    changeset = Experiment.changeset_update(context.experiment,
+      Map.merge(context.valid_attrs, %{variants: variants, rules: rules}))
     assert changeset.valid?
-
-    changeset = Experiment.changeset_update(context[:experiment], context[:valid_attrs])
-    refute changeset.valid?
   end
 
   test "changeset with a start date greater than an end date", context do
@@ -93,19 +104,6 @@ defmodule Xperiments.ExperimentTest do
     exp = insert(:experiment, variants: [variant])
     db_var_payload = (exp.variants |> List.first).payload
     assert db_var_payload == variant.payload
-  end
-
-  test "validation that at least one varian is a control group when running" do
-    bad_exp = build(:experiment, start_date: Timex.now |> Timex.shift(days: 1)) |> with_balanced_variants |> insert
-    changeset = Experiment.change_state(bad_exp, "run")
-    refute changeset.valid?
-    variants = [
-      Xperiments.Factory.variant(50),
-      %{ Xperiments.Factory.variant(50) | control_group: true }
-    ]
-    exp = insert(:experiment, variants: variants, start_date: Timex.now |> Timex.shift(days: 1))
-    changeset = Experiment.run(exp)
-    assert changeset.valid?
   end
 
   test "rules should be without a primary key" do
