@@ -27,13 +27,16 @@ It's very fast and can handle millions of users.
 
 ## Installation
 
-To start Xperiments application:
-  * Install Elixir with `brew install elixir` (OSX)
-  * Clone the repository with `git clone git@github.com:WeTransfer/Xperiments.git`
-  * Install dependencies with `cd Xperiments; mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Install Yarn with `npm install yarn`
-  * Install dependencies with `yarn install`
-  * Start Phoenix endpoint with `mix phoenix.server`
+##### Mac OS
+
+```bash
+% brew install elixir
+% git clone git@github.com:WeTransfer/Xperiments.git
+% cd Xperiments; mix deps.get
+% mix ecto.create && mix ecto.migrate
+% npm install yarn
+% yarn install
+% mix phoenix.server
+```
 
 Now you can visit [`localhost:5000`](http://localhost:5000) from your browser.
