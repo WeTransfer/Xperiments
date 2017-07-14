@@ -4,7 +4,7 @@
 <br />
 **Continuous Integration:** [![Build Status](https://travis-ci.com/WeTransfer/Xperiments.svg?token=CRN5Yz56tcLXSp42GUm8&branch=master)](https://travis-ci.com/WeTransfer/Xperiments)
 <br />
-**License:** [![Apache 2](http://img.shields.io/badge/license-Apache%202-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+**License:** [![BSD-2-Clause](http://img.shields.io/badge/license-BDS-2-Clause%202-brightgreen.svg)](https://opensource.org/licenses/BSD-2-Clause)
 <br/>
 
 ## Project
