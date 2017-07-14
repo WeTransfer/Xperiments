@@ -35,8 +35,8 @@ It's very fast and can handle millions of users.
 % cd Xperiments; mix deps.get
 % mix ecto.create && mix ecto.migrate
 % npm install yarn
-% yarn install
-% mix phoenix.server
+% (cd assets; yarn install)
+% mix phx.server
 ```
 
 Now you can visit [`localhost:5000`](http://localhost:5000) from your browser.
