@@ -4,7 +4,7 @@ defmodule Xperiments.PayloadSchemaTest do
 
   alias Xperiments.PayloadSchema
 
-  @valid_attrs %{key: "one", schema: "{'a': 1}", application_id: 1}
+  @valid_attrs %{key: "one", schema: "{'a': 1}", application_id: 1, name: "CP", defaults: "{}"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

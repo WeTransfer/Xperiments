@@ -20,6 +20,8 @@ defmodule Xperiments.Factory do
     %Xperiments.PayloadSchema{
       key: sequence("key"),
       schema: "{'key': 2}",
+      name: sequence("name"),
+      defaults: "{'p1': 1}",
       application: build(:application)
     }
   end
