@@ -1,10 +1,12 @@
 defmodule Xperiments.Application do
   use Xperiments.Web, :model
-  alias Xperiments.Experiment
+  alias Xperiments.{Experiment, PayloadSchema}
 
   schema "applications" do
     field :name, :string
+
     has_many :experiments, Experiment
+    has_many :payload_schemas, PayloadSchema
 
     embeds_one :settings, Settings, on_replace: :update, primary_key: false do
       field :url
