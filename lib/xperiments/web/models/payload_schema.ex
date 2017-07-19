@@ -7,6 +7,8 @@ defmodule Xperiments.PayloadSchema do
   schema "payload_schemas" do
     field :key, :string
     field :schema, :string
+    field :name, :string
+    field :defaults, :string
 
     belongs_to :application, Xperiments.Application
 
@@ -16,8 +18,8 @@ defmodule Xperiments.PayloadSchema do
   @doc false
   def changeset(%PayloadSchema{} = payload_schema, attrs) do
     payload_schema
-    |> cast(attrs, [:key, :schema, :application_id])
-    |> validate_required([:key, :schema, :application_id])
+    |> cast(attrs, [:key, :schema, :name, :defaults])
+    |> validate_required([:key, :schema, :name, :defaults])
     |> unique_constraint(:key)
   end
 
