@@ -36,7 +36,7 @@ defmodule Xperiments.Web.V1.PayloadSchemaControllerTest do
       post(context.conn, @api_url, %{schema: attrs})
       |> json_response(201)
 
-    assert body["schema"]
+    assert body["schema"]["key"] == "sh1"
   end
 
   test "/udpate a schema", context do
