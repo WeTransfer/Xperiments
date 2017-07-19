@@ -29,7 +29,7 @@ defmodule Xperiments.PayloadSchema do
     def encode(model, _opts) do
       model
       |> Map.from_struct
-      |> Map.take([:key, :schema, :application_id])
+      |> Map.take([:key, :schema, :name, :defaults])
       |> Poison.encode!
     end
   end
