@@ -52,8 +52,8 @@ defmodule Xperiments.Web.Router do
           get "/variant/:variant_id", ExperimentController, :variant, as: :variant
         end
       end
-
       resources "/users", UserController, except: [:new]
+      resources "/payload_schema", PayloadSchemaController
     end
   end
 
