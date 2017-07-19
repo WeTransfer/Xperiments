@@ -10,7 +10,7 @@ defmodule Xperiments.Web.V1.ErrorView do
   end
 
   def render("500.json", _assigns) do
-    %{errors: %{detail: "Internal server error"}}
+    %{errors: %{details: "Internal server error"}}
   end
 
   def render("500.html", _assigns) do
