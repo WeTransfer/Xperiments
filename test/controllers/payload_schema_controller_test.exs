@@ -2,7 +2,7 @@ defmodule Xperiments.Web.V1.PayloadSchemaControllerTest do
   use Xperiments.Web.ConnCase, async: false
   alias Xperiments.PayloadSchema
 
-  @api_url "/api/v1/payload_schema"
+  @api_url "/api/v1/applications/web/payload_schema"
 
   setup do
     user = insert(:user, role: "admin")
@@ -17,12 +17,13 @@ defmodule Xperiments.Web.V1.PayloadSchemaControllerTest do
       |> recycle()
       |> put_req_header("accept", "application/json")
 
-    insert(:payload_schema)
-    {:ok, conn: conn}
+    app = insert(:application, name: "web")
+    insert(:payload_schema, application: app)
+    {:ok, conn: conn, app: app}
   end
 
   test "/index returns a alist of schemas for all applications", context do
-    schemas = Repo.all(PayloadSchema) |> Poison.encode! |> Poison.decode!
+    schemas = assoc(context.app, :payload_schemas) |> Repo.all |> Poison.encode! |> Poison.decode!
     body =
       get(context.conn, @api_url)
       |> json_response(200)
@@ -30,8 +31,7 @@ defmodule Xperiments.Web.V1.PayloadSchemaControllerTest do
   end
 
   test "/create a new schema", context do
-    app = insert(:application)
-    attrs = %{key: "sh1", schema: "{'a': 1}", application_id: app.id}
+    attrs = %{key: "sh1", schema: "{'a': 1}", name: "hey", defaults: "{}"}
     body =
       post(context.conn, @api_url, %{schema: attrs})
       |> json_response(201)
@@ -41,9 +41,10 @@ defmodule Xperiments.Web.V1.PayloadSchemaControllerTest do
 
   test "/udpate a schema", context do
     schema = insert(:payload_schema, schema: "{}")
+
     updates = %{schema: "{'b': 2}"}
     body =
-      put(context.conn, @api_url <> "/#{schema.id}", %{application: updates})
+      put(context.conn, @api_url <> "/#{schema.id}", %{schema: updates})
       |> json_response(200)
 
     assert body["schema"]["schema"] == "{'b': 2}"

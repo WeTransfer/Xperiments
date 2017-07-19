@@ -51,9 +51,9 @@ defmodule Xperiments.Web.Router do
           put "/state",  ExperimentController, :change_state, as: :state
           get "/variant/:variant_id", ExperimentController, :variant, as: :variant
         end
+        resources "/payload_schema", PayloadSchemaController
       end
       resources "/users", UserController, except: [:new]
-      resources "/payload_schema", PayloadSchemaController
     end
   end
 
