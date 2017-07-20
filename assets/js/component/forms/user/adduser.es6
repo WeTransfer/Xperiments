@@ -16,6 +16,8 @@ export default class AddUser extends React.Component {
   static propTypes = {
     experiment: React.PropTypes.object,
     setName: React.PropTypes.func,
+    setEmail: React.PropTypes.func,
+    setRole: React.PropTypes.func,
     save: React.PropTypes.func,
     cancel: React.PropTypes.func,
     isVisible: React.PropTypes.bool,
@@ -55,6 +57,8 @@ export default class AddUser extends React.Component {
       <UserForm
         user={this.props.user}
         setName={this.props.setName}
+        setEmail={this.props.setEmail}
+        setRole={this.props.setRole}
         validationErrors={this.props.validationErrors}
         unsetValidationError={this.props.unsetValidationError}
       />

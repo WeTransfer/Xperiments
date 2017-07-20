@@ -13,8 +13,8 @@ export default {
         POST: `${BASE_PATH}/applications/${currentAppName}/experiments`
       },
       users: {
-        GET: `${BASE_PATH}/applications/${currentAppName}/users`,
-        POST: `${BASE_PATH}/applications/${currentAppName}/users`
+        GET: `${BASE_PATH}/users`,
+        POST: `${BASE_PATH}/users`
       }
     }
   },

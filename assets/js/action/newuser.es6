@@ -5,11 +5,24 @@ import {actions as UsersActions} from 'action/users';
 import API from 'modules/api';
 import config from 'config';
 
+import validators from 'helper/validators';
+
 const validate = data => {
   let errors = {};
 
-  if (!data.name)
+  if (!data.name) {
     errors.name = ['This field is required'];
+  }
+
+  if (!data.email) {
+    errors.email = ['This field is required'];
+  } else if (!validators.isEmail(data.email)) {
+    errors.email = ['Provide a valid email'];
+  }
+
+  if (!data.role) {
+    errors.role = ['This field is required'];
+  }
 
   return errors;
 };
@@ -51,6 +64,14 @@ export default ActionHelper.generate({
         });
 
         dispatch({type: actions.RESET_NEW_USER});
+
+        dispatch({
+          type: AppActions.SET_APP_NOTIFICATION,
+          notificationData: {
+            type: 'info',
+            message: `${data.name} (${data.email}) was added!`
+          }
+        });
         return;
       } else if (response.status === 422) {
         response.json().then(json => {
@@ -66,7 +87,6 @@ export default ActionHelper.generate({
           }
         });
       }
-
     };
   },
 

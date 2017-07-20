@@ -36,13 +36,12 @@ export default class UsersTable extends React.Component {
   };
 
   getActions(user) {
-    const {currentUser} = Store.getState();
+    const {user: currentUser} = Store.getState();
 
     let actions = [];
 
     // Edit
     if (currentUser.role === CONSTANTS.USER_ADMIN) {
-      actions.push(' | ');
       actions.push(<Link to={`/users/${user.id}/edit`} disabled={true}>Edit</Link>);
     }
 
@@ -71,6 +70,8 @@ export default class UsersTable extends React.Component {
 
     return <TableRow key={`user__table-row-${user.id}`}>
       <TableRowColumn key={`user__table-row-column-name-${user.id}`}>{user.name}</TableRowColumn>
+      <TableRowColumn key={`user__table-row-column-email-${user.id}`}><a href={`mailto:${user.email}`}>{user.email}</a></TableRowColumn>
+      <TableRowColumn key={`user__table-row-column-role-${user.role}`}>{user.role}</TableRowColumn>
       <TableRowColumn key={`user__table-row-column-actions-${user.id}`}>{this.getActions(user)}</TableRowColumn>
     </TableRow>;
   }
@@ -102,6 +103,8 @@ export default class UsersTable extends React.Component {
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>Name</TableHeaderColumn>
+            <TableHeaderColumn>Email</TableHeaderColumn>
+            <TableHeaderColumn>Role</TableHeaderColumn>
             <TableHeaderColumn></TableHeaderColumn>
           </TableRow>
         </TableHeader>
