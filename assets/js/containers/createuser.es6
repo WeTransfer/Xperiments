@@ -20,11 +20,14 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     setName: value => setValue('name', value, dispatch),
-    save: (data, formName) => {
-      dispatch(Actions.NewUser.create(data, formName));
+    setEmail: value => setValue('email', value, dispatch),
+    setRole: value => setValue('role', value, dispatch),
+    save: async (data, formName) => {
+      await dispatch(Actions.NewUser.create(data, formName));
+      ownProps.onClose();
     },
     cancel: () => {
-      dispatch(Actions.ValidationErrors.reset(FORM_NAME));
+      Actions.ValidationErrors.reset(FORM_NAME);
       ownProps.onClose();
     },
     unsetValidationError: fieldName => {

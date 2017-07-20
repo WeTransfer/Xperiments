@@ -8,7 +8,8 @@ import config from 'config';
 
 export const actions = ActionHelper.types([
   'FETCH_USERS',
-  'FETCHED_USERS'
+  'FETCHED_USERS',
+  'PUSH_TO_USERS'
 ]);
 
 export default ActionHelper.generate({

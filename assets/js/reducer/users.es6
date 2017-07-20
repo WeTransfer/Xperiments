@@ -26,6 +26,14 @@ export default function(state = {}, action) {
       };
     }
 
+    case actions.PUSH_TO_USERS:
+      newList = state.list;
+      newList.push(action.data);
+      return {
+        ...state,
+        list: newList
+      };
+
     case actions.FILTER_USERS_BY_STATE:
       return {
         ...state,
