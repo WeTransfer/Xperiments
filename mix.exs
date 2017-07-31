@@ -18,7 +18,7 @@ defmodule Xperiments.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Xperiments, []},
-    extra_application: [:logger, :ex2ms, :runtime_tools]]
+    extra_applications: [:logger, :ex2ms, :runtime_tools]]
   end
 
   # Specifies which paths to compile per environment.
