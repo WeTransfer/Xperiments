@@ -16,7 +16,7 @@ defmodule Xperiments.Web.V1.UserController do
     conn = authorize!(conn, User)
     chset = User.changeset(%User{}, user_data)
 
-    case Repo.insert(chset) do
+    case User.create(chset) do
       {:ok, user} ->
         conn
         |> put_status(:created)
@@ -31,7 +31,7 @@ defmodule Xperiments.Web.V1.UserController do
   def update(conn, %{"id" => id, "user" => updates}) do
     user = Repo.get!(User, id)
     conn = authorize!(conn, user)
-    chset = User.changeset(user, updates)
+    chset = User.update_changeset(user, updates)
 
     case Repo.update(chset) do
       {:ok, user} ->
