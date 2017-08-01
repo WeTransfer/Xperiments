@@ -18,13 +18,13 @@ defmodule Xperiments.UserTest do
 
   test "creation of user with encrypted password" do
     changeset = User.changeset(%User{}, @valid_attrs)
-    {:ok, user} = User.create_with_password(changeset)
+    {:ok, user} = User.create(changeset)
     refute user.encrypted_password == changeset.params["password"]
   end
 
   test "comparing password for a given user" do
     changeset = User.changeset(%User{}, @valid_attrs)
-    {:ok, user} = User.create_with_password(changeset)
+    {:ok, user} = User.create(changeset)
     {:ok, new_user} = User.find_and_confirm_password(%{"email" => "some@content", "password" => "123456"})
     assert new_user.id == user.id
   end
@@ -36,7 +36,7 @@ defmodule Xperiments.UserTest do
 
   test "returning error if a wrong password given" do
     changeset = User.changeset(%User{}, @valid_attrs)
-    {:ok, _user} = User.create_with_password(changeset)
+    {:ok, user} = User.create(changeset)
     {:error, msg} = User.find_and_confirm_password(%{"email" => "some@content", "password" => "wrong"})
     assert msg == "invalid password"
   end

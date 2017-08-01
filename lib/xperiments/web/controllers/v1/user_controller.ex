@@ -17,7 +17,7 @@ defmodule Xperiments.Web.V1.UserController do
     conn = authorize!(conn, current_user)
     chset = User.changeset(%User{}, user_data)
 
-    case User.create_with_password(chset) do
+    case User.create(chset) do
       {:ok, user} ->
         conn
         |> put_status(:created)
