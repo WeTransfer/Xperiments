@@ -36,6 +36,7 @@ defmodule Xperiments.Web.Router do
     pipe_through :browser
 
     get "/login", SessionController, :new, as: :login
+    post "/login", SessionController, :create
     get "/logout", SessionController, :delete
 
     get "/:provider", AuthController, :request

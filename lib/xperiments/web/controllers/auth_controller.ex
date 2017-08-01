@@ -24,5 +24,4 @@ defmodule Xperiments.Web.AuthController do
         |> render(Xperiments.Web.V1.ErrorView, "common_error.json", message: "Could not login with the reason: #{reason}")
     end
   end
-
 end
