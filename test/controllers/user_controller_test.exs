@@ -30,13 +30,22 @@ defmodule Xperiments.UserControllerTest do
   end
 
   test "/create a new user", context do
-    attrs = %{name: "Dostoevsky", email: "dostoevsky@wetransfer.com"}
+    attrs = %{name: "Dostoevsky", email: "dostoevsky@wetransfer.com", password: "123456"}
     body =
       post(context.conn, @api_url, %{user: attrs})
       |> json_response(201)
 
     assert body["user"]["email"] == "dostoevsky@wetransfer.com"
     assert body["user"]["role"] == "user"
+  end
+
+  test "/create with an empty password and return errors", context do
+    attrs = %{name: "Dostoevsky", email: "dostoevsky@wetransfer.com"}
+    body =
+      post(context.conn, @api_url, %{user: attrs})
+    |> json_response(422)
+
+    assert body["errors"] == %{"password" => ["can't be blank"]}
   end
 
   test "/udpate an user", context do

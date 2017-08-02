@@ -5,7 +5,7 @@ defmodule Xperiments.SessionControllerTest do
   setup do
     conn = build_conn()
     params = params_for(:user, password: "123456")
-    {:ok, user} = User.changeset(%User{}, params) |> User.create()
+    {:ok, user} = User.changeset(%User{}, params) |> User.create_with_password()
 
     {:ok, conn: conn, user: user}
   end
