@@ -102,7 +102,7 @@
       <div class="login__block-we-logo">
         <img src="/images/wt.png" />
       </div>
-      <%= if @reason, do: "Error" %>
+      <%= if assigns[:reason], do: "Error" %>
       <h3>Xperiments</h3>
       <div class="login__block-form">
         <%= form_for @conn, Routes.session_path(@conn, :create), [as: "login_form"], fn f -> %>

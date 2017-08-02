@@ -49,7 +49,8 @@ defmodule Xperiments.User do
     end
   end
 
-  def create(changeset) do
+  def create_with_password(%{valid?: false} = changeset), do: {:error, changeset}
+  def create_with_password(changeset) do
     changeset
     |> put_change(:encrypted_password, hashed_password(changeset.params["password"]))
     |> Repo.insert()
