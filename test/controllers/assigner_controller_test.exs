@@ -2,6 +2,7 @@ defmodule Xperiments.AssignerControllerTest do
   use Xperiments.Web.ConnCase, async: false
   import Mock
   alias Xperiments.Assigner.ExperimentSupervisor
+  use Hammer, backend: Hammer.Backend.ETS, only: [:delete_buckets]
 
   setup do
     for e_pid <- ExperimentSupervisor.experiment_pids() do
@@ -15,7 +16,7 @@ defmodule Xperiments.AssignerControllerTest do
       |> put_req_header("x-forwarded-for", "for=127.0.0.1")
 
     on_exit fn ->
-      ExRated.delete_bucket("127.0.0.1:assigner/application/test_app/experiments/events")
+      delete_buckets("127.0.0.1:assigner/application/test_app/experiments/events")
     end
 
     [conn: conn, app: app]
