@@ -9,6 +9,8 @@ defmodule Xperiments do
     # Define workers and child supervisors to be supervised
     children = [
       supervisor(Xperiments.Repo, []),
+      worker(Hammer.Backend.ETS, [[expiry_ms: 1000 * 60 * 60,
+                                   cleanup_interval_ms: 1000 * 60 * 10]]),
       supervisor(Xperiments.Web.Endpoint, []),
       supervisor(Xperiments.Assigner.Supervisor, [])
     ]
