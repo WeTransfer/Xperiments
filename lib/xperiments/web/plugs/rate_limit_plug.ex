@@ -1,5 +1,5 @@
 defmodule Xperiments.Plug.RateLimit do
-  use Hammer, backend: Hammer.Backend.ETS, only: [:check_rate]
+  use Hammer, backend: Hammer.Backend.Redis, only: [:check_rate]
   import Phoenix.Controller, only: [json: 2]
   import Plug.Conn
   require Logger

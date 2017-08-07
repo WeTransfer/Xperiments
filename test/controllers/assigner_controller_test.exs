@@ -2,7 +2,7 @@ defmodule Xperiments.AssignerControllerTest do
   use Xperiments.Web.ConnCase, async: false
   import Mock
   alias Xperiments.Assigner.ExperimentSupervisor
-  use Hammer, backend: Hammer.Backend.ETS, only: [:delete_buckets]
+  use Hammer, backend: Hammer.Backend.Redis, only: [:delete_buckets]
 
   setup do
     for e_pid <- ExperimentSupervisor.experiment_pids() do
