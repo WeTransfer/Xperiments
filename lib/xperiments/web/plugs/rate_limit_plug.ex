@@ -1,4 +1,5 @@
 defmodule Xperiments.Plug.RateLimit do
+  use Hammer, backend: Hammer.Backend.ETS, only: [:check_rate]
   import Phoenix.Controller, only: [json: 2]
   import Plug.Conn
   require Logger
@@ -6,16 +7,20 @@ defmodule Xperiments.Plug.RateLimit do
   def init(opts), do: opts
 
   def call(conn, options \\ []) do
-    case check_rate(conn, options) do
-      {:ok, _count}   -> conn # Do nothing, allow execution to continue
-      {:error, _count} -> render_error(conn)
+    case check_rate_builder(conn, options) do
+      {:allow, _count}   -> conn # Do nothing, allow execution to continue
+      {:deny, _limit} -> render_error(conn)
     end
   end
 
-  defp check_rate(conn, options) do
+  #
+  # Private
+  #
+
+  defp check_rate_builder(conn, options) do
     interval_milliseconds = options[:interval_seconds] * 1000
     max_requests = options[:max_requests]
-    ExRated.check_rate(bucket_name(conn), interval_milliseconds, max_requests)
+    check_rate(bucket_name(conn), interval_milliseconds, max_requests)
   end
 
   # Bucket name should be a combination of ip address and request path, like so:
