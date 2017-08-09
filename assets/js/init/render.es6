@@ -7,6 +7,7 @@ import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 import LayoutContainer from 'containers/layout';
 import EditExperimentPageContainer from 'containers/editexperimentpage';
 import ExperimentsDashboardPage from 'component/page/experimentsdashboard';
+import UsersDashboardPage from 'component/page/usersdashboard';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -17,6 +18,7 @@ ReactDOM.render(
     <Router history={browserHistory}>
       <Route path="/" component={LayoutContainer}>
         <IndexRoute component={ExperimentsDashboardPage} />
+        <Route path="users" component={UsersDashboardPage} />
         <Route path="experiments" component={ExperimentsDashboardPage} />
         <Route path="experiments/:experimentId/edit" component={EditExperimentPageContainer} />
       </Route>
