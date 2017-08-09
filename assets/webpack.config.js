@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var CopyWebpackPlugin = require("copy-webpack-plugin");
+var LiveReloadPlugin = require('webpack-livereload-plugin');
 
 var path = require('path');
 
@@ -46,7 +47,8 @@ module.exports = {
     new webpack.LoaderOptionsPlugin({debug: true}),
     new ExtractTextPlugin("css/app.css"),
     new CopyWebpackPlugin([{from: "./static", to: path.resolve(__dirname, "../priv/static")}]),
-    new webpack.ContextReplacementPlugin(/moment[\\\/]lang$/, /^\.\/(en-gb|de|pl)$/)
+    new webpack.ContextReplacementPlugin(/moment[\\\/]lang$/, /^\.\/(en-gb|de|pl)$/),
+    new LiveReloadPlugin({appendScriptTag: true, hostname: 'lvh.me'})
   ]
 
 };

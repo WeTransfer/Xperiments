@@ -12,6 +12,8 @@ import excludableexperiments from './helper/excludableexperiments';
 import newvariant from './helper/newvariant';
 import newrule from './helper/newrule';
 import validationerrors from './helper/validationerrors';
+import users from './helper/users';
+import newuser from './helper/newuser';
 
 // Create our initial state
 const initialState = {
@@ -25,7 +27,9 @@ const initialState = {
   excludableexperiments,
   newvariant,
   newrule,
-  validationerrors
+  validationerrors,
+  users,
+  newuser
 };
 
 // We'll create a Store that has our Reducers and an initial state,
