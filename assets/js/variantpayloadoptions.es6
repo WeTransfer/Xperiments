@@ -393,7 +393,7 @@ const options = {
             {label: 'Plus', value: '/plus'},
             {label: 'Sign-in', value: '/sign-in'}
           ]
-        },
+        }
       ]
     }
   },

@@ -11,8 +11,10 @@ import newrule from './newrule';
 import validationerrors from './validationerrors';
 import users from './users';
 import newuser from './newuser';
+import auth from './auth';
 
 export default Redux.combineReducers({
+  auth,
   app,
   user,
   applications,

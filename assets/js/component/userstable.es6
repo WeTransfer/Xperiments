@@ -3,18 +3,12 @@ import Store from 'store';
 
 import {Link} from 'react-router';
 
-import Helper from 'helper';
-
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import Chip from 'material-ui/Chip';
 
 import globalStyling from 'globalstyling';
 import * as CONSTANTS from 'appconstants';
-import config from 'config';
 
 const styling = {
   ...globalStyling
@@ -50,7 +44,7 @@ export default class UsersTable extends React.Component {
 
   renderList() {
     let renderedUsers = [];
-    
+
     if (!this.props.isFetching) {
       this.props.list.forEach(user => renderedUsers.push(this.makeRow(user)));
     }
@@ -66,8 +60,6 @@ export default class UsersTable extends React.Component {
   }
 
   makeRow(user) {
-    let impressions = '-';
-
     return <TableRow key={`user__table-row-${user.id}`}>
       <TableRowColumn key={`user__table-row-column-name-${user.id}`}>{user.name}</TableRowColumn>
       <TableRowColumn key={`user__table-row-column-email-${user.id}`}><a href={`mailto:${user.email}`}>{user.email}</a></TableRowColumn>

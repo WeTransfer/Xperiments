@@ -2,7 +2,7 @@ defmodule Xperiments.Web.SessionController do
   use Xperiments.Web, :controller
 
   def new(conn, _params) do
-    render(conn, "login.html", layout: false)
+    render(conn, "index.html", user: {:safe, ""})
   end
 
   def create(conn, params) do
@@ -12,7 +12,7 @@ defmodule Xperiments.Web.SessionController do
         |> Guardian.Plug.sign_in(user)
         |> redirect(to: "/")
       {:error, reason} ->
-        render conn, "login.html", layout: false, reason: reason
+        render(conn, "index.html", user: {:safe, ""}, reason: reason)
     end
   end
 

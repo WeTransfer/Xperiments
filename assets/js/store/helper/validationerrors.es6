@@ -4,5 +4,6 @@ export default {
   cloneExperimentForm: {},
   editExperimentForm: {},
   addRuleForm: {},
-  variantForm: {}
+  variantForm: {},
+  loginForm: {}
 };

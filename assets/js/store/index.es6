@@ -18,6 +18,12 @@ import newuser from './helper/newuser';
 // Create our initial state
 const initialState = {
   // This contains everything that is pending in our app is stored here
+  auth: {
+    creating: false,
+    created: false,
+    email: null,
+    password: null
+  },
   app,
   user,
   applications,
