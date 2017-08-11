@@ -5,6 +5,7 @@ defmodule Xperiments.SessionControllerTest do
   setup do
     conn = build_conn()
     params = params_for(:user, password: "123456")
+    params = for {key, val} <- params, into: %{}, do: {Atom.to_string(key), val}
     {:ok, user} = User.changeset(%User{}, params) |> User.create()
 
     {:ok, conn: conn, user: user}
