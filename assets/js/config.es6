@@ -6,7 +6,7 @@ export default {
   api: {
     resources: {
       auth: {
-        POST: `${BASE_PATH}/auth`
+        POST: `${BASE_PATH}/sessions`
       },
       applications: {
         GET: `${BASE_PATH}/applications`
