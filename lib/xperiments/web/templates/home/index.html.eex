@@ -1,1 +1,4 @@
-Index
+<script>
+ var __user__ = <%= @user %>;
+</script>
+
