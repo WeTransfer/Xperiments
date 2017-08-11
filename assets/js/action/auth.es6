@@ -16,11 +16,7 @@ export default ActionHelper.generate({
       dispatch({type: actions.AUTH_CREATE});
 
       try {
-        var formData = new FormData();
-        formData.append('username', data.username);
-        formData.append('password', data.password);
-
-        const response = await API.get(config.api.resources.auth.POST);
+        const response = await API.post(config.api.resources.auth.POST, data);
         response.json().then(json => {
           dispatch({
             type: actions.AUTH_CREATE_SUCCESS,
@@ -28,7 +24,7 @@ export default ActionHelper.generate({
           });
         });
       } catch (e) {
-        throw 'APIGetFailed';
+        throw 'APIPostFailed';
       }
     };
   },

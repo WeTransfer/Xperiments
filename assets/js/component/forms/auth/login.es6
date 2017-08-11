@@ -7,6 +7,7 @@ import TextField from 'material-ui/TextField';
 
 export default class Login extends Form {
   static propTypes = {
+    auth: React.PropTypes.object,
     setEmail: React.PropTypes.func,
     setPassword: React.PropTypes.func,
     submit: React.PropTypes.func,
@@ -14,9 +15,12 @@ export default class Login extends Form {
     unsetValidationError: React.PropTypes.func
   };
 
+  submit() {
+    this.props.submit(this.props.auth);
+  }
+
   render() {
     return <div className="form__login">
-      <form action="/auth/login" method="POST">
         <div className="row">
           <div className="col-md-12">
             <TextField
@@ -45,15 +49,15 @@ export default class Login extends Form {
           </div>
           <div className="col-md-12">
             <RaisedButton
-              type="submit"
               label="Signin"
               primary={true}
               disabled={false}
-              onTouchTap={this.props.submit}
+              onTouchTap={() => {
+                this.submit();
+              }}
             />
           </div>
         </div>
-      </form>
     </div>;
   }
 }

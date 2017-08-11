@@ -26,7 +26,7 @@ let layoutChildren = [
 const {user} = Store.getState();
 if (!user.id) {
   layoutChildren = [
-    <Route path="auth/login" component={AuthContainer} />
+    <IndexRoute component={AuthContainer} />
   ];
 }
 
