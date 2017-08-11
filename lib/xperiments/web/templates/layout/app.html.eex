@@ -42,6 +42,8 @@
     </noscript>
   </div>
 
+  <%= render @view_module, @view_template, assigns %>
+
   <script>
     var __user__ = {};
     <% if @user != "" do %>

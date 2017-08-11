@@ -8,8 +8,7 @@ defmodule Xperiments.Web.AuthController do
   plug Ueberauth
 
   def callback(%{assigns: %{ueberauth_failure: _fails}} = conn, _params) do
-    conn
-    |> redirect(to: "/")
+    redirect(conn, to: "/")
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do

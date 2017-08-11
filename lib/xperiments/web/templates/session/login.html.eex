@@ -98,31 +98,6 @@
     </style>
   </head>
   <body>
-    <div class="login__block">
-      <div class="login__block-we-logo">
-        <img src="/images/wt.png" />
-      </div>
-      <%= if assigns[:reason], do: "Error" %>
-      <h3>Xperiments</h3>
-      <div class="login__block-form">
-        <%= form_for @conn, Routes.session_path(@conn, :create), [as: "login_form"], fn f -> %>
-        <div class="login__email-pwd-form">
-          <%= label(:user, :email, "Email") %>
-          <div class="login__form-group">
-            <%= text_input f, :email %>
-          </div>
-          <%= label(:user, :password, "Password") %>
-          <div class="login__form-group">
-            <%= password_input f, :password %>
-          </div>
-          <%= submit "Login", class: "login__block-login-btn" %>
-          <% end %>
-        </div>
-        <div>
-          OR
-        </div>
-        <a href="/auth/google">Sign in with Google</a>
-      </div>
-    </div>
+  j
   </body>
 </html>
