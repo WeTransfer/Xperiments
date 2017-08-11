@@ -17,13 +17,19 @@ defmodule Xperiments.User do
   end
 
   @doc "Builds a changeset based on the `struct` and `params`."
-  def changeset(struct, params \\ %{}) do
+  def changeset(struct, params \\ %{})
+  def changeset(struct, %{"password" => _password} = params) do
+    changeset(struct, Map.delete(params, "password"))
+    |> cast(params, [:password])
+    |> validate_required(:password)
+    |> validate_length(:password, min: 6)
+  end
+  def changeset(struct, params) do
     struct
-    |> cast(params, [:email, :name, :role, :password])
+    |> cast(params, [:email, :name, :role])
+    |> validate_required([:email])
     |> unique_constraint(:email)
     |> validate_format(:email, ~r/@/)
-    |> validate_length(:password, min: 6)
-    |> validate_required([:email, :name, :role, :password])
   end
 
   def update_changeset(struct, params \\ %{}) do
@@ -49,11 +55,13 @@ defmodule Xperiments.User do
     end
   end
 
-  def create(changeset) do
+  def create(%{valid?: false} = changeset), do: {:error, changeset}
+  def create(%{changes: %{password: password}} = changeset) do
     changeset
-    |> put_change(:encrypted_password, hashed_password(changeset.params["password"]))
+    |> put_change(:encrypted_password, hashed_password(password))
     |> Repo.insert()
   end
+  def create(changeset), do: Repo.insert(changeset)
 
   def find_and_confirm_password(%{"email" => email, "password" => password}) do
     find_by_email_with_not_nil_password(email)

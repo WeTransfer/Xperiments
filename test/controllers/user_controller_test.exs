@@ -40,7 +40,7 @@ defmodule Xperiments.UserControllerTest do
   end
 
   test "/create with an empty password and return errors", context do
-    attrs = %{name: "Dostoevsky", email: "dostoevsky@wetransfer.com"}
+    attrs = %{name: "Dostoevsky", email: "dostoevsky@wetransfer.com", password: ""}
     body =
       post(context.conn, @api_url, %{user: attrs})
     |> json_response(422)
