@@ -8,8 +8,6 @@ import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
-import Helper from 'helper';
-
 export default class UserForm extends Form {
   static propTypes = {
     user: React.PropTypes.object,
@@ -22,7 +20,7 @@ export default class UserForm extends Form {
 
   getUserRoles() {
     let items = [];
-    
+
     UserRoles.forEach(role => {
       items.push(<MenuItem value={role.value} primaryText={role.label} />);
     });

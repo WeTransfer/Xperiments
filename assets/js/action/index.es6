@@ -10,8 +10,10 @@ import NewRule from './newrule';
 import ValidationErrors from './validationerrors';
 import Users from './users';
 import NewUser from './newuser';
+import Auth from './auth';
 
 export default {
+  Auth,
   App,
   User,
   Applications,

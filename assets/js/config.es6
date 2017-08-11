@@ -5,6 +5,9 @@ const REPORTING_URL = window['__REPORTING_URL__'] || '';
 export default {
   api: {
     resources: {
+      auth: {
+        POST: `${BASE_PATH}/auth`
+      },
       applications: {
         GET: `${BASE_PATH}/applications`
       },

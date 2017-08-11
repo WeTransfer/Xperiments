@@ -14,6 +14,7 @@ const styling = {
 
 export default class AddUser extends React.Component {
   static propTypes = {
+    user: React.PropTypes.object,
     experiment: React.PropTypes.object,
     setName: React.PropTypes.func,
     setEmail: React.PropTypes.func,
