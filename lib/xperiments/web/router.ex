@@ -1,8 +1,14 @@
 defmodule Xperiments.Web.Router do
   use Xperiments.Web, :router
 
+  pipeline :external do
+    plug RemoteIp
+    plug CORSPlug, origin: Application.get_env(:xperiments, :cors)[:origin]
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
   end
 
   pipeline :browser do
@@ -14,12 +20,7 @@ defmodule Xperiments.Web.Router do
   pipeline :browser_auth do
     plug Guardian.Plug.VerifySession
     plug Guardian.Plug.LoadResource
-    plug Guardian.Plug.EnsureAuthenticated, handler: Xperiments.Web.SessionController
-  end
-
-  pipeline :external do
-    plug RemoteIp
-    plug CORSPlug, origin: Application.get_env(:xperiments, :cors)[:origin]
+    plug Guardian.Plug.EnsureAuthenticated, handler: Xperiments.Web.HomeController
   end
 
   pipeline :api_auth do
@@ -35,26 +36,25 @@ defmodule Xperiments.Web.Router do
   scope "/auth", Xperiments.Web do
     pipe_through :browser
 
-    get "/login", SessionController, :new, as: :login
-    post "/login", SessionController, :create
-    get "/logout", SessionController, :delete
-
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback
   end
 
   scope "/api", Xperiments.Web do
-    pipe_through [:api, :api_auth]
+    pipe_through :api
+
+    resources "/v1/sessions", V1.SessionController, only: [:create, :new]
 
     scope "/v1", as: :api_v1, alias: V1 do
+      pipe_through :api_auth
+
+      resources "/users", UserController, except: [:new]
       resources "/applications", ApplicationController, except: [:new], param: "name" do
         resources "/experiments", ExperimentController, except: [:delete, :new] do
           put "/state",  ExperimentController, :change_state, as: :state
           get "/variant/:variant_id", ExperimentController, :variant, as: :variant
         end
       end
-
-      resources "/users", UserController, except: [:new]
     end
   end
 
@@ -74,8 +74,8 @@ defmodule Xperiments.Web.Router do
 
   # should be last, because scope is too wide
   scope "/", Xperiments.Web do
-    pipe_through [:browser, :browser_auth]
+    pipe_through [:browser]
 
-    forward "/", HomeController, :index
+    get "/", HomeController, :index
   end
 end
