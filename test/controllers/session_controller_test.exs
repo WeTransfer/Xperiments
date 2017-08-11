@@ -14,8 +14,10 @@ defmodule Xperiments.SessionControllerTest do
   @api_url "/api/v1/sessions"
 
   test "successful login with a email and password", context do
-    post(context.conn, @api_url, %{email: context.user.email, password: "123456"})
+    body =
+      post(context.conn, @api_url, %{email: context.user.email, password: "123456"})
       |> json_response(:created)
+    # assert body == context.user
   end
 
   test "show error if email or password is incorrect", context do
