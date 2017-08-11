@@ -12,7 +12,7 @@ defmodule Xperiments.Web.V1.SessionController do
         conn
         |> Guardian.Plug.sign_in(user)
         |> put_status(:created)
-        |> json("")
+        |> render("create.json", %{user: user})
       {:error, reason} ->
         conn
         |> put_status(:forbidden)
