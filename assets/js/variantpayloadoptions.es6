@@ -112,6 +112,7 @@ const options = {
             {label: 'never', value: 'never'},
             {label: 'transfer is uploading', value: 'transferInProgress'},
             {label: 'transfer is downloading', value: 'transferDownloadStarted'}
+            {label: 'large transfer', value: 'largeTransferIn Progress'}
           ],
           title: 'Show tooltip when*'
         },
