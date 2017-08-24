@@ -111,7 +111,7 @@ const options = {
           enum: [
             {label: 'never', value: 'never'},
             {label: 'transfer is uploading', value: 'transferInProgress'},
-            {label: 'transfer is downloading', value: 'transferDownloadStarted'}
+            {label: 'transfer is downloading', value: 'transferDownloadStarted'},
             {label: 'large transfer', value: 'largeTransferInProgress'}
           ],
           title: 'Show tooltip when*'
