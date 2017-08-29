@@ -4,6 +4,7 @@ config :xperiments, Xperiments.Web.Endpoint,
   http: [port: 8080],
   url: [host: {:system, "HOST", "xperiments.wetransfer.net"}, port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json",
+  secret_key_base: "${SECRET_KEY_BASE}",
   server: true,
   root: ".",
   version: Mix.Project.config[:version]
@@ -22,8 +23,7 @@ config :ueberauth, Ueberauth.Strategy.Google.OAuth,
   client_secret: "${GOOGLE_CLIENT_SECRET}",
   redirect_uri: "${GOOGLE_OAUTH_CALLBACK}"
 
-config :xperiments, Xperiments.Web.Endpoint,
-  secret_key_base: "${SECRET_KEY_BASE}"
+config :xperiments, redis_url: "${REDIS_URL}"
 
 config :guardian, Guardian,
   secret_key: "${SECRET_KEY_BASE}"
