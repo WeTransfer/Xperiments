@@ -356,6 +356,20 @@ const options = {
             field: 'type',
             value: 'bannerWithCTA'
           }
+        },
+        title: {
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'dedicatedSupport'
+          }
+        },
+        text: {
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'dedicatedSupport'
+          }
         }
       },
       properties: [
@@ -366,7 +380,8 @@ const options = {
           enum: [
             {label: 'none', value: 'none'},
             {label: 'Social Proof', value: 'socialProof'},
-            {label: 'Banner with CTA', value: 'bannerWithCTA'}
+            {label: 'Banner with CTA', value: 'bannerWithCTA'},
+            {label: 'Dedicated Support', value: 'dedicatedSupport'}
           ]
         },
         {
@@ -395,44 +410,6 @@ const options = {
             {label: 'Sign-in', value: '/sign-in'}
           ]
         },
-      ]
-    }
-  },
-  dedicatedSupport: {
-    disabled: false,
-    name: 'Dedicated Support',
-    key: 'dedicatedSupport',
-    defaults: {
-      type: 'original'
-    },
-    schema: {
-      type: 'object',
-      rules: {
-        type: {
-          type: 'string',
-          required: true
-        },
-        supportCopy: {
-          type:'string',
-          requiredWhen: {
-            field: 'type',
-            value: ['dedicatedSupport']
-          }
-        }
-      },
-      properties: [
-        {
-          key: 'type',
-          title: 'Type*',
-          enum: [
-            {label: 'default', value: 'original'},
-            {label: 'Dedicated Support', value: 'dedicatedSupport'}
-          ]
-        },
-        {
-          key: 'dedicatedSupport',
-          title: 'Dedicated Support*'
-        }
       ]
     }
   },
