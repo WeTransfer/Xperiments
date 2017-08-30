@@ -398,6 +398,44 @@ const options = {
       ]
     }
   },
+  dedicatedSupport: {
+    disabled: false,
+    name: 'Dedicated Support',
+    key: 'dedicatedSupport',
+    defaults: {
+      type: 'original'
+    },
+    schema: {
+      type: 'object',
+      rules: {
+        type: {
+          type: 'string',
+          required: true
+        },
+        supportCopy: {
+          type:'string',
+          requiredWhen: {
+            field: 'type',
+            value: ['dedicatedSupport']
+          }
+        }
+      },
+      properties: [
+        {
+          key: 'type',
+          title: 'Type*',
+          enum: [
+            {label: 'default', value: 'original'},
+            {label: 'Dedicated Support', value: 'dedicatedSupport'}
+          ]
+        },
+        {
+          key: 'dedicatedSupport',
+          title: 'Dedicated Support*'
+        }
+      ]
+    }
+  },
   custom: {
     name: 'Custom',
     key: 'custom',
