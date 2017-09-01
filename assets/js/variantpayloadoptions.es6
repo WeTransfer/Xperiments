@@ -370,6 +370,20 @@ const options = {
             field: 'type',
             value: 'dedicatedSupport'
           }
+        },
+        TwentyGBTitle: {
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'dedicatedSupport'
+          }
+        }  ,    
+        TwentyGBText: {
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'dedicatedSupport'
+          }
         }
       },
       properties: [
@@ -399,6 +413,14 @@ const options = {
         {
           key: 'ctaText',
           title: 'CTA Text'
+        },
+        {
+          key: 'TwentyGBTitle',
+          title: '20GB Title'
+        },        
+        {
+          key: 'TwentyGBText',
+          title: '20GB Text'
         },
         {
           key: 'onPage',
