@@ -310,6 +310,35 @@ const options = {
       ]
     }
   },
+  transferLinkTooltips: {
+    disabled: false,
+    name: 'Transfer Link Tooltips',
+    key: 'transferLinkTooltips',
+    defaults: {
+      type: 'original'
+    },
+    schema: {
+      type: 'object',
+      rules: {
+        type: {
+          type: 'string',
+          required: true
+        }
+      },
+      properties: [
+        {
+          key: 'type',
+          type: 'string',
+          title: 'Type*',
+          enum: [
+            {label: 'default', value: 'original'},
+            {label: 'Tooltip only', value: 'tooltipOnly'},
+            {label: 'Tooltip + Button copy', value: 'tooltipPlusButton'}
+          ]
+        }
+      ]
+    }
+  },
   plusPage: {
     name: 'Plus Page',
     key: 'plusPage',
@@ -394,7 +423,7 @@ const options = {
             {label: 'Plus', value: '/plus'},
             {label: 'Sign-in', value: '/sign-in'}
           ]
-        },
+        }
       ]
     }
   },
