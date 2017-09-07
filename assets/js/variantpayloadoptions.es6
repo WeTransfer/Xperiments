@@ -357,28 +357,28 @@ const options = {
             value: 'bannerWithCTA'
           }
         },
-        title: {
+        dedicatedTitle: {
           type: 'string',
           requiredWhen: {
             field: 'type',
             value: 'dedicatedSupport'
           }
         },
-        text: {
+        dedicatedText: {
           type: 'string',
           requiredWhen: {
             field: 'type',
             value: 'dedicatedSupport'
           }
         },
-        TwentyGBTitle: {
+        twentyGBTitle: {
           type: 'string',
           requiredWhen: {
             field: 'type',
             value: 'dedicatedSupport'
           }
-        }  ,    
-        TwentyGBText: {
+        },
+        twentyGBText: {
           type: 'string',
           requiredWhen: {
             field: 'type',
@@ -407,20 +407,28 @@ const options = {
           title: 'Text*'
         },
         {
+          key: 'dedicatedTitle',
+          title: 'Dedicated Support Title'
+        },
+        {
+          key: 'dedicatedText',
+          title: 'Dedicated Support Text'
+        },
+        {
+          key: 'twentyGBTitle',
+          title: '20GB Title'
+        },
+        {
+          key: 'twentyGBText',
+          title: '20GB Text'
+        },             
+        {
           key: 'by',
           title: 'By'
         },
         {
           key: 'ctaText',
           title: 'CTA Text'
-        },
-        {
-          key: 'TwentyGBTitle',
-          title: '20GB Title'
-        },        
-        {
-          key: 'TwentyGBText',
-          title: '20GB Text'
         },
         {
           key: 'onPage',
