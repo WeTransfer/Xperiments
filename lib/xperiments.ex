@@ -9,6 +9,8 @@ defmodule Xperiments do
     # Define workers and child supervisors to be supervised
     children = [
       supervisor(Xperiments.Repo, []),
+      worker(Hammer.Backend.Redis, [[expiry_ms: 1000 * 60 * 60,
+                                     redix_config: Application.get_env(:xperiments, :redis_url)]]),
       supervisor(Xperiments.Web.Endpoint, []),
       supervisor(Xperiments.Assigner.Supervisor, [])
     ]
