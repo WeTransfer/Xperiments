@@ -385,6 +385,34 @@ const options = {
             field: 'type',
             value: 'bannerWithCTA'
           }
+        },
+        dedicatedTitle: {
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'dedicatedSupport'
+          }
+        },
+        dedicatedText: {
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'dedicatedSupport'
+          }
+        },
+        twentyGBTitle: {
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'dedicatedSupport'
+          }
+        },
+        twentyGBText: {
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'dedicatedSupport'
+          }
         }
       },
       properties: [
@@ -395,7 +423,8 @@ const options = {
           enum: [
             {label: 'none', value: 'none'},
             {label: 'Social Proof', value: 'socialProof'},
-            {label: 'Banner with CTA', value: 'bannerWithCTA'}
+            {label: 'Banner with CTA', value: 'bannerWithCTA'},
+            {label: 'Dedicated Support', value: 'dedicatedSupport'}
           ]
         },
         {
@@ -406,6 +435,22 @@ const options = {
           key: 'text',
           title: 'Text*'
         },
+        {
+          key: 'dedicatedTitle',
+          title: 'Dedicated Support Title'
+        },
+        {
+          key: 'dedicatedText',
+          title: 'Dedicated Support Text'
+        },
+        {
+          key: 'twentyGBTitle',
+          title: '20GB Title'
+        },
+        {
+          key: 'twentyGBText',
+          title: '20GB Text'
+        },             
         {
           key: 'by',
           title: 'By'
