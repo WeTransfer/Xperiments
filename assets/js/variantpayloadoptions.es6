@@ -423,6 +423,7 @@ const options = {
           enum: [
             {label: 'none', value: 'none'},
             {label: 'Social Proof', value: 'socialProof'},
+            {label: 'New Social Proof', value: 'newSocialProof'},
             {label: 'Banner with CTA', value: 'bannerWithCTA'},
             {label: 'Dedicated Support', value: 'dedicatedSupport'}
           ]
