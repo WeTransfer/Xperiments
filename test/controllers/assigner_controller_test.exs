@@ -98,16 +98,16 @@ defmodule Xperiments.AssignerControllerTest do
       assert db_exp.statistics.variants_impression == %{hd(context.exp.variants).id => 4}
     end
 
-    # test "requests are throttled", context do
-    #   for _i <- 0..4 do
-    #     post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
-    #     |> json_response(200)
-    #   end
-    #   body =
-    #     post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
-    #   |> json_response(403)
-    #   assert body == %{"error" => "Rate limit exceeded"}
-    # end
+    test "requests are throttled", context do
+      for _i <- 0..4 do
+        post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
+        |> json_response(200)
+      end
+      body =
+        post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
+      |> json_response(403)
+      assert body == %{"error" => "Rate limit exceeded"}
+    end
   end
 
   describe "Rules/Segments logic" do
