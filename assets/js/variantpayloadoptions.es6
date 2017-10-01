@@ -111,7 +111,8 @@ const options = {
           enum: [
             {label: 'never', value: 'never'},
             {label: 'transfer is uploading', value: 'transferInProgress'},
-            {label: 'transfer is downloading', value: 'transferDownloadStarted'}
+            {label: 'transfer is downloading', value: 'transferDownloadStarted'},
+            {label: 'large transfer', value: 'largeTransferInProgress'}
           ],
           title: 'Show tooltip when*'
         },
@@ -309,6 +310,35 @@ const options = {
       ]
     }
   },
+  transferLinkTooltips: {
+    disabled: false,
+    name: 'Transfer Link Tooltips',
+    key: 'transferLinkTooltips',
+    defaults: {
+      type: 'original'
+    },
+    schema: {
+      type: 'object',
+      rules: {
+        type: {
+          type: 'string',
+          required: true
+        }
+      },
+      properties: [
+        {
+          key: 'type',
+          type: 'string',
+          title: 'Type*',
+          enum: [
+            {label: 'default', value: 'original'},
+            {label: 'Tooltip only', value: 'tooltipOnly'},
+            {label: 'Tooltip + Button copy', value: 'tooltipPlusButton'}
+          ]
+        }
+      ]
+    }
+  },
   plusPage: {
     name: 'Plus Page',
     key: 'plusPage',
@@ -355,6 +385,34 @@ const options = {
             field: 'type',
             value: 'bannerWithCTA'
           }
+        },
+        dedicatedTitle: {
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'dedicatedSupport'
+          }
+        },
+        dedicatedText: {
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'dedicatedSupport'
+          }
+        },
+        twentyGBTitle: {
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'dedicatedSupport'
+          }
+        },
+        twentyGBText: {
+          type: 'string',
+          requiredWhen: {
+            field: 'type',
+            value: 'dedicatedSupport'
+          }
         }
       },
       properties: [
@@ -365,7 +423,9 @@ const options = {
           enum: [
             {label: 'none', value: 'none'},
             {label: 'Social Proof', value: 'socialProof'},
-            {label: 'Banner with CTA', value: 'bannerWithCTA'}
+            {label: 'New Social Proof', value: 'newSocialProof'},
+            {label: 'Banner with CTA', value: 'bannerWithCTA'},
+            {label: 'Dedicated Support', value: 'dedicatedSupport'}
           ]
         },
         {
@@ -376,6 +436,22 @@ const options = {
           key: 'text',
           title: 'Text*'
         },
+        {
+          key: 'dedicatedTitle',
+          title: 'Dedicated Support Title'
+        },
+        {
+          key: 'dedicatedText',
+          title: 'Dedicated Support Text'
+        },
+        {
+          key: 'twentyGBTitle',
+          title: '20GB Title'
+        },
+        {
+          key: 'twentyGBText',
+          title: '20GB Text'
+        },             
         {
           key: 'by',
           title: 'By'

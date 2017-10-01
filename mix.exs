@@ -51,6 +51,8 @@ defmodule Xperiments.Mixfile do
      {:distillery, "~> 1.0"},
      {:appsignal, "~> 0.0"},
      {:hammer, "~> 0.1.0"},
+     {:hammer_backend_redis, "~> 0.1.0"},
+     {:recon, "~> 2.3.2"},
      {:ex_machina, "~> 1.0", only: :test},
      {:mock, "~> 0.2.0", only: :test}]
   end
