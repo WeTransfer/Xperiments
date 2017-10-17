@@ -44,7 +44,6 @@ defmodule Xperiments.Mixfile do
      {:guardian, "~> 0.14"},
      {:bodyguard, "~> 0.6.1"},
      {:distillery, "~> 1.0"},
-     {:appsignal, "~> 0.0"},
      {:remote_ip, "~> 0.1.0"},
      {:hammer, "~> 0.1.0"},
      {:hammer_backend_redis, "~> 0.1.0"},
