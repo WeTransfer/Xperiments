@@ -4,6 +4,8 @@ defmodule Xperiments.AssignerControllerTest do
   alias Xperiments.Assigner.ExperimentSupervisor
   use Hammer, backend: Hammer.Backend.Redis, only: [:delete_buckets]
 
+  @api_path "/assigner/application/test_app"
+
   setup do
     for e_pid <- ExperimentSupervisor.experiment_pids() do
       Supervisor.terminate_child(ExperimentSupervisor, e_pid)
@@ -35,8 +37,6 @@ defmodule Xperiments.AssignerControllerTest do
     build_and_run_experiments(2, state: "running", application: context.app, rules: Xperiments.Factory.rules_1)
     build_and_run_experiments(1, state: "running", application: context.app, rules: Xperiments.Factory.rules_2)
   end
-
-  @api_path "/assigner/application/test_app"
 
   test "/experiments returns assigner variants", context do
     body =

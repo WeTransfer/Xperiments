@@ -2,7 +2,7 @@ defmodule Xperiments.Web.V1.ErrorView do
   use Xperiments.Web, :view
 
   def render("404.json", _assigns) do
-    %{errors: %{detail: "Page not found"}}
+    %{errors: %{details: "Page not found"}}
   end
 
   def render("403.json", _assigns) do
@@ -10,7 +10,7 @@ defmodule Xperiments.Web.V1.ErrorView do
   end
 
   def render("500.json", _assigns) do
-    %{errors: %{detail: "Internal server error"}}
+    %{errors: %{details: "Internal server error"}}
   end
 
   def render("500.html", _assigns) do
