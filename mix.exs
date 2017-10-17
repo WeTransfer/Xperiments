@@ -45,6 +45,8 @@ defmodule Xperiments.Mixfile do
      {:bodyguard, "~> 0.6.1"},
      {:distillery, "~> 1.0"},
      {:remote_ip, "~> 0.1.0"},
+     {:libcluster, "~> 2.1"},
+     {:httpoison, "~> 0.12"},
      {:hammer, "~> 0.1.0"},
      {:hammer_backend_redis, "~> 0.1.0"},
      {:recon, "~> 2.3.2"},

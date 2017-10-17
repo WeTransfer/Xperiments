@@ -32,6 +32,19 @@ config :phoenix, :generators,
 config :xperiments, :cors,
   origin: "*"
 
+config :libcluster,
+  topologies: [
+    consul: [
+      strategy: Cluster.Strategy.Consul,
+      config: [
+        service: "ab",
+        env: Mix.env
+      ]
+    ]
+  ]
+
+config :ex_rated, :timeout, 600_000
+
 config :xperiments, redis_url: "redis://localhost"
 
 config :xperiments, :js_config,
