@@ -235,7 +235,7 @@ const options = {
   },
   signupFormPlanSelectorType: {
     disabled: false,
-    name: 'Singup Form - Plan Selector Type',
+    name: 'Signup Form - Plan Selector Type',
     key: 'signupFormPlanSelectorType',
     defaults: {
       type: 'original'
@@ -335,6 +335,56 @@ const options = {
             {label: 'Tooltip only', value: 'tooltipOnly'},
             {label: 'Tooltip + Button copy', value: 'tooltipPlusButton'}
           ]
+        }
+      ]
+    }
+  },
+  plusPanelFrequency: {
+    name: 'Plus panel Frequency',
+    key: 'plusPanelFrequency',
+    defaults: {
+      type: 'none'
+    },
+    schema: {
+      type: 'object',
+      rules: {
+        frequency: {
+          type: 'string'
+        },
+        route: {
+          type: 'string',
+          required: true
+        },
+        TrackingID: {
+          type: 'string',
+          required: true
+        }
+      },
+      properties: [
+        {
+          key:'frequency',
+          title: 'Select how often the Plus panel should open',
+          type: 'string',
+          enum: [
+            {label: 'never', value: '0'},
+            {label: 'every 2 visits', value: '2'},
+            {label: 'every 3 visits', value: '3'},
+            {label: 'every 5 visits', value: '5'},
+            {label: 'always', value: '1'}
+          ]
+        },
+        {
+          key:'route',
+          title: 'Select the panel that you want to open automatically',
+          type: 'string',
+          enum: [
+            {label: 'Plus', value: '/plus'},
+            {label: 'Sign-in', value: '/sign-in'}
+          ]
+        },
+        {
+          key:'TrackingID',
+          title: 'TrackingID'
         }
       ]
     }
@@ -451,7 +501,7 @@ const options = {
         {
           key: 'twentyGBText',
           title: '20GB Text'
-        },             
+        },
         {
           key: 'by',
           title: 'By'
