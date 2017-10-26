@@ -2,7 +2,7 @@ defmodule Xperiments.AssignerControllerTest do
   use Xperiments.Web.ConnCase, async: false
   import Mock
   alias Xperiments.Assigner.ExperimentSupervisor
-  use Hammer, backend: Hammer.Backend.ETS, only: [:delete_buckets]
+  use Hammer, backend: Hammer.Backend.Redis, only: [:delete_buckets]
 
   setup do
     for e_pid <- ExperimentSupervisor.experiment_pids() do
@@ -87,7 +87,7 @@ defmodule Xperiments.AssignerControllerTest do
       end
     end
 
-    test "saving statistics data to DB after we reach a trashhold", context do
+    test "saving statistics data to DB after we reach a treshold", context do
       for _i <- 0..4 do
         post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
         |> json_response(200)
