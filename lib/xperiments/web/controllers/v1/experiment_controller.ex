@@ -44,7 +44,7 @@ defmodule Xperiments.Web.V1.ExperimentController do
 
   def update(conn, %{"id" => id, "experiment" => updates}) do
     exp = Repo.get!(Experiment, id)
-    conn = authorize!(conn, exp)
+    conn = mark_authorized(conn)
 
     {exclusions, updates} = Map.pop(updates, "exclusions", [])
     # NOTE: Maybe unnecessary step now
@@ -69,7 +69,7 @@ defmodule Xperiments.Web.V1.ExperimentController do
 
   def change_state(conn, %{"experiment_id" => id, "event" => event}) do
     experiment = Repo.get!(Experiment, id)
-    conn = authorize!(conn, experiment)
+    conn = mark_authorized(conn)
 
     if String.to_atom(event) in Experiment.events do
       changeset = Experiment.change_state(experiment, event)

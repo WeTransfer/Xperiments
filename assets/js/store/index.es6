@@ -12,10 +12,18 @@ import excludableexperiments from './helper/excludableexperiments';
 import newvariant from './helper/newvariant';
 import newrule from './helper/newrule';
 import validationerrors from './helper/validationerrors';
+import users from './helper/users';
+import newuser from './helper/newuser';
 
 // Create our initial state
 const initialState = {
   // This contains everything that is pending in our app is stored here
+  auth: {
+    creating: false,
+    created: false,
+    email: null,
+    password: null
+  },
   app,
   user,
   applications,
@@ -25,7 +33,9 @@ const initialState = {
   excludableexperiments,
   newvariant,
   newrule,
-  validationerrors
+  validationerrors,
+  users,
+  newuser
 };
 
 // We'll create a Store that has our Reducers and an initial state,

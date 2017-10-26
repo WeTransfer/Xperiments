@@ -29,7 +29,9 @@ export default class Layout extends React.Component {
   };
 
   componentWillMount() {
-    Store.dispatch(Actions.Applications.list());
+    if (this.props.user.id) {
+      Store.dispatch(Actions.Applications.list());
+    }
   }
 
   getErrorNotification() {
@@ -44,7 +46,7 @@ export default class Layout extends React.Component {
     let dialogOptions = {};
     if (this.props.notification.title)
       dialogOptions.title = this.props.notification.title;
-    
+
     let dialogChildren = [];
     this.props.notification.message.forEach(el => {
       el.forEach(subEl => {

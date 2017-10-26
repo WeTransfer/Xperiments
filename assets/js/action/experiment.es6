@@ -121,11 +121,6 @@ export default ActionHelper.generate({
               data: json.experiment
             });
 
-            // dispatch({
-            //   type: AppActions.SET_APP_REDIRECT,
-            //   path: '/experiments/'
-            // });
-
             dispatch({
               type: AppActions.SET_APP_NOTIFICATION,
               notificationData: {

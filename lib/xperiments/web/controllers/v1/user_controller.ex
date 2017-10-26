@@ -3,20 +3,21 @@ defmodule Xperiments.Web.V1.UserController do
   alias Xperiments.User
   alias Xperiments.Web.V1.ErrorView
 
-  plug :verify_authorized
+  # plug :verify_authorized
 
   def index(conn, _params) do
+    # current_user = Guardian.Plug.current_resource(conn)
+    # conn = authorize!(conn, current_user)
     users = Repo.all(User)
-    conn
-    |> authorize!(User)
-    |> render("index.json", users: users)
+    render(conn, "index.json", users: users)
   end
 
   def create(conn, %{"user" => user_data}) do
-    conn = authorize!(conn, User)
+    # current_user = Guardian.Plug.current_resource(conn)
+    # conn = authorize!(conn, current_user)
     chset = User.changeset(%User{}, user_data)
 
-    case Repo.insert(chset) do
+    case User.create(chset) do
       {:ok, user} ->
         conn
         |> put_status(:created)
@@ -29,9 +30,10 @@ defmodule Xperiments.Web.V1.UserController do
   end
 
   def update(conn, %{"id" => id, "user" => updates}) do
+    # current_user = Guardian.Plug.current_resource(conn)
     user = Repo.get!(User, id)
-    conn = authorize!(conn, user)
-    chset = User.changeset(user, updates)
+    # conn = authorize!(conn, current_user)
+    chset = User.update_changeset(user, updates)
 
     case Repo.update(chset) do
       {:ok, user} ->
@@ -46,8 +48,9 @@ defmodule Xperiments.Web.V1.UserController do
   end
 
   def delete(conn, %{"id" => id}) do
+    # current_user = Guardian.Plug.current_resource(conn)
     user = Repo.get!(User, id)
-    conn = authorize!(conn, user)
+    # conn = authorize!(conn, current_user)
 
     case Repo.delete(user) do
       {:ok, user} ->

@@ -9,8 +9,12 @@ import excludableexperiments from './excludableexperiments';
 import newvariant from './newvariant';
 import newrule from './newrule';
 import validationerrors from './validationerrors';
+import users from './users';
+import newuser from './newuser';
+import auth from './auth';
 
 export default Redux.combineReducers({
+  auth,
   app,
   user,
   applications,
@@ -20,5 +24,7 @@ export default Redux.combineReducers({
   excludableexperiments,
   newvariant,
   newrule,
-  validationerrors
+  validationerrors,
+  users,
+  newuser
 });

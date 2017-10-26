@@ -38,10 +38,15 @@ defmodule Xperiments.Mixfile do
      {:cowboy, "~> 1.0"},
      {:ecto_state_machine, "~> 0.3.0"},
      {:timex, "~> 3.0"},
+
      {:cors_plug, "~> 1.2"},
+     {:remote_ip, "~> 0.1.0"},
+
      {:ueberauth, "~> 0.4"},
      {:ueberauth_google, "~> 0.5"},
      {:guardian, "~> 0.14"},
+     {:comeonin, "~> 4.0"},
+     {:pbkdf2_elixir, "~> 0.12"},
      {:bodyguard, "~> 0.6.1"},
      {:distillery, "~> 1.0"},
      {:remote_ip, "~> 0.1.0"},

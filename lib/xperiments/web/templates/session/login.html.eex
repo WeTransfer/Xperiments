@@ -4,38 +4,71 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
 
     <style>
-      body {
-        font-family: 'Roboto', sans-serif;
-        margin: 0;
-        padding: 0;
-      }
+     body {
+       font-family: 'Roboto', sans-serif;
+       margin: 0;
+       padding: 0;
+     }
 
-      .login__block {
-        position: fixed;
-        width: 300px;
-        height: 400px;
-        background: #f1f1f1;
-        box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-        padding: 100px 0px;
-        box-sizing: border-box;
-      }
-      .login__block-we-logo {
-        width: 100%;
-        height: 50px;
-        overflow: hidden;
-      }
-      .login__block-we-logo img {
-        height: 100%;
-      }
+     .login__block {
+       position: fixed;
+       width: 300px;
+       height: 400px;
+       background: #f1f1f1;
+       box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);
+       top: 50%;
+       left: 50%;
+       transform: translate(-50%, -50%);
+       text-align: center;
+       padding: 100px 0px;
+       box-sizing: border-box;
+     }
+     .login__block-we-logo {
+       width: 100%;
+       height: 50px;
+       overflow: hidden;
+     }
+     .login__block-we-logo img {
+       height: 100%;
+     }
 
-      .login__block-form {
+     .login__block-form div {
+       box-sizing: border-box;
+       display: block;
+     }
 
-      }
-      .login__block-form a {
+     .login__block-form {
+       box-sizing: border-box;
+     }
+     .login__email-pwd-form .login__form-group {
+       /* margin: 0 -15px 15px -15px; */
+     }
+     .login__email-pwd-form label {
+       padding-top: 7px;
+       margin-bottom: 0;
+       text-align: right;
+       width: 100px;
+       display: block;
+     }
+     .login__email-pwd-form input {
+       display: block;
+       width: 200px;
+       height: 34px;
+       padding: 6px 12px;
+       font-size: 14px;
+       line-height: 1.42857143;
+       color: #555;
+       background-color: #fff;
+       background-image: none;
+       border: 1px solid #ccc;
+       border-radius: 4px;
+       -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+       box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+       -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+       -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+       transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+     }
+     .login__block-login-btn {
         display: block;
         height: 40px;
         width: 200px;
@@ -45,23 +78,26 @@
         margin: 0 auto;
         line-height: 40px;
         font-size: 13px;
-      }
+       }
+       .login__block-form a {
+         display: block;
+         height: 40px;
+         width: 200px;
+         background: #409FFF;
+         color: #fff;
+         text-decoration: none;
+         margin: 0 auto;
+         line-height: 40px;
+         font-size: 13px;
+       }
 
-      h3 {
-        font-weight: 300;
-      }
+       h3 {
+         font-weight: 300;
+       }
 
     </style>
   </head>
   <body>
-    <div class="login__block">
-      <div class="login__block-we-logo">
-        <img src="/images/wt.png" />
-      </div>
-      <h3>Xperiments</h3>
-      <div class="login__block-form">
-        <a href="/auth/google">Sign in with Google</a>
-      </div>
-    </div>
+  j
   </body>
 </html>

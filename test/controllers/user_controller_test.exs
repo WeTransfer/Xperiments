@@ -3,17 +3,17 @@ defmodule Xperiments.UserControllerTest do
   alias Xperiments.User
 
   setup do
-    user = insert(:user, role: "admin")
+    params = params_for(:user, password: "123456", role: "user")
+    params = for {key, val} <- params, into: %{}, do: {Atom.to_string(key), val}
+    {:ok, user} = User.changeset(%User{}, params) |> User.create()
 
     conn =
-      build_conn()
+      Phoenix.ConnTest.build_conn()
       |> bypass_through(Xperiments.Router, [:api, :browser])
-      |> get("/")
+      |> post("/api/v1/sessions", %{email: user.email, password: "123456"})
       |> Map.update!(:state, fn (_) -> :set end)
       |> Guardian.Plug.sign_in(user, :token, [])
-      |> send_resp(200, "Flush the session yo")
       |> recycle()
-      |> put_req_header("accept", "application/json")
 
     insert_list(3, :user)
     {:ok, conn: conn}
@@ -30,13 +30,22 @@ defmodule Xperiments.UserControllerTest do
   end
 
   test "/create a new user", context do
-    attrs = %{name: "Dostoevsky", email: "dostoevsky@wetransfer.com"}
+    attrs = %{name: "Dostoevsky", email: "dostoevsky@wetransfer.com", password: "123456"}
     body =
       post(context.conn, @api_url, %{user: attrs})
       |> json_response(201)
 
     assert body["user"]["email"] == "dostoevsky@wetransfer.com"
     assert body["user"]["role"] == "user"
+  end
+
+  test "/create with an empty password and return errors", context do
+    attrs = %{name: "Dostoevsky", email: "dostoevsky@wetransfer.com", password: ""}
+    body =
+      post(context.conn, @api_url, %{user: attrs})
+    |> json_response(422)
+
+    assert body["errors"] == %{"password" => ["can't be blank"]}
   end
 
   test "/udpate an user", context do

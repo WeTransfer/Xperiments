@@ -42,8 +42,13 @@
     </noscript>
   </div>
 
+  <%= render @view_module, @view_template, assigns %>
+
   <script>
-    var __user__ = <%= @user %>;
+    var __user__ = {};
+    <% if @user != "" do %>
+      __user__ = <%= @user %>;
+    <% end %>
     var __REPORTING_URL__ = '<%= Application.get_env(:xperiments, :js_config)[:reporting_url] %>';
   </script>
   <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>" ></script>
