@@ -18,8 +18,7 @@ config :xperiments, Xperiments.Web.Endpoint,
   secret_key_base: "wmyoXASvGJLg451QAYP78cyDkFi9d5MEDmG73goFsFdzg0cnSYxYxcWptWjqHjBs",
   render_errors: [view: Xperiments.Web.V1.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Xperiments.PubSub,
-           adapter: Phoenix.PubSub.PG2],
-  instrumenters: [Appsignal.Phoenix.Instrumenter]
+           adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -32,6 +31,8 @@ config :phoenix, :generators,
 
 config :xperiments, :cors,
   origin: "*"
+
+config :xperiments, redis_url: "redis://localhost"
 
 config :xperiments, :js_config,
   reporting_url: "https://analytics.google.com/analytics/web/?authuser=1#my-reports/5IyMQAn0Tcqdu2Va8V9BIg/a69714416w130256140p134086343/%3F_u.date00%3D20170227%26_u.date01%3D20170227%26_u.sampleOption%3Dmoreprecision%26_u.sampleSize%3D500000/"
@@ -57,6 +58,7 @@ config :guardian, Guardian,
   serializer: Xperiments.GuardianSerializer
 
 config :bodyguard, current_user: {Guardian.Plug, :current_resource}
+
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

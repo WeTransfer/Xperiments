@@ -137,12 +137,12 @@ defmodule Xperiments.Assigner.Experiment do
 
   def handle_cast({:add_exclusion, exc_id}, state) do
     new_state = Map.update!(state, :exclusions, fn ex_list -> [exc_id | ex_list] |> Enum.uniq() end)
-    {:noreply, new_state}
+    {:noreply, new_state, :hibernate}
   end
 
   def handle_cast({:remove_exclusion, exc_id}, state) do
     new_state = Map.update!(state, :exclusions, fn ex_list -> List.delete(ex_list, exc_id) end)
-    {:noreply, new_state}
+    {:noreply, new_state, :hibernate}
   end
 
   def handle_cast({:inc_impression, var_id}, state) do
@@ -159,23 +159,23 @@ defmodule Xperiments.Assigner.Experiment do
 
   def handle_call({:register_priority}, _caller, state) do
     {:ok, _} = Registry.register(:registry_priorities, self(), state.inserted_at)
-    {:reply, :ok, state}
+    {:reply, :ok, state, :hibernate}
   end
 
   def handle_call({:get_exclusions_list}, _caller, %{state: "running", exclusions: exclusions} = state) do
-    {:reply, exclusions, state}
+    {:reply, exclusions, state, :hibernate}
   end
   def handle_call({:get_exclusions_list}, _caller, state) do
-    {:reply, [], state}
+    {:reply, [], state, :hibernate}
   end
 
   def handle_call({:check_segemets, segments}, _caller, state) do
-    {:reply, compare_rules(segments, state.rules), state}
+    {:reply, compare_rules(segments, state.rules), state, :hibernate}
   end
 
   def handle_call(:is_started, _caller, state) do
     response = :gt == DateTime.compare(DateTime.utc_now(), state.start_date)
-    {:reply, response, state}
+    {:reply, response, state, :hibernate}
   end
 
   def handle_call({:get_experiment_data, var_id}, _caller, state) do
@@ -191,7 +191,7 @@ defmodule Xperiments.Assigner.Experiment do
              end_date: state.end_date,
              variant: variant}}
       end
-    {:reply, response, state}
+    {:reply, response, state, :hibernate}
   end
 
   def handle_call({:get_random_variant}, _caller, state) do
@@ -200,7 +200,7 @@ defmodule Xperiments.Assigner.Experiment do
         Map.take(state, [:id, :name, :start_date, :end_date, :state]),
         %{variant: do_get_random_variant(state.variants) |> Map.drop([:segment_range])}
       )
-    {:reply, response, state}
+    {:reply, response, state, :hibernate}
   end
 
   def handle_info(:end_experiment, state) do
