@@ -1,5 +1,5 @@
 defmodule Xperiments.ExperimentControllerTest do
-  use Xperiments.Web.ConnCase, async: false
+  use XperimentsWeb.ConnCase, async: false
   use Timex
   alias Xperiments.Experiment
 

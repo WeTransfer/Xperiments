@@ -1,5 +1,5 @@
 defmodule Xperiments.User do
-  use Xperiments.Web, :model
+  use XperimentsWeb, :model
   alias Xperiments.Repo
   alias Ueberauth.Auth
 
@@ -57,8 +57,8 @@ defmodule Xperiments.User do
     end
 
     def add_token(user) do
-      salt = Application.get_env(:xperiments, Xperiments.Web.Endpoint)[:secret_key_base]
-      token = Phoenix.Token.sign(Xperiments.Web.Endpoint, salt, user.id)
+      salt = Application.get_env(:xperiments, XperimentsWeb.Endpoint)[:secret_key_base]
+      token = Phoenix.Token.sign(XperimentsWeb.Endpoint, salt, user.id)
       Map.put_new(user, :token, token)
     end
   end

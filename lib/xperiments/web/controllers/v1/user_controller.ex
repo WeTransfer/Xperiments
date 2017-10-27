@@ -1,7 +1,7 @@
-defmodule Xperiments.Web.V1.UserController do
-  use Xperiments.Web, :controller
+defmodule XperimentsWeb.V1.UserController do
+  use XperimentsWeb, :controller
   alias Xperiments.User
-  alias Xperiments.Web.V1.ErrorView
+  alias XperimentsWeb.V1.ErrorView
 
   plug :verify_authorized
 

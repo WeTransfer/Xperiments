@@ -1,3 +1,3 @@
-defmodule Xperiments.Web.SessionView do
-  use Xperiments.Web, :view
+defmodule XperimentsWeb.SessionView do
+  use XperimentsWeb, :view
 end

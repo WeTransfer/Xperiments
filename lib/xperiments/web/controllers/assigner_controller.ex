@@ -1,5 +1,5 @@
-defmodule Xperiments.Web.AssignerController do
-  use Xperiments.Web, :controller
+defmodule XperimentsWeb.AssignerController do
+  use XperimentsWeb, :controller
   alias Xperiments.{Repo, Experiment}
 
   plug Xperiments.Plug.RateLimit, max_requests: 5, interval_seconds: 60
@@ -24,8 +24,8 @@ defmodule Xperiments.Web.AssignerController do
   end
 
   def auth_request(conn, _opts) do
-    salt = Application.get_env(:xperiments, Xperiments.Web.Endpoint)[:secret_key_base]
-    case Phoenix.Token.verify(Xperiments.Web.Endpoint, salt, conn.params["token"]) do
+    salt = Application.get_env(:xperiments, XperimentsWeb.Endpoint)[:secret_key_base]
+    case Phoenix.Token.verify(XperimentsWeb.Endpoint, salt, conn.params["token"]) do
       {:ok, _} -> conn
       {:error, _} ->
         conn

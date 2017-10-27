@@ -1,5 +1,5 @@
-defmodule Xperiments.Web.HomeController do
-  use Xperiments.Web, :controller
+defmodule XperimentsWeb.HomeController do
+  use XperimentsWeb, :controller
   use Guardian.Phoenix.Controller
 
   def index(conn, _params, user, _claims) do

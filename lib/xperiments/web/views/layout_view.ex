@@ -1,3 +1,3 @@
-defmodule Xperiments.Web.LayoutView do
-  use Xperiments.Web, :view
+defmodule XperimentsWeb.LayoutView do
+  use XperimentsWeb, :view
 end

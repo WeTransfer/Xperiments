@@ -7,7 +7,7 @@ defmodule Xperiments.Experiment do
 
   *Variants* and *rules* are stored in JSONB fields.
   """
-  use Xperiments.Web, :model
+  use XperimentsWeb, :model
   alias Xperiments.{Application, Variant, Rule, User}
 
   use EctoStateMachine,

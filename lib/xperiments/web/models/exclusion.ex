@@ -3,7 +3,7 @@ defmodule Xperiments.Exclusion do
   Join model for the many to may experiments to itself.
   Uses to store mutual exclusions.
   """
-  use Xperiments.Web, :model
+  use XperimentsWeb, :model
   alias Xperiments.{Experiment, Repo}
 
   @foreign_key_type :binary_id

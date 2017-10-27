@@ -1,5 +1,5 @@
-defmodule Xperiments.Web.V1.ErrorView do
-  use Xperiments.Web, :view
+defmodule XperimentsWeb.V1.ErrorView do
+  use XperimentsWeb, :view
 
   def render("404.json", _assigns) do
     %{errors: %{detail: "Page not found"}}

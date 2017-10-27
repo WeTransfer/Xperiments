@@ -1,6 +1,6 @@
 defmodule Xperiments.BroadcastService do
   @channel "experiments:all"
-  @endpoint Xperiments.Web.Endpoint
+  @endpoint XperimentsWeb.Endpoint
 
   @doc """
   Broadcasts messages when specific states are changed

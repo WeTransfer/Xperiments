@@ -1,4 +1,4 @@
-defmodule Xperiments.Web.UserSocket do
+defmodule XperimentsWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
@@ -30,7 +30,7 @@ defmodule Xperiments.Web.UserSocket do
   # Would allow you to broadcast a "disconnect" event and terminate
   # all active sockets and channels for a given user:
   #
-  #     Xperiments.Web.Endpoint.broadcast("users_socket:#{user.id}", "disconnect", %{})
+  #     XperimentsWeb.Endpoint.broadcast("users_socket:#{user.id}", "disconnect", %{})
   #
   # Returning `nil` makes this socket anonymous.
   def id(_socket), do: nil

@@ -1,7 +1,7 @@
-defmodule Xperiments.Web.Endpoint do
+defmodule XperimentsWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :xperiments
 
-  socket "/socket", Xperiments.Web.UserSocket
+  socket "/socket", XperimentsWeb.UserSocket
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -36,5 +36,5 @@ defmodule Xperiments.Web.Endpoint do
     key: "_xperiments_key",
     signing_salt: "IaCvFC+u"
 
-  plug Xperiments.Web.Router
+  plug XperimentsWeb.Router
 end

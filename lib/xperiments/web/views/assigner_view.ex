@@ -1,5 +1,5 @@
-defmodule Xperiments.Web.AssignerView do
-  use Xperiments.Web, :view
+defmodule XperimentsWeb.AssignerView do
+  use XperimentsWeb, :view
 
   def render("experiments.json", %{experiments: experiments}) do
     experiments

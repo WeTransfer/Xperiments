@@ -1,5 +1,5 @@
-defmodule Xperiments.Web.V1.ExperimentController do
-  use Xperiments.Web, :controller
+defmodule XperimentsWeb.V1.ExperimentController do
+  use XperimentsWeb, :controller
   alias Xperiments.{Experiment, Exclusion, Application}
   alias Xperiments.BroadcastService
 
@@ -38,7 +38,7 @@ defmodule Xperiments.Web.V1.ExperimentController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(Xperiments.Web.V1.ErrorView, "error.json", changeset: changeset)
+        |> render(XperimentsWeb.V1.ErrorView, "error.json", changeset: changeset)
     end
   end
 
@@ -63,7 +63,7 @@ defmodule Xperiments.Web.V1.ExperimentController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(Xperiments.Web.V1.ErrorView, "error.json", changeset: changeset)
+        |> render(XperimentsWeb.V1.ErrorView, "error.json", changeset: changeset)
     end
   end
 
@@ -81,7 +81,7 @@ defmodule Xperiments.Web.V1.ExperimentController do
         {:error, changeset} ->
           conn
           |> put_status(:unprocessable_entity)
-          |> render(Xperiments.Web.V1.ErrorView, "error.json", changeset: changeset)
+          |> render(XperimentsWeb.V1.ErrorView, "error.json", changeset: changeset)
       end
     else
       conn
@@ -103,9 +103,9 @@ defmodule Xperiments.Web.V1.ExperimentController do
       nil ->
         msg = "Variant with id '#{var_id}' for the experiment with id '#{e_id}' is not found"
         put_status(conn, :not_found)
-        |> render(Xperiments.Web.V1.ErrorView, "common_error.json", %{error: %{experiment: msg}})
+        |> render(XperimentsWeb.V1.ErrorView, "common_error.json", %{error: %{experiment: msg}})
       var ->
-        render(conn, Xperiments.Web.V1.VariantView, "show.json", variant: var)
+        render(conn, XperimentsWeb.V1.VariantView, "show.json", variant: var)
     end
   end
 
@@ -115,7 +115,7 @@ defmodule Xperiments.Web.V1.ExperimentController do
       nil ->
         err_message = "The application #{app_name} doesn't exists"
         put_status(conn, :unprocessable_entity)
-        |> render(Xperiments.Web.V1.ErrorView, "common_error.json", %{error: %{application: err_message}})
+        |> render(XperimentsWeb.V1.ErrorView, "common_error.json", %{error: %{application: err_message}})
         |> halt()
       app ->
         assign(conn, :application, app)

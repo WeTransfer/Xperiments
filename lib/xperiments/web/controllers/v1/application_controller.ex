@@ -1,5 +1,5 @@
-defmodule Xperiments.Web.V1.ApplicationController do
-  use Xperiments.Web, :controller
+defmodule XperimentsWeb.V1.ApplicationController do
+  use XperimentsWeb, :controller
   alias Xperiments.Application
 
   plug :verify_authorized

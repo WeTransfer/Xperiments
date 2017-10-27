@@ -1,5 +1,5 @@
-defmodule Xperiments.Web.SessionController do
-  use Xperiments.Web, :controller
+defmodule XperimentsWeb.SessionController do
+  use XperimentsWeb, :controller
 
   def new(conn, _params) do
     render(conn, "login.html", layout: false)

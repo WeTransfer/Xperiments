@@ -1,5 +1,5 @@
 defmodule Xperiments.AssignerControllerTest do
-  use Xperiments.Web.ConnCase, async: false
+  use XperimentsWeb.ConnCase, async: false
   import Mock
   alias Xperiments.Assigner.ExperimentSupervisor
   use Hammer, backend: Hammer.Backend.Redis, only: [:delete_buckets]
@@ -54,8 +54,8 @@ defmodule Xperiments.AssignerControllerTest do
   test "returning of a specific variant", context do
     exp = insert(:experiment)
     var = hd(exp.variants)
-    salt = Application.get_env(:xperiments, Xperiments.Web.Endpoint)[:secret_key_base]
-    token = Phoenix.Token.sign(Xperiments.Web.Endpoint, salt, 1)
+    salt = Application.get_env(:xperiments, XperimentsWeb.Endpoint)[:secret_key_base]
+    token = Phoenix.Token.sign(XperimentsWeb.Endpoint, salt, 1)
 
     # without a token
     get(context.conn, "#{@api_path}/experiments/#{exp.id}/variants/#{var.id}")

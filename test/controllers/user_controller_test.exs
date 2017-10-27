@@ -1,5 +1,5 @@
 defmodule Xperiments.UserControllerTest do
-  use Xperiments.Web.ConnCase, async: false
+  use XperimentsWeb.ConnCase, async: false
   alias Xperiments.User
 
   setup do

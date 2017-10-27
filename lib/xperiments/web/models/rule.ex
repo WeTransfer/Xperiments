@@ -8,7 +8,7 @@ defmodule Xperiments.Rule do
   - *operator*. String. Can be only: "==", "!=", ">", "<", ">=", "<=" , "=~"
   - *value*. String. Example: "eu", "ru", "100", etc.
   """
-  use Xperiments.Web, :model
+  use XperimentsWeb, :model
 
   @primary_key false
   embedded_schema do

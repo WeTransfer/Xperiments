@@ -1,5 +1,5 @@
 defmodule Xperiments.ApplicationControllerTest do
-  use Xperiments.Web.ConnCase, async: false
+  use XperimentsWeb.ConnCase, async: false
   alias Xperiments.Application
 
   setup do

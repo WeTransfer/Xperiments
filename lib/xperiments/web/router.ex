@@ -1,5 +1,5 @@
-defmodule Xperiments.Web.Router do
-  use Xperiments.Web, :router
+defmodule XperimentsWeb.Router do
+  use XperimentsWeb, :router
 
   pipeline :api do
     plug :accepts, ["json"]
@@ -14,7 +14,7 @@ defmodule Xperiments.Web.Router do
   pipeline :browser_auth do
     plug Guardian.Plug.VerifySession
     plug Guardian.Plug.LoadResource
-    plug Guardian.Plug.EnsureAuthenticated, handler: Xperiments.Web.SessionController
+    plug Guardian.Plug.EnsureAuthenticated, handler: XperimentsWeb.SessionController
   end
 
   pipeline :external do
@@ -32,7 +32,7 @@ defmodule Xperiments.Web.Router do
 
   get "/healthcheck", HealthCheckPlug, []
 
-  scope "/auth", Xperiments.Web do
+  scope "/auth", XperimentsWeb do
     pipe_through :browser
 
     get "/login", SessionController, :new, as: :login
@@ -42,7 +42,7 @@ defmodule Xperiments.Web.Router do
     get "/:provider/callback", AuthController, :callback
   end
 
-  scope "/api", Xperiments.Web do
+  scope "/api", XperimentsWeb do
     pipe_through [:api, :api_auth]
 
     scope "/v1", as: :api_v1, alias: V1 do
@@ -58,7 +58,7 @@ defmodule Xperiments.Web.Router do
   end
 
   # Additional option routes added because of CORS
-  scope "/assigner", Xperiments.Web do
+  scope "/assigner", XperimentsWeb do
     pipe_through [:api, :external]
 
     post "/application/:app_name/experiments", AssignerController, :experiments
@@ -72,7 +72,7 @@ defmodule Xperiments.Web.Router do
   end
 
   # should be last, because scope is too wide
-  scope "/", Xperiments.Web do
+  scope "/", XperimentsWeb do
     pipe_through [:browser, :browser_auth]
 
     forward "/", HomeController, :index

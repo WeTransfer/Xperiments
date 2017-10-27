@@ -1,3 +1,3 @@
-defmodule Xperiments.Web.AuthView do
-  use Xperiments.Web, :view
+defmodule XperimentsWeb.AuthView do
+  use XperimentsWeb, :view
 end

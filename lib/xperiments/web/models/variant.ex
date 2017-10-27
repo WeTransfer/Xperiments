@@ -3,7 +3,7 @@ defmodule Xperiments.Variant do
   Describe variants for an experiment.
   Control group can be set only for one variant.
   """
-  use Xperiments.Web, :model
+  use XperimentsWeb, :model
 
   embedded_schema do
     field :name

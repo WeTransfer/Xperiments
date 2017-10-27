@@ -1,8 +1,8 @@
-defmodule Xperiments.Web.AuthController do
+defmodule XperimentsWeb.AuthController do
   @moduledoc """
   Auth controller responsible for handling Ueberauth responses
   """
-  use Xperiments.Web, :controller
+  use XperimentsWeb, :controller
   alias Xperiments.User
 
   plug Ueberauth
@@ -21,7 +21,7 @@ defmodule Xperiments.Web.AuthController do
       {:error, reason} ->
         conn
         |> put_status(401)
-        |> render(Xperiments.Web.V1.ErrorView, "common_error.json", message: "Could not login with the reason: #{reason}")
+        |> render(XperimentsWeb.V1.ErrorView, "common_error.json", message: "Could not login with the reason: #{reason}")
     end
   end
 

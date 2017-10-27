@@ -1,3 +1,3 @@
-defmodule Xperiments.Web.HomeView do
-  use Xperiments.Web, :view
+defmodule XperimentsWeb.HomeView do
+  use XperimentsWeb, :view
 end

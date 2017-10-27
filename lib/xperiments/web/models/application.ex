@@ -1,5 +1,5 @@
 defmodule Xperiments.Application do
-  use Xperiments.Web, :model
+  use XperimentsWeb, :model
   alias Xperiments.Experiment
 
   schema "applications" do
