@@ -3,21 +3,21 @@ defmodule Xperiments.Factory do
   use Timex
 
   def user_factory do
-    %Xperiments.User{
+    %Xperiments.Cms.User{
       name: sequence("Lev"),
       email: sequence(:email, &"lev.tolstoy#{&1}@wetransfer.com")
     }
   end
 
   def application_factory do
-    %Xperiments.Application{
+    %Xperiments.Cms.Application{
       name: sequence("frontend"),
       settings: %{url: "http://wetest.com"}
     }
   end
 
   def experiment_factory do
-    %Xperiments.Experiment{
+    %Xperiments.Experiments.Experiment{
       name: sequence("Experiment"),
       description: "Change some text",
       start_date: Timex.now |> Timex.shift(days: -1),

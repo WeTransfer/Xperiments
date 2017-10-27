@@ -1,4 +1,4 @@
-defmodule Xperiments.Experiment do
+defmodule Xperiments.Experiments.Experiment do
   @moduledoc """
   The module stores all information about an experiment.
   It belongs to parents: Users and Application. And has many_to_many
@@ -8,7 +8,8 @@ defmodule Xperiments.Experiment do
   *Variants* and *rules* are stored in JSONB fields.
   """
   use XperimentsWeb, :model
-  alias Xperiments.{Application, Variant, Rule, User}
+  alias Xperiments.Cms.{Application, User}
+  alias Xperiments.Experiments.{Variant, Rule}
 
   use EctoStateMachine,
     states: [:draft, :running, :stopped, :terminated, :deleted],
@@ -47,7 +48,7 @@ defmodule Xperiments.Experiment do
     belongs_to :user, User
 
     # used only for tests now, delete it after tests refactoring
-    many_to_many :exclusions, __MODULE__, join_through: Xperiments.Exclusion,
+    many_to_many :exclusions, __MODULE__, join_through: Xperiments.Experiments.Exclusion,
       join_keys: [experiment_a_id: :id, experiment_b_id: :id], on_replace: :delete
 
     embeds_many :variants, Variant, on_replace: :delete

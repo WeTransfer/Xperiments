@@ -2,7 +2,7 @@ defmodule Xperiments.Assigner.ExperimentSupervisor do
   use Supervisor
   require Logger
   alias Xperiments.Assigner.Experiment
-  alias Xperiments.Experiment, as: ModelExperiment
+  alias Xperiments.Experiments.Experiment, as: ModelExperiment
 
   def start_link do
     Supervisor.start_link(__MODULE__, :ok, name: __MODULE__)

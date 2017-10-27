@@ -17,7 +17,7 @@ defmodule Xperiments.Mixfile do
   #
   # Type `mix help compile.app` for more information.
   def application do
-    [mod: {Xperiments, []},
+    [mod: {Xperiments.Application, []},
     extra_applications: [:logger, :runtime_tools]]
   end
 
@@ -29,10 +29,10 @@ defmodule Xperiments.Mixfile do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:phoenix, "~> 1.3.0", override: true},
+    [{:phoenix, "~> 1.3", override: true},
      {:phoenix_pubsub, "~> 1.0"},
-     {:phoenix_ecto, "~> 3.0"},
-     {:phoenix_html, "~> 2.6"},
+     {:phoenix_ecto, "~> 3.3"},
+     {:phoenix_html, "~> 2.10"},
      {:postgrex, ">= 0.0.0"},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},

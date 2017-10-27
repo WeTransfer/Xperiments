@@ -1,6 +1,7 @@
 defmodule XperimentsWeb.AssignerController do
   use XperimentsWeb, :controller
-  alias Xperiments.{Repo, Experiment}
+  alias Xperiments.Repo
+  alias Xperiments.Experiments.Experiment
 
   plug Xperiments.Plug.RateLimit, max_requests: 5, interval_seconds: 60
   plug :auth_request when action in [:example]

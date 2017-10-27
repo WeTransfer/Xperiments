@@ -9,9 +9,9 @@ defmodule Xperiments.Assigner.DispatcherTest do
     app = insert(:application, name: "web")
     excluded_exps = insert_list(2, :experiment, application: app, state: "running")
     exp = insert(:experiment, state: "running", exclusions: excluded_exps)
-    exp = Map.merge(exp, %{exclusions: Xperiments.Exclusion.for_experiment(exp.id)})
+    exp = Map.merge(exp, %{exclusions: Xperiments.Experiments.Exclusion.for_experiment(exp.id)})
     Enum.map(excluded_exps, fn e ->
-      Map.merge(e, %{exclusions: Xperiments.Exclusion.for_experiment(e.id)})
+      Map.merge(e, %{exclusions: Xperiments.Experiments.Exclusion.for_experiment(e.id)})
       |> ExperimentSupervisor.start_experiment()
     end)
     ExperimentSupervisor.start_experiment(exp)

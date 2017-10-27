@@ -1,7 +1,7 @@
-defmodule Xperiments.UserTest do
+defmodule Xperiments.Cms.UserTest do
   use Xperiments.ModelCase
 
-  alias Xperiments.User
+  alias Xperiments.Cms.User
 
   @valid_attrs %{email: "some content", name: "some content", role: "some content"}
   @invalid_attrs %{}

@@ -1,17 +1,17 @@
 defmodule XperimentsWeb.V1.ApplicationController do
   use XperimentsWeb, :controller
-  alias Xperiments.Application
+  alias Xperiments.Cms.Application
 
-  plug :verify_authorized
+  # plug :verify_authorized
 
   def index(conn, _params) do
-    conn = mark_authorized(conn)
+    # conn = mark_authorized(conn)
     apps = Repo.all(Application)
     render conn, "index.json", applications: apps
   end
 
   def create(conn, %{"application" => app}) do
-    conn = authorize!(conn, Application)
+    # conn = authorize!(conn, Application)
     chset = Application.changeset(%Application{}, app)
 
     case Repo.insert(chset) do
@@ -28,7 +28,7 @@ defmodule XperimentsWeb.V1.ApplicationController do
 
   def update(conn, %{"name" => name, "application" => updates}) do
     app = Repo.get_by!(Application, name: name)
-    conn = authorize!(conn, app)
+    # conn = authorize!(conn, app)
     chset = Application.changeset(app, updates)
 
     case Repo.update(chset) do
@@ -45,7 +45,7 @@ defmodule XperimentsWeb.V1.ApplicationController do
 
   def delete(conn, %{"name" => name}) do
     app = Repo.get_by!(Application, name: name)
-    conn = authorize!(conn, app)
+    # conn = authorize!(conn, app)
 
     case Repo.delete(app) do
       {:ok, app} ->

@@ -1,7 +1,8 @@
 defmodule Xperiments.GuardianSerializer do
   @behaviour Guardian.Serializer
 
-  alias Xperiments.{Repo, User}
+  alias Xperiments.Repo
+  alias Xperiments.Cms.User
 
   def for_token(user = %User{}), do: { :ok, "User:#{user.id}" }
   def for_token(_), do: { :error, "Unknown resource type" }

@@ -1,19 +1,19 @@
 defmodule XperimentsWeb.V1.UserController do
   use XperimentsWeb, :controller
-  alias Xperiments.User
+  alias Xperiments.Cms.User
   alias XperimentsWeb.V1.ErrorView
 
-  plug :verify_authorized
+  # plug :verify_authorized
 
   def index(conn, _params) do
     users = Repo.all(User)
     conn
-    |> authorize!(User)
+    # |> authorize!(User)
     |> render("index.json", users: users)
   end
 
   def create(conn, %{"user" => user_data}) do
-    conn = authorize!(conn, User)
+    # conn = authorize!(conn, User)
     chset = User.changeset(%User{}, user_data)
 
     case Repo.insert(chset) do
@@ -30,7 +30,7 @@ defmodule XperimentsWeb.V1.UserController do
 
   def update(conn, %{"id" => id, "user" => updates}) do
     user = Repo.get!(User, id)
-    conn = authorize!(conn, user)
+    # conn = authorize!(conn, user)
     chset = User.changeset(user, updates)
 
     case Repo.update(chset) do
@@ -47,7 +47,7 @@ defmodule XperimentsWeb.V1.UserController do
 
   def delete(conn, %{"id" => id}) do
     user = Repo.get!(User, id)
-    conn = authorize!(conn, user)
+    # conn = authorize!(conn, user)
 
     case Repo.delete(user) do
       {:ok, user} ->

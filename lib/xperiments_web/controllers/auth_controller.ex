@@ -3,7 +3,7 @@ defmodule XperimentsWeb.AuthController do
   Auth controller responsible for handling Ueberauth responses
   """
   use XperimentsWeb, :controller
-  alias Xperiments.User
+  alias Xperiments.Cms.User
 
   plug Ueberauth
 

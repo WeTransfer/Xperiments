@@ -1,6 +1,6 @@
-defmodule Xperiments.ApplicationControllerTest do
+defmodule Xperiments.Cms.ApplicationControllerTest do
   use XperimentsWeb.ConnCase, async: false
-  alias Xperiments.Application
+  alias Xperiments.Cms.Application
 
   setup do
     user = insert(:user, role: "admin")

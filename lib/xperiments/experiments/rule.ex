@@ -1,4 +1,4 @@
-defmodule Xperiments.Rule do
+defmodule Xperiments.Experiments.Rule do
   @moduledoc """
   Defines rules for a segmentation.
 

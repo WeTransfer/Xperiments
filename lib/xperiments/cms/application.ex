@@ -1,6 +1,6 @@
-defmodule Xperiments.Application do
+defmodule Xperiments.Cms.Application do
   use XperimentsWeb, :model
-  alias Xperiments.Experiment
+  alias Xperiments.Experiments.Experiment
 
   schema "applications" do
     field :name, :string

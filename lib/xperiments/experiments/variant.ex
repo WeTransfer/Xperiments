@@ -1,4 +1,4 @@
-defmodule Xperiments.Variant do
+defmodule Xperiments.Experiments.Variant do
   @moduledoc """
   Describe variants for an experiment.
   Control group can be set only for one variant.

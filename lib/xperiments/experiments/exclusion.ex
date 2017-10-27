@@ -1,10 +1,11 @@
-defmodule Xperiments.Exclusion do
+defmodule Xperiments.Experiments.Exclusion do
   @moduledoc """
   Join model for the many to may experiments to itself.
   Uses to store mutual exclusions.
   """
   use XperimentsWeb, :model
-  alias Xperiments.{Experiment, Repo}
+  alias Xperiments.Repo
+  alias Xperiments.Experiments.Experiment
 
   @foreign_key_type :binary_id
   @primary_key false

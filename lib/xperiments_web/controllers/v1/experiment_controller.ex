@@ -1,6 +1,7 @@
 defmodule XperimentsWeb.V1.ExperimentController do
   use XperimentsWeb, :controller
-  alias Xperiments.{Experiment, Exclusion, Application}
+  alias Xperiments.Cms.Application
+  alias Xperiments.Experiments.{Experiment, Exclusion}
   alias Xperiments.BroadcastService
 
   plug :scrub_params, "experiment" when action in [:create, :update]
@@ -44,7 +45,7 @@ defmodule XperimentsWeb.V1.ExperimentController do
 
   def update(conn, %{"id" => id, "experiment" => updates}) do
     exp = Repo.get!(Experiment, id)
-    conn = authorize!(conn, exp)
+    # conn = authorize!(conn, exp)
 
     {exclusions, updates} = Map.pop(updates, "exclusions", [])
     # NOTE: Maybe unnecessary step now
@@ -69,7 +70,7 @@ defmodule XperimentsWeb.V1.ExperimentController do
 
   def change_state(conn, %{"experiment_id" => id, "event" => event}) do
     experiment = Repo.get!(Experiment, id)
-    conn = authorize!(conn, experiment)
+    # conn = authorize!(conn, experiment)
 
     if String.to_atom(event) in Experiment.events do
       changeset = Experiment.change_state(experiment, event)

@@ -34,7 +34,7 @@ defmodule XperimentsWeb do
       alias Xperiments.Repo
       import Ecto
       import Ecto.Query
-      import Bodyguard.Controller
+#      import Bodyguard.Controller
 
       alias Xperiments.Router.Helpers, as: Routes
     end
@@ -42,11 +42,11 @@ defmodule XperimentsWeb do
 
   def view do
     quote do
-      use Phoenix.View, root: "lib/xperiments/web/templates", namespace: XperimentsWeb
+      use Phoenix.View, root: "lib/xperiments_web/templates", namespace: XperimentsWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_csrf_token: 0, get_flash: 2, view_module: 1]
-      import Bodyguard.Controller
+#      import Bodyguard.Controller
 
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML

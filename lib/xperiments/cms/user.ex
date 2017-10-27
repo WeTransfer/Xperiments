@@ -1,4 +1,4 @@
-defmodule Xperiments.User do
+defmodule Xperiments.Cms.User do
   use XperimentsWeb, :model
   alias Xperiments.Repo
   alias Ueberauth.Auth
@@ -9,7 +9,7 @@ defmodule Xperiments.User do
     field :role, :string, default: "user"
     field :avatar_uri, :string
 
-    has_many :experiments, Xperiments.Experiment
+    has_many :experiments, Xperiments.Experiments.Experiment
 
     timestamps()
   end
