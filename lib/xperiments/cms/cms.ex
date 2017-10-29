@@ -34,6 +34,14 @@ defmodule Xperiments.Cms do
     Repo.all(Application)
   end
 
+  def get_application(name) do
+    case Repo.get_by(Application, name: name) do
+      nil -> {:error, :application_not_found, name}
+      app -> {:ok, app}
+    end
+  end
+
+
   def create_application(params) do
     changeset = Application.changeset(%Application{}, params)
     Repo.insert(changeset)
