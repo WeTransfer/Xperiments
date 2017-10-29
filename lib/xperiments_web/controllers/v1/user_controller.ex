@@ -1,63 +1,35 @@
 defmodule XperimentsWeb.V1.UserController do
   use XperimentsWeb, :controller
-  alias Xperiments.Cms.User
-  alias XperimentsWeb.V1.ErrorView
+  alias Xperiments.Cms
 
-  # plug :verify_authorized
+  action_fallback XperimentsWeb.V1.FallbackController
 
   def index(conn, _params) do
-    users = Repo.all(User)
     conn
-    # |> authorize!(User)
-    |> render("index.json", users: users)
+    |> render("index.json", users: Cms.get_users_list())
   end
 
-  def create(conn, %{"user" => user_data}) do
-    # conn = authorize!(conn, User)
-    chset = User.changeset(%User{}, user_data)
-
-    case Repo.insert(chset) do
-      {:ok, user} ->
-        conn
-        |> put_status(:created)
-        |> render("show.json", user: user)
-      {:error, chset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(ErrorView, "error.json", changeset: chset)
+  def create(conn, %{"user" => user_params}) do
+    with {:ok, user} <- Cms.create_user(user_params) do
+      conn
+      |> put_status(:created)
+      |> render("show.json", user: user)
     end
   end
 
   def update(conn, %{"id" => id, "user" => updates}) do
-    user = Repo.get!(User, id)
-    # conn = authorize!(conn, user)
-    chset = User.changeset(user, updates)
-
-    case Repo.update(chset) do
-      {:ok, user} ->
-        conn
-        |> put_status(:ok)
-        |> render("show.json", user: user)
-      {:error, chset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(ErrorView, "error.json", changeset: chset)
+    with {:ok, user} <- Cms.update_user(id, updates) do
+      conn
+      |> put_status(:ok)
+      |> render("show.json", user: user)
     end
   end
 
   def delete(conn, %{"id" => id}) do
-    user = Repo.get!(User, id)
-    # conn = authorize!(conn, user)
-
-    case Repo.delete(user) do
-      {:ok, user} ->
-        conn
-        |> put_status(:ok)
-        |> render("show.json", user: user)
-      {:error, chset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(ErrorView, "error.json", changeset: chset)
+    with {:ok, user} <- Cms.delete_user(id) do
+      conn
+      |> put_status(:ok)
+      |> render("show.json", user: user)
     end
   end
 end
