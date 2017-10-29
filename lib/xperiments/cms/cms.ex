@@ -4,7 +4,9 @@ defmodule Xperiments.Cms do
   It allows to manage applications, users and other.
   """
   alias Xperiments.Repo
-  alias Xperiments.Cms.User
+  alias Xperiments.Cms.{User, Application}
+
+  ## User
 
   def get_users_list do
     Repo.all(User)
@@ -24,5 +26,27 @@ defmodule Xperiments.Cms do
   def delete_user(id) do
     user = Repo.get!(User, id)
     Repo.delete(user)
+  end
+
+  ## Application
+
+  def get_applications_list do
+    Repo.all(Application)
+  end
+
+  def create_application(params) do
+    changeset = Application.changeset(%Application{}, params)
+    Repo.insert(changeset)
+  end
+
+  def update_application(name, update_params) do
+    application = Repo.get_by!(Application, name: name)
+    changeset = Application.changeset(application, update_params)
+    Repo.update(changeset)
+  end
+
+  def delete_application(name) do
+    application = Repo.get_by!(Application, name: name)
+    Repo.delete(application)
   end
 end

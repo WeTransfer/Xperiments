@@ -1,61 +1,34 @@
 defmodule XperimentsWeb.V1.ApplicationController do
   use XperimentsWeb, :controller
-  alias Xperiments.Cms.Application
+  alias Xperiments.Cms
 
-  # plug :verify_authorized
+  action_fallback XperimentsWeb.V1.FallbackController
 
   def index(conn, _params) do
-    # conn = mark_authorized(conn)
-    apps = Repo.all(Application)
-    render conn, "index.json", applications: apps
+    render conn, "index.json", applications: Cms.get_applications_list()
   end
 
-  def create(conn, %{"application" => app}) do
-    # conn = authorize!(conn, Application)
-    chset = Application.changeset(%Application{}, app)
-
-    case Repo.insert(chset) do
-      {:ok, app} ->
-        conn
-        |> put_status(:created)
-        |> render("show.json", application: app)
-      {:error, chset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(ErrorView, "error.json", changeset: chset)
+  def create(conn, %{"application" => params}) do
+    with {:ok, app} <- Cms.create_application(params) do
+      conn
+      |> put_status(:created)
+      |> render("show.json", application: app)
     end
   end
 
   def update(conn, %{"name" => name, "application" => updates}) do
-    app = Repo.get_by!(Application, name: name)
-    # conn = authorize!(conn, app)
-    chset = Application.changeset(app, updates)
-
-    case Repo.update(chset) do
-      {:ok, app} ->
-        conn
-        |> put_status(:ok)
-        |> render("show.json", application: app)
-      {:error, chset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(ErrorView, "error.json", changeset: chset)
+    with {:ok, app} <- Cms.update_application(name, updates) do
+      conn
+      |> put_status(:ok)
+      |> render("show.json", application: app)
     end
   end
 
   def delete(conn, %{"name" => name}) do
-    app = Repo.get_by!(Application, name: name)
-    # conn = authorize!(conn, app)
-
-    case Repo.delete(app) do
-      {:ok, app} ->
-        conn
-        |> put_status(:ok)
-        |> render("show.json", application: app)
-      {:error, chset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(ErrorView, "error.json", changeset: chset)
+    with {:ok, app} <- Cms.delete_application(name) do
+      conn
+      |> put_status(:ok)
+      |> render("show.json", application: app)
     end
   end
 end
