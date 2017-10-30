@@ -42,7 +42,7 @@ defmodule Xperiments.Mixfile do
      {:ueberauth, "~> 0.4"},
      {:ueberauth_google, "~> 0.5"},
      {:guardian, "~> 0.14"},
-     {:bodyguard, "~> 0.6.1"},
+     {:bodyguard, "~> 2.1"},
      {:distillery, "~> 1.0"},
      {:remote_ip, "~> 0.1.0"},
      {:hammer, "~> 0.1.0"},

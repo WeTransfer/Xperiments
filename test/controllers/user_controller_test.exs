@@ -4,19 +4,21 @@ defmodule Xperiments.Cms.UserControllerTest do
 
   setup do
     user = insert(:user, role: "admin")
-
-    conn =
-      build_conn()
-      |> bypass_through(Xperiments.Router, [:api, :browser])
-      |> get("/")
-      |> Map.update!(:state, fn (_) -> :set end)
-      |> Guardian.Plug.sign_in(user, :token, [])
-      |> send_resp(200, "Flush the session yo")
-      |> recycle()
-      |> put_req_header("accept", "application/json")
+    conn = sign_in(user)
 
     insert_list(3, :user)
     {:ok, conn: conn}
+  end
+
+  def sign_in(user) do
+    build_conn()
+    |> bypass_through(Xperiments.Router, [:api, :browser])
+    |> get("/")
+    |> Map.update!(:state, fn (_) -> :set end)
+    |> Guardian.Plug.sign_in(user, :token, [])
+    |> send_resp(200, "Flush the session yo")
+    |> recycle()
+    |> put_req_header("accept", "application/json")
   end
 
   @api_url "/api/v1/users"
@@ -55,5 +57,17 @@ defmodule Xperiments.Cms.UserControllerTest do
     |> json_response(200)
 
     assert Repo.get(User, user.id) == nil
+  end
+
+  test "forbidden access for simple users" do
+    conn = sign_in(insert(:user))
+    get(conn, @api_url)
+    |> json_response(403)
+    post(conn, @api_url, %{user: %{}})
+    |> json_response(403)
+    put(conn, @api_url <> "/1", %{user: %{}})
+    |> json_response(403)
+    delete(conn, @api_url <> "/1")
+    |> json_response(403)
   end
 end

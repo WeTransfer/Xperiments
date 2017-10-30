@@ -2,9 +2,13 @@ defmodule Xperiments.Experiments do
   @moduledoc """
   Experiments context
   """
+  @behaviour Bodyguard.Policy
+
   import Ecto.Query, warn: false
+
   alias Xperiments.Repo
   alias Xperiments.Experiments.{Experiment, Exclusion}
+  alias Xperiments.Cms.User
 
   def get_experiments_for_app(app) do
     Experiment.all_for_application(app)
@@ -62,4 +66,15 @@ defmodule Xperiments.Experiments do
       variant -> {:ok, variant}
     end
   end
+
+  # Bodyguard callback
+  @doc """
+  Authorization policies:
+    - Admins can do everything
+    - Users can't change states and update not their own experiment
+  """
+  def authorize(_, %User{role: "admin"}, _), do: true
+  def authorize(:update_experiment, %User{id: user_id}, %Experiment{user_id: exp_user_id}) when user_id != exp_user_id, do: false
+  def authorize(:change_experiment_state, _, _), do: false
+  def authorize(_, _, _), do: true
 end

@@ -14,6 +14,13 @@ defmodule XperimentsWeb.V1.FallbackController do
     |> render(XperimentsWeb.V1.ErrorView, "common_error.json", %{error: %{experiment: msg}})
   end
 
+  def call(conn, {:error, :unauthorized}) do
+    conn
+    |> put_status(:forbidden)
+    |> render(ErrorView, :"403")
+  end
+
+
   def call(conn, {:error, changeset, _}),
     do: call(conn, {:error, changeset})
   def call(conn, {:error, changeset}) do

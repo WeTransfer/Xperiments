@@ -3,6 +3,8 @@ defmodule Xperiments.Cms do
   CMS functionalit.
   It allows to manage applications, users and other.
   """
+  @behaviour Bodyguard.Policy
+
   alias Xperiments.Repo
   alias Xperiments.Cms.{User, Application}
 
@@ -57,4 +59,14 @@ defmodule Xperiments.Cms do
     application = Repo.get_by!(Application, name: name)
     Repo.delete(application)
   end
+
+  # Bodyguard callback
+  @doc """
+  Policies for aothurizations:
+    - Admins can do everything
+    - Simple users can see list of applications
+  """
+  def authorize(_, %User{role: "admin"}, _), do: true
+  def authorize(:get_applications_list, _, _params), do: true
+  def authorize(_, _, _), do: false
 end
