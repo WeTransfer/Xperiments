@@ -349,13 +349,13 @@ const options = {
       type: 'object',
       rules: {
         frequency: {
-          type: 'string'
+          type: 'number'
         },
         route: {
           type: 'string',
           required: true
         },
-        TrackingID: {
+        trackingId: {
           type: 'string',
           required: true
         }
@@ -364,13 +364,13 @@ const options = {
         {
           key:'frequency',
           title: 'Select how often the Plus panel should open',
-          type: 'string',
+          type: 'number',
           enum: [
             {label: 'never', value: '0'},
             {label: 'every 2 visits', value: '2'},
             {label: 'every 3 visits', value: '3'},
             {label: 'every 5 visits', value: '5'},
-            {label: 'always', value: '1'}
+            {label: 'always open', value: '1'}
           ]
         },
         {
@@ -383,8 +383,8 @@ const options = {
           ]
         },
         {
-          key:'TrackingID',
-          title: 'TrackingID'
+          key:'trackingId',
+          title: 'trackingId'
         }
       ]
     }
