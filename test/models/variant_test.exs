@@ -1,6 +1,6 @@
-defmodule Xperiments.VariantTest do
+defmodule Xperiments.Experiments.VariantTest do
   use Xperiments.ModelCase
-  alias Xperiments.Variant
+  alias Xperiments.Experiments.Variant
 
   @valid_attrs %{name: "Variant A", allocation: 30, description: "Test the red button",
   payload: "{'color': 'red'}", control_group: false}

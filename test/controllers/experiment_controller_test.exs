@@ -1,24 +1,28 @@
-defmodule Xperiments.ExperimentControllerTest do
-  use Xperiments.Web.ConnCase, async: false
+defmodule Xperiments.Experiments.ExperimentControllerTest do
+  use XperimentsWeb.ConnCase, async: false
   use Timex
-  alias Xperiments.Experiment
+  alias Xperiments.Experiments.Experiment
 
   setup do
     user = insert(:user)
 
-    conn =
-      Phoenix.ConnTest.build_conn()
-      |> bypass_through(Xperiments.Router, [:api, :browser])
-      |> get("/auth/login")
-      |> Map.update!(:state, fn (_) -> :set end)
-      |> Guardian.Plug.sign_in(user, :token, [])
-      |> send_resp(200, "Flush the session yo")
-      |> recycle()
-      |> put_req_header("accept", "application/json")
+    conn = sign_in(user)
 
     app = insert(:application, name: "frontend")
     {:ok, conn: conn, app: app, user: user}
   end
+
+  def sign_in(user) do
+    build_conn()
+    |> bypass_through(Xperiments.Router, [:api, :browser])
+    |> get("/auth/login")
+    |> Map.update!(:state, fn (_) -> :set end)
+    |> Guardian.Plug.sign_in(user, :token, [])
+    |> send_resp(200, "Flush the session yo")
+    |> recycle()
+    |> put_req_header("accept", "application/json")
+  end
+
 
   def insert_experiment(context) do
     insert(:experiment,
@@ -103,17 +107,15 @@ defmodule Xperiments.ExperimentControllerTest do
                                    "variants" => [%{}, %{"allocation" => ["must be greater than 0"]}]}}
   end
 
-  test "test authorization for udpate and change_state actions", context do
+  test "authorization for udpate and change_state actions", context do
     exp = insert_experiment(%{user: insert(:user), app: context.app})
     updates = %{name: "Supre Experiment"}
 
-    assert_raise Bodyguard.NotAuthorizedError, fn ->
-      put(context.conn, @api_path <> "/experiments/" <> exp.id, %{experiment: updates})
-    end
+    put(context.conn, @api_path <> "/experiments/" <> exp.id, %{experiment: updates})
+    |> json_response(403)
 
-    assert_raise Bodyguard.NotAuthorizedError, fn ->
-      put(context.conn, @api_path <> "/experiments/" <> exp.id <> "/state", %{event: "run"})
-    end
+    put(context.conn, @api_path <> "/experiments/" <> exp.id <> "/state", %{event: "run"})
+    |> json_response(403)
   end
 
   test "/index returns a list of experiments, except those which are in a deleted state", context do
@@ -126,10 +128,13 @@ defmodule Xperiments.ExperimentControllerTest do
   end
 
   test "/state changes state for a given experiemnt", context do
+    admin = insert(:user, role: "admin")
     exp = insert(:experiment, application: context.app, variants: [%{ Xperiments.Factory.variant() | control_group: true }], start_date: Timex.now() |> Timex.shift(days: 1), user: context.user)
     assert exp.state == "draft"
+
+    conn = sign_in(admin)
     body =
-      put(context[:conn], @api_path <> "/experiments/" <> exp.id <> "/state", %{event: "run"})
+      put(conn, @api_path <> "/experiments/" <> exp.id <> "/state", %{event: "run"})
       |> json_response(200)
     assert body["state"] == "running"
     assert Repo.get!(Experiment, exp.id).state == "running"
@@ -200,6 +205,11 @@ defmodule Xperiments.ExperimentControllerTest do
     import Mock
     alias Xperiments.BroadcastService
 
+    def admin_conn do
+      sign_in(insert(:user, role: "admin"))
+    end
+
+
     def insert_runnable_experiment(context, state \\ "draft") do
       insert(:experiment, state: state, variants: [%{Xperiments.Factory.variant(100) | control_group: true}], start_date: Timex.now |> Timex.shift(days: 1), user: context.user)
     end
@@ -207,7 +217,7 @@ defmodule Xperiments.ExperimentControllerTest do
     test "broadcast correct messages when we run an experiment", context do
       exp = insert_runnable_experiment(context)
       with_mock BroadcastService, [broadcast_state_changes: fn(_, _, _) -> :ok end] do
-        put(context.conn, "#{@api_path}/experiments/#{exp.id}/state", %{event: "run"})
+        put(admin_conn(), "#{@api_path}/experiments/#{exp.id}/state", %{event: "run"})
         |> json_response(200)
 
         assert called BroadcastService.broadcast_state_changes("draft", "running", :_)
@@ -217,7 +227,7 @@ defmodule Xperiments.ExperimentControllerTest do
     test "broadcast correct messages when we stop an experiment", context do
       exp = insert_runnable_experiment(context, "running")
       with_mock BroadcastService, [broadcast_state_changes: fn(_, _, _) -> :ok end] do
-        put(context.conn, "#{@api_path}/experiments/#{exp.id}/state", %{event: "stop"})
+        put(admin_conn(), "#{@api_path}/experiments/#{exp.id}/state", %{event: "stop"})
         |> json_response(200)
 
         assert called BroadcastService.broadcast_state_changes("running", "stopped", :_)
@@ -227,7 +237,7 @@ defmodule Xperiments.ExperimentControllerTest do
     test "broadcast correct messages when we terminate an experiment", context do
       exp = insert_runnable_experiment(context, "stopped")
       with_mock BroadcastService, [broadcast_state_changes: fn(_, _, _) -> :ok end] do
-        put(context.conn, "#{@api_path}/experiments/#{exp.id}/state", %{event: "terminate"})
+        put(admin_conn(), "#{@api_path}/experiments/#{exp.id}/state", %{event: "terminate"})
         |> json_response(200)
 
         assert called BroadcastService.broadcast_state_changes("stopped", "terminated", :_)

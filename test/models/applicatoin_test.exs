@@ -1,8 +1,8 @@
-defmodule Xperiments.ApplicationTest do
+defmodule Xperiments.Cms.ApplicationTest do
   use Xperiments.ModelCase
   import Xperiments.Factory
 
-  alias Xperiments.Application
+  alias Xperiments.Cms.Application
 
   @valid_attrs %{name: "some content"}
   @invalid_attrs %{}

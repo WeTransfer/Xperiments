@@ -1,23 +1,25 @@
-defmodule Xperiments.ApplicationControllerTest do
-  use Xperiments.Web.ConnCase, async: false
-  alias Xperiments.Application
+defmodule Xperiments.Cms.ApplicationControllerTest do
+  use XperimentsWeb.ConnCase, async: false
+  alias Xperiments.Cms.Application
 
   setup do
     user = insert(:user, role: "admin")
-
-    conn =
-      build_conn()
-      |> bypass_through(Xperiments.Router, [:api, :browser])
-      |> get("/")
-      |> Map.update!(:state, fn (_) -> :set end)
-      |> Guardian.Plug.sign_in(user, :token, [])
-      |> send_resp(200, "Flush the session yo")
-      |> recycle()
-      |> put_req_header("accept", "application/json")
+    conn = sign_in(user)
 
     insert(:application)
     insert(:application, %{name: "backend"})
     {:ok, conn: conn}
+  end
+
+  def sign_in(user) do
+    build_conn()
+    |> bypass_through(Xperiments.Router, [:api, :browser])
+    |> get("/")
+    |> Map.update!(:state, fn (_) -> :set end)
+    |> Guardian.Plug.sign_in(user, :token, [])
+    |> send_resp(200, "Flush the session yo")
+    |> recycle()
+    |> put_req_header("accept", "application/json")
   end
 
   @api_url "/api/v1/applications"
@@ -58,5 +60,17 @@ defmodule Xperiments.ApplicationControllerTest do
     |> json_response(200)
 
     assert Repo.get(Application, app.id) == nil
+  end
+
+  test "forbidden access for simple users except getting a list of applicatoins" do
+    conn = sign_in(insert(:user))
+    get(conn, @api_url)
+    |> json_response(200)
+    post(conn, @api_url, %{application: %{}})
+    |> json_response(403)
+    put(conn, @api_url <> "/1", %{application: %{}})
+    |> json_response(403)
+    delete(conn, @api_url <> "/1")
+    |> json_response(403)
   end
 end

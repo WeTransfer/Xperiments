@@ -37,7 +37,7 @@ defmodule Xperiments.Assigner.ExperimentSupervisorTest do
       exp = insert(:experiment, state: "running", end_date: Timex.shift(Timex.now, days: -1))
       :error = ExperimentSupervisor.start_experiment(exp)
       :timer.sleep 30
-      db_exp = Xperiments.Repo.get!(Xperiments.Experiment, exp.id)
+      db_exp = Xperiments.Repo.get!(Xperiments.Experiments.Experiment, exp.id)
       assert db_exp.state == "terminated"
     end
     assert capture_log(err_fun) =~ "Given experiment is not started"

@@ -1,9 +1,10 @@
-defmodule Xperiments.ExperimentTest do
+defmodule Xperiments.Experiments.ExperimentTest do
   use Xperiments.ModelCase
   use Timex
 
   import Xperiments.Factory
-  alias Xperiments.{Experiment, Application}
+  alias Xperiments.Experiments.Experiment
+  alias Xperiments.Cms.Application
 
   def build_date(shift_days) do
     Timex.now()
