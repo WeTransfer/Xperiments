@@ -7,7 +7,7 @@ defmodule Xperiments.Assigner.ExperimentTest do
     excluded_exp = insert(:experiment, application: app)
     exp =
       insert(:experiment, state: "running", max_users: 5, exclusions: [excluded_exp], rules: Xperiments.Factory.rules_1)
-    exp = Map.merge(exp, %{exclusions: Xperiments.Exclusion.for_experiment(exp.id)})
+    exp = Map.merge(exp, %{exclusions: Xperiments.Experiments.Exclusion.for_experiment(exp.id)})
     ExperimentSupervisor.start_experiment(exp)
     [exp: exp, excluded_exp: excluded_exp]
   end
@@ -118,16 +118,16 @@ defmodule Xperiments.Assigner.ExperimentTest do
 
   test "statistics saves to DB after treshhold impressions", context do
     {:ok, state} = Experiment.init(context.exp)
-    db_exp = Xperiments.Repo.get!(Xperiments.Experiment, context.exp.id)
+    db_exp = Xperiments.Repo.get!(Xperiments.Experiments.Experiment, context.exp.id)
     assert db_exp.statistics == nil
     Enum.scan(0..5, state, fn _, state ->
       {:noreply, new_state} = Experiment.handle_cast({:inc_impression, "any_var_id"}, state)
       new_state
     end)
     :timer.sleep(100) # wait for an async db query
-    db_exp = Xperiments.Repo.get!(Xperiments.Experiment, context.exp.id)
+    db_exp = Xperiments.Repo.get!(Xperiments.Experiments.Experiment, context.exp.id)
     assert db_exp.statistics ==
-      %Xperiments.Experiment.Statistics{
+      %Xperiments.Experiments.Experiment.Statistics{
         common_impression: 4,
         variants_impression: %{"any_var_id" => 4}
       }

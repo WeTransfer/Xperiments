@@ -12,7 +12,7 @@ defmodule Xperiments.Assigner.Experiment do
   """
   use GenServer
   require Logger
-  alias Xperiments.Experiment, as: ModelExperiment
+  alias Xperiments.Experiments.Experiment, as: ModelExperiment
 
   @stat_treshold Application.get_env(:xperiments, Experiment)[:stat_threshold] # defines how often save statistic data to a DB
 

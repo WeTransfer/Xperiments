@@ -1,6 +1,6 @@
-defmodule Xperiments.RuleTest do
+defmodule Xperiments.Experiments.RuleTest do
   use Xperiments.ModelCase
-  alias Xperiments.Rule
+  alias Xperiments.Experiments.Rule
 
   @valid_attrs %{"parameter" => "lang", "type" => "string", "operator" => "==", "value" => "eu"}
 

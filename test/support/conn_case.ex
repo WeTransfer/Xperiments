@@ -1,4 +1,4 @@
-defmodule Xperiments.Web.ConnCase do
+defmodule XperimentsWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -25,11 +25,11 @@ defmodule Xperiments.Web.ConnCase do
       import Ecto.Changeset
       import Ecto.Query
 
-      # import Xperiments.Web.Router.Helpers
+      # import XperimentsWeb.Router.Helpers
       import Xperiments.Factory
 
       # The default endpoint for testing
-      @endpoint Xperiments.Web.Endpoint
+      @endpoint XperimentsWeb.Endpoint
     end
   end
 

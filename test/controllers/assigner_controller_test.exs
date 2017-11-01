@@ -1,5 +1,5 @@
 defmodule Xperiments.AssignerControllerTest do
-  use Xperiments.Web.ConnCase, async: false
+  use XperimentsWeb.ConnCase, async: false
   import Mock
   alias Xperiments.Assigner.ExperimentSupervisor
   use Hammer, backend: Hammer.Backend.Redis, only: [:delete_buckets]
@@ -45,7 +45,7 @@ defmodule Xperiments.AssignerControllerTest do
     assert length(body["assign"]) == 3
     assert hd(body["assign"])["name"] # test that we return a name of a requested experiment
     ids =
-      Xperiments.Repo.all(Xperiments.Experiment)
+      Xperiments.Repo.all(Xperiments.Experiments.Experiment)
       |> Enum.map(& &1.id)
     returned_ids = body["assign"] |> Enum.map(fn e -> e["id"] end)
     assert Enum.sort(returned_ids) == Enum.sort(ids)
@@ -54,8 +54,8 @@ defmodule Xperiments.AssignerControllerTest do
   test "returning of a specific variant", context do
     exp = insert(:experiment)
     var = hd(exp.variants)
-    salt = Application.get_env(:xperiments, Xperiments.Web.Endpoint)[:secret_key_base]
-    token = Phoenix.Token.sign(Xperiments.Web.Endpoint, salt, 1)
+    salt = Application.get_env(:xperiments, XperimentsWeb.Endpoint)[:secret_key_base]
+    token = Phoenix.Token.sign(XperimentsWeb.Endpoint, salt, 1)
 
     # without a token
     get(context.conn, "#{@api_path}/experiments/#{exp.id}/variants/#{var.id}")
@@ -70,7 +70,7 @@ defmodule Xperiments.AssignerControllerTest do
 
   describe "Impreassions" do
     setup context do
-      exp = hd(Xperiments.Repo.all(Xperiments.Experiment))
+      exp = hd(Xperiments.Repo.all(Xperiments.Experiments.Experiment))
       [
         conn: context.conn,
         exp: exp,
@@ -93,7 +93,7 @@ defmodule Xperiments.AssignerControllerTest do
         |> json_response(200)
       end
       :timer.sleep 100 # yep, async tests are hard
-      db_exp = Xperiments.Repo.get!(Xperiments.Experiment, context.exp.id)
+      db_exp = Xperiments.Repo.get!(Xperiments.Experiments.Experiment, context.exp.id)
       assert db_exp.statistics.common_impression == 4
       assert db_exp.statistics.variants_impression == %{hd(context.exp.variants).id => 4}
     end

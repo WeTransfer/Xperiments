@@ -1,6 +1,6 @@
 use Mix.Config
 
-config :xperiments, Xperiments.Web.Endpoint,
+config :xperiments, XperimentsWeb.Endpoint,
   http: [port: 8080],
   url: [host: {:system, "HOST", "xperiments.wetransfer.net"}, port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json",

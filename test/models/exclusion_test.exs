@@ -1,8 +1,8 @@
-defmodule Xperiments.ExclusionTest do
+defmodule Xperiments.Experiments.ExclusionTest do
   use Xperiments.ModelCase
 
   import Xperiments.Factory
-  alias Xperiments.Exclusion
+  alias Xperiments.Experiments.Exclusion
 
   test "udpate exclusions" do
     app = insert(:application)
