@@ -448,7 +448,28 @@ const options = {
         }
       ]
     }
-  }
+  },
+  wallpaper: {
+    name: 'Wallpaper',
+    key: 'wallpaper',
+    defaults: {
+      path: ''
+    },
+    schema: {
+      type: 'object',
+      rules: {
+        path: {
+          type: 'string'
+        }
+      },
+      properties: [
+        {
+          key: 'path',
+          title: 'Path'
+        }
+      ]
+    }
+  },
 };
 
 export default {
