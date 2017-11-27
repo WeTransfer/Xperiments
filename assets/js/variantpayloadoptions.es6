@@ -366,11 +366,11 @@ const options = {
           title: 'Select how often the Plus panel should open',
           type: 'number',
           enum: [
-            {label: 'never', value: '0'},
-            {label: 'every 2 visits', value: '2'},
-            {label: 'every 3 visits', value: '3'},
-            {label: 'every 5 visits', value: '5'},
-            {label: 'always open', value: '1'}
+            {label: 'never', value: 0},
+            {label: 'every 2 visits', value: 2},
+            {label: 'every 3 visits', value: 3},
+            {label: 'every 5 visits', value: 5},
+            {label: 'always open', value: 1}
           ]
         },
         {

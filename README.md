@@ -19,7 +19,7 @@ It's very fast and can handle millions of users.
 * **Experiment Management UI** - Comes bundled with a Material-UI based interface to manage experiments
 
 ## Requirements
-  
+
   * Postgresql verions 9.4 and newer
   * Elixir 1.4
   * Erlang 19.0 (might work on older versions, not tested)
@@ -39,4 +39,4 @@ It's very fast and can handle millions of users.
 % mix phx.server
 ```
 
-Now you can visit [`localhost:5000`](http://localhost:5000) from your browser.
+Now you can visit [`lvh.me:5000`](http://lvh.me:5000) from your browser.
