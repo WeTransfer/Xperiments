@@ -8,6 +8,7 @@ config :xperiments, XperimentsWeb.Endpoint,
 
 config :xperiments, Experiment,
   stat_threshold: 4
+config :xperiments, rate_limiter: Xperiments.Plug.RateLimitTest
 
 # Print only warnings and errors during test
 config :logger, level: :warn
