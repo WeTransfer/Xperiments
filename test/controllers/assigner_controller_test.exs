@@ -2,7 +2,6 @@ defmodule Xperiments.AssignerControllerTest do
   use XperimentsWeb.ConnCase, async: false
   import Mock
   alias Xperiments.Assigner.ExperimentSupervisor
-  use Hammer, backend: Hammer.Backend.Redis, only: [:delete_buckets]
 
   setup do
     for e_pid <- ExperimentSupervisor.experiment_pids() do
@@ -14,10 +13,6 @@ defmodule Xperiments.AssignerControllerTest do
       build_conn()
       |> put_req_header("accept", "application/json")
       |> put_req_header("x-forwarded-for", "for=127.0.0.1")
-
-    on_exit fn ->
-      delete_buckets("127.0.0.1:assigner/application/test_app/experiments/events")
-    end
 
     [conn: conn, app: app]
   end
@@ -38,17 +33,12 @@ defmodule Xperiments.AssignerControllerTest do
 
   @api_path "/assigner/application/test_app"
 
-  test "/experiments returns assigner variants", context do
+  test "/experiments return variants based on given segments", context do
     body =
-      post(context.conn, @api_path <> "/experiments", %{})
+      post(context.conn, @api_path <> "/experiments", %{"segments" => %{"lang" => "ru", "system" => "osx"}})
       |> json_response(200)
     assert length(body["assign"]) == 3
     assert hd(body["assign"])["name"] # test that we return a name of a requested experiment
-    ids =
-      Xperiments.Repo.all(Xperiments.Experiments.Experiment)
-      |> Enum.map(& &1.id)
-    returned_ids = body["assign"] |> Enum.map(fn e -> e["id"] end)
-    assert Enum.sort(returned_ids) == Enum.sort(ids)
   end
 
   test "returning of a specific variant", context do
@@ -66,6 +56,31 @@ defmodule Xperiments.AssignerControllerTest do
       get(context.conn, "#{@api_path}/experiments/#{exp.id}/variants/#{var.id}?token=#{token}")
       |> json_response(200)
     assert hd(body["assign"])["id"] == exp.id
+  end
+
+  test "parsing USER_AGENT if given and add to segemts", context do
+    user_agent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"
+    parsed_ua = %{"browser" => "Firefox", "platform" => "Windows 7", "version" => "47.0"}
+    segments = %{"lang" => "en"}
+    with_mock Xperiments.Assigner.Dispatcher, [get_suitable_experiments: fn (_segments, _assigned) -> [] end] do
+      post(context.conn, @api_path <> "/experiments", %{user_agent: user_agent, segments: segments})
+      assert called Xperiments.Assigner.Dispatcher.get_suitable_experiments(Map.merge(parsed_ua, segments), nil)
+    end
+  end
+
+  test "parsing of bad USER_AGENT string", context do
+    segments = %{"lang" => "zb"}
+    with_mock Xperiments.Assigner.Dispatcher, [get_suitable_experiments: fn (_segments, _assigned) -> [] end] do
+      post(context.conn, @api_path <> "/experiments", %{"user_agent" => "плохая строка", "segments" => segments})
+      assert called Xperiments.Assigner.Dispatcher.get_suitable_experiments(segments, nil)
+    end
+  end
+
+  test "rejecting requests with invalid params", context do
+    Enum.each [%{}, %{"segments" => nil}, %{"segments" => %{}}], fn params ->
+      response = post(context.conn, @api_path <> "/experiments", params)
+      assert response.status == 204
+    end
   end
 
   describe "Impreassions" do
@@ -96,17 +111,6 @@ defmodule Xperiments.AssignerControllerTest do
       db_exp = Xperiments.Repo.get!(Xperiments.Experiments.Experiment, context.exp.id)
       assert db_exp.statistics.common_impression == 4
       assert db_exp.statistics.variants_impression == %{hd(context.exp.variants).id => 4}
-    end
-
-    test "requests are throttled", context do
-      for _i <- 0..4 do
-        post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
-        |> json_response(200)
-      end
-      body =
-        post(context.conn, "#{@api_path}/experiments/events", %{event: "impression", payload: context.call_payload})
-      |> json_response(403)
-      assert body == %{"error" => "Rate limit exceeded"}
     end
   end
 
