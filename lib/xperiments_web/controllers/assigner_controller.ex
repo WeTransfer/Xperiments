@@ -3,7 +3,7 @@ defmodule XperimentsWeb.AssignerController do
   alias Xperiments.Repo
   alias Xperiments.Experiments.Experiment
 
-  plug Xperiments.Plug.RateLimit, max_requests: 5, interval_seconds: 60
+  plug Application.get_env(:xperiments, :rate_limiter), max_requests: 5, interval_seconds: 60
   plug :auth_request when action in [:example]
 
   def experiments(conn, params) do
