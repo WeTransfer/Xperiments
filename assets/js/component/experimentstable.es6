@@ -50,7 +50,7 @@ export default class ExperimentsTable extends React.Component {
     showingExperimentId: null,
     cloningExperimentId: null
   }
-  
+
   showExperiment(id) {
     this.setState({
       showingExperimentId: id
@@ -115,7 +115,7 @@ export default class ExperimentsTable extends React.Component {
     let terminateAction = <a onClick={() => this.terminateExperiment(experiment.id)}>{`Kill${ingPostfix}`}</a>;
     let stopAction = <a onClick={() => this.stopExperiment(experiment.id)}>{`Stop${ingPostfix}`}</a>;
     let reportAction = <a target="_blank" href={config.reports.url}>Report</a>;
-    
+
     if (user.role === CONSTANTS.USER_ADMIN) {
       if (experiment.state === CONSTANTS.EXPERIMENT_STATE_DRAFT) {
         actions.push(' | ');
@@ -155,7 +155,7 @@ export default class ExperimentsTable extends React.Component {
       let visibleExperiment = this.props.list.filter((experiment) => {
         return experiment.id === this.state.showingExperimentId;
       });
-      
+
       if (visibleExperiment) {
         const actions = [
           <FlatButton
@@ -186,7 +186,7 @@ export default class ExperimentsTable extends React.Component {
       let clonableExperiment = this.props.list.filter((experiment) => {
         return experiment.id === this.state.cloningExperimentId;
       });
-      
+
       if (clonableExperiment) {
         return <CloneExperimentContainer
           isVisible={true}
@@ -201,7 +201,7 @@ export default class ExperimentsTable extends React.Component {
 
   renderList() {
     let renderedExperiments = [];
-    
+
     if (!this.props.isFetching) {
       this.props.list.forEach(experiment => renderedExperiments.push(this.makeRow(experiment)));
     }
@@ -222,8 +222,12 @@ export default class ExperimentsTable extends React.Component {
       impressions = experiment.statistics.common_impression;
     }
 
+    const nameColumnStyling = {
+      whiteSpace: 'initial'
+    };
+
     return <TableRow key={`experiment__table-row-${experiment.id}`}>
-      <TableRowColumn key={`experiment__table-row-column-name-${experiment.id}`}>{experiment.name}</TableRowColumn>
+      <TableRowColumn key={`experiment__table-row-column-name-${experiment.id}`} style={nameColumnStyling}>{experiment.name}</TableRowColumn>
       <TableRowColumn key={`experiment__table-row-column-state-${experiment.id}`}><Chip labelStyle={globalStyling.chipLabel} backgroundColor={globalStyling.stateColors[experiment.state]}>{experiment.state}</Chip></TableRowColumn>
       <TableRowColumn key={`experiment__table-row-column-impressions-${experiment.id}`}>{impressions}</TableRowColumn>
       <TableRowColumn key={`experiment__table-row-column-start-date-${experiment.id}`}>{Helper.formatDateTime(experiment.start_date)}</TableRowColumn>
